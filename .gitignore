@@ -37,3 +37,13 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+
+**/Videos
+**/Books
+Videos/
+Books/
+.DS_Store
+**/Data
+Data/
+**Videos/

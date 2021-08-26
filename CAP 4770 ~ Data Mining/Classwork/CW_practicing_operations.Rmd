@@ -1,0 +1,81 @@
+---
+title: "Simple Operations and Summaries"
+subtitle: "Getting familiar with R"  
+output: html_notebook
+---
+
+Let us try to reproduce one of the examples discussed during our lecture. Below we define two vectors, `x` and `y`. Notice the use of the `c()` function, used for combining values into a vector.
+
+```{r}
+# define x
+x <- seq(1, 10, by = 1)
+# define y
+y <- x^2
+```
+
+If we want to find the mean and standard deviation of `x` and `y`, we can use the commands below:
+
+```{r}
+# mean of x
+mean(x)
+# mean of y
+mean(y)
+```
+
+
+```{r}
+# standard deviation of x
+sd(x)
+# standard deviation of y
+sd(y)
+```
+
+Now let us check the value of correlation between `x` and `y`:
+
+```{r}
+cor(x,y)
+```
+
+(as discussed during the lecture, the (Pearson) correlation coefficient compute here, measures of the strength and direction of the _linear_ relationship between two variables - if any-)
+
+
+
+
+## Datasets? 
+
+R comes with a variety of built-in datasets that we can use to test different algorithms or simply practice our data analysis skills. 
+
+One example is the `mtcars` dataset: the data extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models).
+
+To check how the dataset looks like, simply type the name of the object (in this case `mtcars`) in a R _chunk of code_:
+
+```{r}
+mtcars
+```
+
+
+Typically we just want to see the first (or last) set of observations to get a quick sense of the type of information we are dealing with:
+
+```{r}
+# use the head() function to print the first 6 rows
+head(mtcars)
+```
+
+
+```{r}
+# use the tail() function to print the last 6 rows
+tail(mtcars)
+```
+
+
+Formally, `mtcars` is called a **data frame**, where rows represents observations (records/samples) and columns represent features (variables/attributes)
+
+
+### Summarizing a dataset
+
+The `summary()` function is a powerful function that returns summary statistics for every variable in a given data frame:
+
+```{r}
+summary(mtcars)
+```
+
