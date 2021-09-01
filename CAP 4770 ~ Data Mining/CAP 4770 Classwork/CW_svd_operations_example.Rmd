@@ -1,0 +1,118 @@
+---
+title: "SVD illustration"
+output: html_notebook
+---
+
+Below we write a _function_ that let us create a [Hilbert matrix](https://en.wikipedia.org/wiki/Hilbert_matrix) of any dimension.
+
+```{r}
+# create Hilbert matrix of size n 
+hilbert <- function(n) { 
+  i <- 1:n
+  1 / outer(i - 1, i, "+") 
+  }
+```
+
+Let us consider the Hilbert matrix of size $n=9$. We will create such matrix, and then extract the first 6 columns of it:
+
+```{r}
+# create Hilbert matrix of size 9
+hil_nine <- hilbert(9)
+# select all rows, and columns 1 through 6
+X <- hil_nine[ , 1:6]
+```
+
+
+Below we print the entire matrix $X$ with $m=9$ rows and $n=6$ columns:
+
+```{r}
+# print matrix X
+print(X)
+```
+
+One way to calculate the **singular value decomposition** (SVD) of the matrix $X$ is to use the `svd()` function in R:
+
+```{r}
+# compute SVD using the svd() function
+s <- svd(X)
+```
+
+
+Notice that `s` is an object of class _list_, containing 3 main pieces of information:
+
+- `d`, a vector containing the singular values of matrix `X`
+
+- `u`, a matrix whose columns contain the _left singular vectors_ of `X`
+
+- `v`, a matrix whose columns contain the _right singular vectors_ of `X`
+
+```{r}
+# find out the class of the svd object
+class(s)
+```
+
+Mathematically, the singular value decomposition (SVD) of a matrix $X$ looks like: 
+
+$$
+X = U \Sigma V^T
+$$
+
+where $\Sigma = \text{diag}(d)$ is a diagonal matrix containing the **singular values** of matrix $X$. Both matrices, $U$ and $V$ are **orthogonal**, that is, $UU^T$ and $VV^T$ are equal to the _identity matrix_ (of the associated dimensions)
+
+
+
+
+We now extract the components from the SVD object:
+
+```{r}
+# matrix of left singular vectors
+myU <- 
+# diagonal matrix with singular values
+mySigma <- 
+# matrix of right singular vectors
+myV <- 
+```
+
+We can confirm this decomposition (also sometimes called factorization), using the matrix multiplication operator in R, `%*%`, and the transpose operator `t()`
+
+```{r}
+## U * Sigma * V^T
+
+```
+
+
+Check the magnitude of the singular values:
+
+```{r}
+# print singular values of X
+
+```
+
+
+Suppose we focus only on the first 3 singular values, then using the first 3 columns for both $U$ and $V$
+
+```{r}
+# reduced U
+red_U <- 
+red_V <- 
+red_S <- 
+```
+
+an approximation to $X$ is created: 
+
+```{r}
+# approximation to matrix X
+approx_matrix <- 
+# print matrix
+approx_matrix
+```
+
+Notice that by using just 3 singular values, we obtain a good approximation of the original matrix $X$ (this verifies the use of SVD for compression purposes)
+
+```{r}
+# find the difference between X and 
+# its approximation with 3 singular values
+
+```
+
+

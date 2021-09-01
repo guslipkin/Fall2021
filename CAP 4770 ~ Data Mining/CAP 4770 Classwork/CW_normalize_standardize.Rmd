@@ -1,0 +1,124 @@
+---
+title: "Data Pre-processing"
+subtitle: Normalization and Standardization using `caret`
+output:
+  html_document:
+    df_print: paged
+---
+
+The quality of the data and the amount of useful information that it contains are _key factors_ that determine how well a data mining algorithm can extract knowledge from data and how machine learning algorithms can learn.
+
+It is absolutely critical that we make sure to **examine** and **preprocess** a dataset before. 
+
+## Data pre-processing with the `caret` package in R
+
+```{r}
+# load the caret package
+library(caret)
+```
+
+The `caret` package (short for **C**lassification **A**nd **RE**gression **T**raining) is a set of functions that attempt to streamline the process for creating predictive models. Full documentation can be found [here](http://topepo.github.io/caret/index.html)
+
+
+
+The `caret` package in R provides a number of useful _data transforms_. (it assumes that all of the data are numeric)
+
+The model of the transform is prepared using the `preProcess()` function and applied to a dataset using the `predict()` function.
+
+
+
+
+
+Consider the `iris` dataset. The famous (Fisher's or Anderson's) `iris` data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The `species` are Iris setosa, versicolor, and virginica.
+
+![Sepal and Petal](https://www.math.umd.edu/~petersd/666/html/iris_with_labels.jpg)
+
+Check the first entries of the `iris` dataset:
+
+```{r}
+head(iris)
+```
+
+For the purpose of illustration, let us create a copy of the `iris` dataset ignoring the column `Species` (since it is not numeric), that is, we ignore the 5th column in the original dataset:
+
+```{r}
+# load the tidyverse package for data transformation
+library(tidyverse)
+```
+
+
+```{r}
+# we use the select() function - part of the tidyverse - 
+my_iris <- iris %>%
+  select(-Species)
+```
+
+Summary statistics are shown below:
+
+```{r}
+# summarize data
+summary(my_iris)
+```
+
+### Scaling
+
+The `scale` transform calculates the _standard deviation_ for an attribute and divides each value by that standard deviation.
+
+```{r}
+# calculate the pre-process parameters from the dataset
+preprocessParams_scale <- preProcess(my_iris, method = "scale")
+```
+
+We now use the `predict()` function to see the new transformed data:
+
+```{r}
+# transform the dataset using the parameters
+transformed_scale <- predict(preprocessParams_scale, my_iris)
+  # summarize the transformed dataset
+summary(transformed_scale)
+```
+
+
+## Centering
+
+The `center` transform calculates the _mean_ for an attribute and subtracts it from each value.
+
+```{r}
+# calculate the pre-process parameters from the dataset
+preprocessParams_center <- preProcess(my_iris, method = "center")
+# transform the dataset using the parameters
+transformed_center <- predict(preprocessParams_center, my_iris)
+# summarize the transformed dataset
+summary(transformed_center)
+```
+
+
+## Standardizing
+
+Combining the `scale` and `center` transforms will _standardize_ your data. Attributes will have a mean value of 0 and a standard deviation of 1.
+
+```{r}
+# calculate the pre-process parameters from the dataset
+preprocessParams_std <- preProcess(my_iris, method = c("scale", "center"))
+# transform the dataset using the parameters
+transformed_std <- predict(preprocessParams_std, my_iris)
+# summarize the transformed dataset
+summary(transformed_std)
+```
+
+
+## Normalizing
+
+Data values can be scaled into the range of $[0, 1]$ which is called _normalization_.
+
+
+```{r}
+# calculate the pre-process parameters from the dataset
+preprocess_norm <- preProcess(my_iris, method = "range")
+# transform the dataset using the parameters
+transformed_norm <- predict(preprocess_norm, my_iris)
+# summarize the transformed dataset
+summary(transformed_norm)
+```
+
+
