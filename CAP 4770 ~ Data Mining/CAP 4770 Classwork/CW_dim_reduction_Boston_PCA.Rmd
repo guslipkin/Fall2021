@@ -1,0 +1,165 @@
+---
+title: "Dimensionality Reduction with PCA - Visualization"
+subtitle: "Boston Housing Dataset"
+output: html_notebook
+---
+
+Let us load the `tidyverse` package for data transformation and visualization
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+## House Prices in Boston
+
+For each neighborhood, a number of variables are given, such as the crime rate, the student/teacher ratio, and the median value of a housing unit in the neighborhood.
+
+The file `BostonHousing.csv` contains information collected by the US Bureau of the Census concerning housing in the area of Boston, Massachusetts. The dataset includes information on 506 census housing tracts in the Boston area. The goal is to _predict the median house price_ in new tracts based on information such as crime rate, pollution, and number of rooms. The response is the median house price (`MEDV`).
+
+  Variables |  Description
+------------|----------------------------------------------------------------
+`CRIM`      | Crime rate
+`ZN`        | Percentage of residential land zoned for lots over 25,000 ft2
+`INDUS`     | Percentage of land occupied by non-retail business
+`CHAS`      | Does tract bound Charles River (`= 1` if tract bounds river, `= 0` otherwise)
+`NOX`       | Nitric oxide concentration (parts per 10 million)
+`RM`        | Average number of rooms per dwelling
+`AGE`       | Percentage of owner-occupied units built prior to 1940
+`DIS`       | Weighted distances to five Boston employment centers
+`RAD`       | Index of accessibility to radial highways
+`TAX`       | Full-value property tax rate per $10,000
+`PTRATIO`   | Pupil-to-teacher ratio by town
+`LSTAT`     | Percentage of lower status of the population
+`MEDV`      | Median value of owner-occupied homes in $1000s
+`CAT.MEDV`  | Is median value of owner-occupied homes in tract above $30,000 (`CAT.MEDV = 1`) or not (`CAT.MEDV = 0`)
+
+
+- Read dataset:
+
+```{r, message=FALSE}
+housing <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/BostonHousing.csv")
+```
+
+Print the first 6 observations:
+
+```{r}
+
+```
+
+
+The first row represents the first neighborhood, which had an average per capita crime rate of 0.006, 18% of the residential land zoned for lots over 25,000 ft2, 2.31% of the land devoted to non-retail business, no border on the Charles River, and so on.
+
+
+Let us consider a smaller data set of continuous variables only:
+
+```{r}
+red_boston <- housing %>% 
+                select(-c(ZN, RAD, TAX, CHAS, `CAT. MEDV`))
+```
+
+
+Are there any missing values?
+
+```{r}
+
+```
+
+Luckily, this dataset has no missing values. We now focus on performing PCA using all numerical variables in the `red_boston` data frame:
+
+
+#### Other summaries
+
+We can also compute the standard deviation, which gives a sense of how dispersed the data are (relative to the mean). Further options, such as `sum(is.na(VARIABLE))`, which gives the number of null values, can tell us about missing values.
+
+
+```{r}
+# data frame with summary statistics
+
+```
+
+
+#### Correlation
+
+Next, we summarize relationships between two or more variables.
+
+For _numerical variables_, we can compute a complete **matrix of correlations** between each pair of variables, using the R function `cor()`.
+
+```{r}
+# matrix with correlation coefficients
+
+```
+
+
+### PCA
+
+We use the `prcomp()` function to perform principal component analysis (PCA) on the Boston housing dataset:
+
+```{r}
+pca_boston <- 
+# summary
+
+```
+
+The first 5 principal component explain ~90% of the variation in the collection of 506 data points.
+
+
+We can check the loadings for these 5 components: 
+
+```{r}
+# check the new loadings
+
+```
+
+
+
+_Can we characterize the role of each principal component here?_
+
+- PC1 largest loadings come from `LSTAT` (percentage of lower status of the population) , `INDUS` (percentage of land occupied by non-retail business), `NOX` (nitric oxide concentration)
+
+- PC2 largest loadings come from (positive) `DIS` (weighted distances to 5 Boston employment centers), and (negative) `MEDV` (median value of owner-occupied homes), (negative) `RM` (average number of rooms)
+
+
+### Visualization
+
+
+**Using `factoextra`**
+
+
+The `factoextra` package provides some easy-to-use functions to extract and visualize the output of multivariate data analyses, including Principal Component
+Analysis (PCA)
+
+```{r, message=FALSE}
+library(factoextra)
+```
+
+
+A _scree-plot_ can be easily generated to show the contribution of each component to explain the variation in the data
+
+```{r}
+
+```
+
+
+Biplots can also be generated using:
+
+```{r}
+
+```
+
+Contributions to the first principal component:
+
+```{r}
+
+```
+
+Contributions to the second principal component:
+
+```{r}
+
+```
+
+
+
+
+

@@ -1,0 +1,57 @@
+---
+title: "Principal Component Analysis Illustration"
+subtitle: "Dimensionality Reduction using PCA"
+output: html_notebook
+---
+
+## PCA on the `USArrests` dataset
+
+Load the `tidyverse` and `factoextra` packages.
+
+```{r, message = FALSE, warning=FALSE}
+library(tidyverse)
+library(factoextra)
+```
+
+
+
+In this classwork activity we consider the `USArrests` dataset, which contains statistics, in arrests per 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas. (The `USArrests` dataframe is a built-in dataset in R, so you don't have to read/load the data from a different source)
+
+Below we show the first entries in this datasets
+
+```{r}
+head(USArrests)
+```
+
+(a) Perform PCA on the four numerical variables in this dataset.
+
+```{r}
+arrests_pca <- prcomp(USArrests, scale. = T)
+```
+
+Check the summary 
+
+```{r}
+summary(arrests_pca)
+```
+
+Explore the loadings for each variable:
+
+```{r}
+arrests_pca$rotation
+```
+
+
+(b) Create a biplot (in the PC1-PC2 coordinate system) and explain your results. According to your findings: Do Florida, Nevada, California, and Michigan have anything in common? How about New Hampshire, Maine, and North Dakota?
+
+
+
+```{r}
+fviz_pca_biplot(arrests_pca, 
+                select.ind = list(names = c("Florida", "Nevada", "California",
+                                            "Michigan", "New Hampshire", "Maine",
+                                            "North Dakota")))
+```
+
+
+

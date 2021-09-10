@@ -156,6 +156,9 @@ A = \begin{bmatrix}
 -2 & 1 & 0
 \end{bmatrix}
 $$
+
+> I tried my best here but could only replicate the first step
+
 ```{r}
 ec <- matrix(c(1, -2, 0, 1, 1, 0), nrow = 2, ncol = 3)
 svdEC <- svd(ec)

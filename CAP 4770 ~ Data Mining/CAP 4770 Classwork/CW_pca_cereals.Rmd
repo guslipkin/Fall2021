@@ -1,0 +1,153 @@
+---
+title: "Introduction to Principal Component Analysis"
+output: html_notebook
+---
+
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+## Data
+
+Data were collected on the nutritional information and consumer rating of 77 breakfast cereals. The consumer rating is a rating of cereal "healthiness" for consumer information (not a rating by consumers). For each cereal, the data include 13 numerical variables, and we are interested in reducing this dimension. For each cereal, the information is based on a bowl of cereal rather than a serving size, because most people simply fill a cereal bowl (resulting in constant volume, but not weight). 
+
+
+```{r}
+cereals <- read_csv("https://github.com/reisanar/datasets/raw/master/Cereals.csv")
+# print the first rows of data
+head(cereals)
+```
+
+
+## PCA in two components
+
+To calculate the principal component decomposition we use the `prcomp()` function in R. The calculation is done by a **singular value decomposition** of the (centered and possibly scaled) data matrix.
+
+We will focus first on the attributes `calories` and `rating`:
+
+```{r}
+# small data frame
+cereals_small <- cereals[, c("calories", "rating")]
+  
+```
+
+
+```{r}
+# compute PCs on two dimensions
+pcs <- prcomp(cereals_small)
+summary(pcs)
+```
+
+We can check the information from the principal component analysis by checking the different elements in the object `pcs`:
+
+```{r}
+# the matrix of variable loadings
+pcs$rotation
+```
+
+The first column is the projection onto $z_1$ using the weights (0.847, -0.532). The second column is the projection onto $z_2$ using the weights (0.532, 0.847).
+
+
+For example, the first score for the `100%_Bran` cereal (with 70 calories and a rating of 68.4) is 
+$$
+(0.847)(70 - 106.88) + (-0.532)(68.4 - 42.67) = -44.92.
+$$
+
+(here 106.88 and 42.67 are the means of `calories` and `rating` respectively)
+
+```{r}
+pcs$x[1,1]
+```
+
+The transformed variables are stored in the `x` list element:
+
+```{r}
+# the values of the transformed variables
+
+```
+
+
+You can create the covariance matrix of calories and ratings as follows:
+
+```{r}
+
+```
+
+
+Notice that in this case, using the first principal component (a linear combination of `calories` and `rating`), allows us to capture 86.32 of the variation in the data (compared to the 66% of the variation explained by `calories` only)
+
+```{r}
+# variation explained by calories
+379.6309/(379.6309 + 197.3263)
+```
+
+
+
+## PCA output using all 13 numerical variables
+
+We will create a new data frame consisting of all 13 numerical variables (that is we ignore columns 1 to 3 in the original data frame), and removing any observation with missing information (those with `NA` values for any of the variables)
+
+
+```{r}
+# new data frame 
+cereals_clean <- 
+  
+  
+```
+
+PCA is performed in the same way we did in the previous example: 
+
+```{r}
+# PCA in all numerical variables
+pcs_all <- 
+  
+  
+```
+
+Note that the first three components account for more than 96% of the total variation associated with all 13 of the original variables. This suggests that we can capture most of the variability in the data with less than 25% of the original dimensions in the data. In fact, the first two principal components alone capture 92.6% of the total variation.
+
+
+
+
+## Scaling
+
+Let us check the loadings for the first 2 principal components: 
+
+```{r}
+pcs_all$rotation[ , 1:2]
+```
+
+In our example, it is clear that the first principal component is dominated by the sodium content of the cereal: it has the highest (in this case, positive) weight. This means that the first principal component is in fact measuring how much sodium is in the cereal. Similarly, the second principal component seems to be measuring the amount of potassium. Since both these variables are measured in milligrams, whereas the other nutrients are measured in grams, the scale is obviously leading to this result. The variances of potassium and sodium are much larger than the variances of the other variables, and thus the total variance is dominated by these two variances. A solution is to **standardize** the data before performing the PCA.
+
+The `prcomp()` function already _centers_ by default (`center = TRUE`), so the only extra option we need to specify is `scale = TRUE`
+
+
+Standardization means replacing each original variable by a standardized version of the variable that has unit variance. This is easily accomplished by dividing each variable by its standard deviation. _The effect of this normalization is to give all variables equal importance in terms of variability_.
+
+When should we normalize the data like this? It depends on the nature of the data. If the variables are measured in different units so that it is unclear how to compare the variability of different variables (e.g., dollars for some, parts per million for others) or if for variables measured in the same units, scale does not reflect importance (earnings per share, gross revenues), it is generally advisable to standardize. In this way, the differences in units of measurement do not affect the principal components' weights. In the rare situations where we can give relative weights to variables, we multiply the scaled variables by these weights before doing the principal components analysis.
+
+
+PCA output using all normalized numeric variables:
+
+
+```{r}
+pcs_std <-
+  
+```
+
+Now we find that we need 7 principal components to account for more than 90% of the total variability. The first 2 principal components account for only 52% of the total variability, and thus reducing the number of variables to two would mean losing a lot of information.
+
+```{r}
+# check the new loadings
+
+```
+
+
+- Examining the weights, we see that the first principal component measures the balance between 2 quantities: (1) calories and cups (large positive weights) vs. (2) protein, fiber, potassium, and consumer rating (large negative weights). High scores on principal component 1 mean that the cereal is high in calories and the amount per bowl, and low in protein, and potassium. Unsurprisingly, this type of cereal is associated with a low consumer rating.
+
+- The second principal component is most affected by the weight of a serving, and the third principal component by the carbohydrate content. We can continue labeling the next principal components in a similar fashion to learn about the structure of the data.
+
+
+

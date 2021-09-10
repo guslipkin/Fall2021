@@ -57,7 +57,7 @@ $$
 X = U \Sigma V^T
 $$
 
-where $\Sigma = \text{diag}(d)$ is a diagonal matrix containing the **singular values** of matrix $X$. Both matrices, $U$ and $V$ are **orthogonal**, that is, $UU^T$ and $VV^T$ are equal to the _identity matrix_ (of the associated dimensions)
+where $\Sigma = \text{diag}(d)$ is a diagonal matrix containing the **singular values** of matrix $X$. Both matrices, $U$ and $V$ are **orthogonal**, that is, $U^TU$ and $V^TV$ are equal to the _identity matrix_ (of the associated dimensions)
 
 
 
@@ -66,18 +66,18 @@ We now extract the components from the SVD object:
 
 ```{r}
 # matrix of left singular vectors
-myU <- 
+myU <- s$u
 # diagonal matrix with singular values
-mySigma <- 
+mySigma <- diag(s$d)
 # matrix of right singular vectors
-myV <- 
+myV <- s$v
 ```
 
 We can confirm this decomposition (also sometimes called factorization), using the matrix multiplication operator in R, `%*%`, and the transpose operator `t()`
 
 ```{r}
 ## U * Sigma * V^T
-
+myU %*% mySigma %*% t(myV)
 ```
 
 
@@ -85,7 +85,7 @@ Check the magnitude of the singular values:
 
 ```{r}
 # print singular values of X
-
+s$d
 ```
 
 
@@ -93,16 +93,16 @@ Suppose we focus only on the first 3 singular values, then using the first 3 col
 
 ```{r}
 # reduced U
-red_U <- 
-red_V <- 
-red_S <- 
+red_U <- myU[, 1:3]
+red_V <- myV[, 1:3]
+red_S <- mySigma[1:3, 1:3]
 ```
 
 an approximation to $X$ is created: 
 
 ```{r}
 # approximation to matrix X
-approx_matrix <- 
+approx_matrix <- red_U %*% red_S %*% t(red_V)
 # print matrix
 approx_matrix
 ```
@@ -112,7 +112,12 @@ Notice that by using just 3 singular values, we obtain a good approximation of t
 ```{r}
 # find the difference between X and 
 # its approximation with 3 singular values
-
+approx_matrix - X
 ```
 
+
+```{r}
+# confirming that U is an orthogonal matrix
+t(myU) %*% myU
+```
 
