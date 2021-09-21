@@ -1,0 +1,193 @@
+---
+title: "Vehicle Fuel Economy Estimates Dataset"
+subtitle: "Exploratory Data Analysis (EDA) - Example"
+author: "Gus Lipkin"
+output: html_notebook
+---
+
+
+_Use this notebook to practice your exploratory data analysis and visualization skills._
+
+
+
+> The **original dataset** is obtained from FuelEconomy.gov Web Services. The 1984-2017 fuel economy data is produced during vehicle testing at the **Environmental Protection Agency's (EPA) National Vehicle and Fuel Emissions Laboratory** in Ann Arbor, Michigan, and by vehicle manufacturers with EPA oversight. Check also the data in this [Kaggle page](https://www.kaggle.com/epa/fuel-economy). The version of the data used in this notebook is also available in [this repo](https://github.com/reisanar/datasets/blob/master/fuel.csv).
+
+
+## Load packages
+
+```{r}
+# use data science tools from the tidyverse
+library(tidyverse)
+```
+
+## Read the data
+
+The adapted dataset used in this notebook contains  more than 38,000 observations and 81 variables are available! (We will focus on a small subset of the attributes for this initial exploration). A related data dictionary can be found at https://www.fueleconomy.gov/feg/ws/
+
+EPA's fuel economy values are good estimates of the fuel economy a typical driver will achieve under average driving conditions and provide a good basis to compare one vehicle to another. Fuel economy varies, sometimes significantly, based on driving conditions, driving style, and other factors.
+
+Below we read the `.csv` file using `readr::read_csv()` (the `readr` package is part of the `tidyverse`)
+
+```{r}
+fuel <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/fuel.csv",
+                 col_types = cols())
+```
+
+Check the dimensions of the dataset using the `dim()` function:
+
+```{r}
+# use the dim() function to check the number of rows and columns
+dim(fuel)
+```
+
+## Data Exploration
+
+
+```{r}
+# random sample of the data
+set.seed(217)      # this sets a random seed for reproducibility
+fuel %>%
+   sample_n(7)
+```
+
+We can see the range (minimum and maximum) of a variable using the `range()` function: 
+
+```{r}
+range(fuel$year)
+```
+
+We can also use the `dplyr::sumarize()` function to get some summaries for certain variables. Try to generate a summary that shows the minimum and maximum values for the variables `year`, `annual_fuel_cost_ft1` and `annual_consumption_in_barrels_ft1`:
+
+```{r}
+# insert code here
+fuel %>%
+  select(year, annual_fuel_cost_ft1, annual_consumption_in_barrels_ft1) %>%
+  summary()
+
+fuel %>%
+  summarize(yearMin = min(year), yearMax = max(year),
+            fuelCostMin = min(annual_fuel_cost_ft1), fuelCostMax = max(annual_fuel_cost_ft1),
+            consMin = min(annual_consumption_in_barrels_ft1), consMax = max(annual_consumption_in_barrels_ft1))
+
+fuel %>%
+  summarize(min(c(year, annual_fuel_cost_ft1, annual_consumption_in_barrels_ft1)),
+            max(c(year, annual_fuel_cost_ft1, annual_consumption_in_barrels_ft1)))
+```
+
+> Quick note. Using summarise here seems very ineffficient because unless I'm forgetting something, you have to individually get the min and max for each variable.
+
+For variables that are encoded as categorical, we can also get counts. First, below is a trick to find which variables are encoded as _character_ (this will help you determine which ones are actually categorical variables: for example an email is stored as a character, but we may not treat is a category since it may be unique, while colors and brands could be treated as categorical):
+
+```{r}
+# select variables that are of type character
+fuel %>%
+   select_if(is.character)
+```
+
+Let us select check the number of observations for each class of vehicle (`class`)
+
+```{r}
+fuel %>%
+  group_by(class) %>%
+  count()
+# you could also use group_by() followed by summarize() where the 
+# summary counts the number of rows using the n() function
+```
+
+```{r}
+# alternative: using the group_by + summarize combination
+fuel %>%
+  group_by(fuel_type) %>%
+  summarize(n = n())
+```
+
+When working with larger datasets like this one, chances are that several observations have missing values (`NA`) in some of the attributes available in the dataset. It is good practice to get a sense of the proportion of missing values for different variables. This may help you make design choices when exploring predictive models (e.g., how and what type of data imputation to incorporate - if any -, or deciding which variables have enough variation and are good choices for further analysis). 
+
+Below is a trick to easily get this information using tools from `dplyr`:
+
+```{r}
+fuel %>%
+  summarize_all(~sum(is.na(.))/n())
+```
+
+> The code above tells you that we have no missing values for the variables `year`, `make`, `model` and others; and it also indicates that the attribute `range_ft2` is an empty column (all observations have a missing value there).<br><br>
+**Quick explanation**: `is.na()` returns either `TRUE` if the element is missing, and `FALSE` otherwise. When combined with the function `sum()`, any value of `TRUE` will be understood as a `1`, and instances of `FALSE` as `0` (this is known as _**coercion**_). Therefore, adding all the `1`s will tell you how many observations have a missing value, and dividing by the number of observations (i.e., using `n()`) will give the proportion. Documentation for the `summarize_all()` function (and other similar functions) can be found [here](https://dplyr.tidyverse.org/reference/summarise_all.html). 
+<br><br>Again, this shows the power of `dplyr`: just a few lines of code can give you very good information.
+
+<div class="alert alert-block alert-warning" style="display:inline-block;" markdown="1">
+
+**Practice**: which other type of summaries can you create? Try grouping by _multiple_ variables to analyze that set of observations (e.g., grouping by `make` and `transmission` to analyze the fuel efficiency of cars in the different groups) 
+
+</div>
+
+
+**Insert solutions here and comment on your results**
+```{r}
+fuel %>%
+  group_by(make, transmission) %>%
+  summarise(meanMPG = mean(combined_mpg_ft1)) %>%
+  arrange(desc(meanMPG))
+```
+
+> By finding the mean combined mpg for each make and transmission type, we can find the most efficient combinations on the market. However, simply listing the data isn't good enough because no one wants to comb through 616 rows, so I arranged in in descending order by mean MPG.
+
+
+
+
+## Some data visualizations
+
+There are many observations and attributes (variables) available in this dataset. We will generate some data visualizations in this notebook that can help us confirm some of the things we would expect from the evolution and progress made in car manufacturing in recent years.
+
+The purpose of EPA's fuel economy estimates is to provide a reliable basis for comparing vehicles. Most vehicles in the database (other than plug-in hybrids) have three fuel economy estimates: 
+- a "city" estimate that represents urban driving, in which a vehicle is started in the morning (after being parked all night) and driven in stop-and-go traffic; 
+
+- a "highway" estimate that represents a mixture of rural and interstate highway driving in a warmed-up vehicle, typical of longer trips in free-flowing traffic; 
+
+- and a "combined" estimate that represents a combination of city driving (55%) and highway driving (45%). Estimates for all vehicles are based on laboratory testing under standardized conditions to allow for fair comparisons.
+
+The database also provides annual fuel cost estimates, rounded to the nearest \$50, for each vehicle. The estimates are based on the assumptions that you travel 15,000 miles per year (55% under city driving conditions and 45% under highway conditions) and that fuel costs \$2.33/gallon for regular unleaded gasoline, \$2.58/gallon for mid-grade unleaded gasoline, and \$2.82/gallon for premium.
+
+
+Use the `geom_bar()` function from `ggplot2` to generate the plot below. 
+
+![](https://raw.githubusercontent.com/reisanar/figs/master/fuel-practice.png)
+
+
+```{r}
+# use ggplot() and geom_bar()
+fuel %>%
+  filter(year %in% 1984:2017) %>%
+  ggplot() +
+  geom_bar(aes(x = engine_cylinders)) +
+  labs(title = "Cylinders distributions", 
+       subtitle = "Vehicles data for years 1984 to 2017") +
+  xlab("Number of cylinders")
+```
+
+If you look to the far right in the above plot, you will notice some vehicles with 16 cylinders. Let us use the `dplyr::filter()` function to find those observations:
+
+```{r}
+# insert code here. Hint: use filter()
+fuel %>%
+  filter(year %in% 1984:2017 & engine_cylinders == 16)
+```
+
+
+
+The Bugatti Veyron: million dollars cars! Learn more about this car [here](https://en.wikipedia.org/wiki/Bugatti_Veyron). 
+
+![](https://raw.githubusercontent.com/reisanar/figs/master/bugatti.jpeg)
+
+In the set of slides for `ggplot2` we studied the relationship between the engine size (`engine_displacement`) and the fuel efficiency. Let us do something similar here by creating a plot similar to the one below:
+
+![](https://raw.githubusercontent.com/reisanar/figs/master/city-mpg-scatterplot.png)
+
+```{r}
+# insert code here. Hint: use geom_point()
+fuel %>%
+  ggplot() +
+  geom_point(aes(x = engine_displacement, y = city_mpg_ft1, color = fuel_type)) +
+  ylim(0, 60) +
+  labs(x = "Engine displacement (in liters)", y = "City MPG", color = "Type of Fuel")
+```
+

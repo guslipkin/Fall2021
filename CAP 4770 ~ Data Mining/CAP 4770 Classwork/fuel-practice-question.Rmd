@@ -1,0 +1,62 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+fuel <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/fuel.csv",
+                 col_types = cols())
+```
+
+
+We can also use the `dplyr::sumarize()` function to get some summaries for certain variables. Try to generate a summary that shows the minimum and maximum values for the variables `year`, `annual_fuel_cost_ft1` and `annual_consumption_in_barrels_ft1`:
+
+
+> This is the best way I can think of using summarise for this. The code is a pain to write and a bit difficult to read. The output is also difficult to read.
+
+```{r}
+fuel %>%
+  summarize(yearMin = min(year), yearMax = max(year),
+            fuelCostMin = min(annual_fuel_cost_ft1), fuelCostMax = max(annual_fuel_cost_ft1),
+            consMin = min(annual_consumption_in_barrels_ft1), consMax = max(annual_consumption_in_barrels_ft1))
+```
+
+
+> Of course, it seems like the easiest thing to do would to create a vector or list of the columns. Creating a list doesn't work at all and using a vector just grabs the min/max total value of all three columns.
+
+```{r}
+fuel %>%
+  summarize(min(c(year, annual_fuel_cost_ft1, annual_consumption_in_barrels_ft1)),
+            max(c(year, annual_fuel_cost_ft1, annual_consumption_in_barrels_ft1)))
+```
+
+
+> However, using `summary()` instead of `summarise()` gives you a neatly formatted list of summary statistics
+
+```{r}
+# insert code here
+fuel %>%
+  select(year, annual_fuel_cost_ft1, annual_consumption_in_barrels_ft1) %>%
+  summary()
+```
+
+
+> If you only want the `min` and `max` values, it's a bit more work, but it can still be done more simply than with `summarize()`
+
+```{r}
+summ <- fuel %>%
+  select(year, annual_fuel_cost_ft1, annual_consumption_in_barrels_ft1) %>%
+  summary()
+summ[c(1,6),]
+```
+
+
+> Or an awful one-liner without any tidyverse
+
+```{r}
+summary(fuel[, c("year", "annual_fuel_cost_ft1", "annual_consumption_in_barrels_ft1")])[c(1,6),]
+```
+
+
+> I guess I'm just really wondering what the best way to use `summarise()` would be and what the advantages of doing it that way would be over just using base R

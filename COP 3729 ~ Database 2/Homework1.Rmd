@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(data.table)
+library(tidyverse)
+library(dbplyr)
+
+con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+# flights <- copy_to(con, nycflights13::flights)
+# airports <- copy_to(con, nycflights13::airports)
+
+actor <- copy_to(con, fread("actor.csv"))
+film <- copy_to(con, read.csv("film.csv"))
+film_actor <- copy_to(con, fread("film_actor.csv"))
+
+head(actor)
+head(film)
+head(film_actor)
+```
+
+```{r}
+firstName <- "Nick"
+lastName <- "Wahlberg"
+actor %>%
+  select(-last_update) %>%
+  full_join(film_actor %>%
+              select(-last_update), by = "actor_id") %>%
+  full_join(film %>%
+              select(-last_update), by = "film_id") %>%
+  filter(first_name == firstName & last_name == lastName) %>%
+  show_query()
+```
+
