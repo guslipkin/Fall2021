@@ -103,9 +103,13 @@ summary(fifa_pca)
 # code here - include as many chunks of code as needed
 fviz_pca_biplot(fifa_pca, 
                 select.ind = list(name = c("Cristiano Ronaldo", "L. Messi", "Neymar", "Gus Outomouro", "Gus Ledes")))
+fviz_contrib(fifa_pca, choice = "var", axes = 1)
+fviz_contrib(fifa_pca, choice = "var", axes = 2)
 ```
 
 > Comments: This was fun. The three names I know, Ronaldo, Messi, and Neymar, are all grouped together where I guess all the good players go. The two other players I've never heard of before that are named Gus share some similar properties, but not in such great quantities as the three well-known players.
+
+> More Comments: Ball control and dribbling (I thought this was a function of ball control?) are the two most important parts. Compared to the second dimension, almost nothing is the same and it looks generally reversed.
 
 
 

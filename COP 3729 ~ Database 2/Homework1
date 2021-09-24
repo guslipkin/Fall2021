@@ -1,0 +1,12 @@
+CREATE OR REPLACE FUNCTION TopFive(actor_name TEXT)
+RETURNS TABLE (actors_name TEXT, movie_name TEXT) language plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+        SELECT actors.name, movies.title
+        FROM actors
+        INNER JOIN movies_actors ON actors.actor_id = movies_actors.actor_id
+        INNER JOIN movies ON movies_actors.movie_id = movies.movie_id
+        WHERE actors.name = actor_name
+        LIMIT 5;
+END;$$
