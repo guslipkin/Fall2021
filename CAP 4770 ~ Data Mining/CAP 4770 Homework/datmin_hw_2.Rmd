@@ -28,7 +28,7 @@ Share:
 
 You could use the University's library for this, or simply use Google Scholar for a list of the many papers that have used this methodology in recent years.
 
-
+> [Principal component analysis of urban traffic characteristics and meteorological data](https://www.sciencedirect.com/science/article/pii/S1361920903000063?casa_token=7BOZtJWu7HsAAAAA:GHDPsIW7TgUu_hmZz36G8DDpWpTXMvTHqJEjk1CNYbCQdvFfjHtMgu3Y8rIvEClgjiHnZIW-xg), written by S.M. Shiva Nagendra and Mukesh Khare from the Department of Civil Engineering, Indian Institute of Technology Delhi is about analyzing one-year traffic, emissions, and meteorological data for an intersection in urban Delhi. They found that PCA is a useful tool for large multivariate datasets and that traffic and emissions variables dominated the first principal component, independent of the time period length. The rest of the principal components were heavily focused on meteorological variables. Lastly, the found that traffic and emissions variables were weakly linked with the meteorological variables. 
 
 
 # Problem 2 (25 points)
@@ -147,16 +147,17 @@ toyota_pca <- prcomp(myToyota, scale. = T)
 summary(toyota_pca)
 ```
 
-> Comments: 
+> Comments: PC1 is only 40% of the variance which is a bit surprising to me. I'm not sure why that is. Getting 90% around PC4 seems a bit more standard to me. It also seems odd that there are seven principal components and seven variables.
 
 
 (c) Produce at least one **data visualization** to explain the results on PCA. (You can use the `factoextra` package for this and follow the examples discussed in class)
 
 ```{r}
 # code here - include as many chunks of code as needed
-
+fviz_pca(toyota_pca, geom_ind = c("point", "text"), repel = TRUE, label = c("var", "ind"), habillage = factor(myToyota$hp))
 ```
 
+> Comments: This is okay. There's general grouping by horsepower (the colors). It's a bit odd that there are no variables with arrows in the fourth quadrant.
 
 ## Problem 5 (20 points)
 
@@ -169,32 +170,59 @@ Find the data in this [GitHub repo](https://github.com/reisanar/datasets/blob/ma
 ```{r, message=FALSE}
 # read grammy data
 soty <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/grammy_softy_20.csv", col_types = cols())
+rownames(soty) <- soty$track_name
+head(soty)
 ```
 
 (a) Perform PCA on this dataset, using all the **numerical attributes** available. 
 
 ```{r}
+mySoty <- soty[, c(
+    "danceability",
+    "energy",
+    "loudness",
+    "speechiness",
+    "acousticness",
+    "instrumentalness",
+    "liveness",
+    "valence",
+    "tempo",
+    "duration_ms")]
 
+soty_pca <- prcomp(mySoty, scale. = T)
 ```
 
 
 (b) Summarize your findings and comment on your results. 
 
 ```{r}
-
+summary(soty_pca)
 ```
 
+> Comments: I'm not sure why I'm choosing 50% as a benchmark, but it's good to get it by PC2. 75% at PC4 seems alright with 90% at PC6. I'm not sure if there's any meaning behind my benchmarks being at 2, 4, and 6, but I also could've arbitrarily picked them so probably no meaning.
 
 (c) Apply PCA again to a smaller number of numerical attributes (briefly explain your reasoning for the selection of the numerical attributes you consider for this part of the problem)
 
 ```{r}
+mySoty <- mySoty[, c(
+    "danceability",
+    "energy",
+    "loudness",
+    "tempo")]
 
+mySoty$danceability <- round(mySoty$danceability, 1)
+
+soty_pca <- prcomp(mySoty[,-1], scale. = T)
+summary(soty_pca)
 ```
 
+> Comments: I selected `danceability`, `energy`, `loudness`, and `tempo` because I wanted to know if people in clubs really do enjoy loud music with good energy and good tempo. I did, however, decide to round the `danceability` to the tens place so that songs could be grouped a bit more neatly because no two songs had the same `danceability` score. I'm not sure how "legal" that is, but oh well. I then removed `danceability` so that it wouldn't affect the biplot.
 
 (d) Create at least one data visualization of your PCA results.
 
 ```{r}
-
+fviz_pca(soty_pca, geom_ind = c("point", "text"), repel = TRUE, label = c("var", "ind"), habillage = factor(mySoty$danceability))
 ```
+
+> Comments: With my reduced set of variables, I wanted to see if there was a good grouping between songs with similar danceability scores. `fviz_pca` seems to fit the bill quite nicely because I can color code based on `danceabliity`. There seems to be no real color grouping except that songs with a `danceability` of $0.5$ are closer to the lines for `loudness`, `energy`, and `tempo` than the other groups.
 
