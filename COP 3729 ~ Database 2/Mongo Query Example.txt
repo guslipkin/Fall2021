@@ -1,0 +1,273 @@
+Command Line Example
+> show dbs
+HospitalCompare  0.082GB
+admin            0.000GB
+book             0.000GB
+config           0.000GB
+local            0.000GB
+test             0.000GB
+> use book
+switched to db book
+> function insertCity(name, population, lastCensus, famousFor, mayorInfo) {db.towns.insert({ name: name, population: population, lastCensus: ISODate(lastCensus), famousFor: famousFor, mayor: mayorInfo } ); }
+> insertCity("Punxsutawney", 6200, '2016-01-31', ["Punxsutawney Phil"], {name: "Richard Alexander" })
+> find {}
+uncaught exception: SyntaxError: unexpected token: '{' :
+@(shell):1:5
+> db.towns.find({})
+{ "_id" : ObjectId("5f850cb4af8e478ef8805374"), "name" : "New York", "population" : 22200000, "lastCensus" : "2016-07-01T13:21:55.000", "famousFor" : [ "the MOMA", "food", "Derek Jeter" ], "mayor" : { "name" : "Bill de Blasio", "party" : "D" } }
+{ "_id" : ObjectId("6153756a397adf5f6072b2f6"), "name" : "Punxsutawney", "population" : 6200, "lastCensus" : ISODate("2016-01-31T00:00:00Z"), "famousFor" : [ "Punxsutawney Phil" ], "mayor" : { "name" : "Richard Alexander" } }
+
+> db.towns.find( { name: /^P/, population: {$lt :10000 }})
+{ "_id" : ObjectId("6153756a397adf5f6072b2f6"), "name" : "Punxsutawney", "population" : 6200, "lastCensus" : ISODate("2016-01-31T00:00:00Z"), "famousFor" : [ "Punxsutawney Phil" ], "mayor" : { "name" : "Richard Alexander" } }
+
+> db.towns.find( { name: /^P/, population: {$lt :10000 }}, { _id: 0, name: 1, population : 1 } )
+{ "name" : "Punxsutawney", "population" : 6200 }
+>
+
+Compass Examples
+[
+   { "item": "journal", "qty": 25, "size": { "h": 14, "w": 21, "uom": "cm" }, "status": "A" },
+   { "item": "notebook", "qty": 50, "size": { "h": 8.5, "w": 11, "uom": "in" }, "status": "A" },
+   { "item": "paper", "qty": 100, "size": { "h": 8.5, "w": 11, "uom": "in" }, "status": "D" },
+   { "item": "planner", "qty": 75, "size": { "h": 22.85, "w": 30, "uom": "cm" }, "status": "D" },
+   { "item": "postcard", "qty": 45, "size": { "h": 10, "w": 15.25, "uom": "cm" }, "status": "A" }
+]
+
+empty document
+find {}
+
+Specify Equality Condition
+find { status: "D" }
+
+Specify Conditions Using Query Operators
+The following example retrieves all documents from the inventory collection where status equals either "A" or "D":
+{ status: { $in: [ "A", "D" ] } }
+
+Specify AND Conditions
+The following example retrieves all documents in the inventory collection where the status equals "A" and qty is less than ($lt) 30
+{ status: "A", qty: { $lt: 30 } }
+
+Specify OR Conditions
+The following example retrieves all documents in the collection where the status equals "A" or qty is less than ($lt) 30
+{ $or: [ { status: "A" }, { qty: { $lt: 30 } } ] }
+
+Specify AND as well as OR Conditions
+ In the following example, the compound query document selects all documents in the collection where the status equals "A" and either qty is less than ($lt) 30 or item starts with the character p
+{ status: "A", $or: [ { qty: { $lt: 30 } }, { item: /^p/ } ] }
+
+
+Match an Embedded/Nested Document
+For example, the following query selects all documents where the field size equals the document { h: 14, w: 21, uom: "cm" }
+{ size: { h: 14, w: 21, uom: "cm" } }
+
+Query on Nested Field
+The following example selects all documents where the field uom nested in the size field equals "in":
+{ "size.uom": "in" }
+
+Specify Match using Query Operator
+The following query uses the less than operator ($lt) on the field h embedded in the size field
+{ "size.h": { $lt: 15 } }
+
+Specify AND Condition
+The following query selects all documents where the nested field h is less than 15, the nested field uom equals "in", and the status field equals "D"
+{ "size.h": { $lt: 15 }, "size.uom": "in", status: "D" }
+
+Query an Array
+[
+   { item: "journal", "qty": 25, "tags": ["blank", "red"], "dim_cm": [ 14, 21 ] },
+   { item: "notebook", "qty": 50, "tags": ["red", "blank"], "dim_cm": [ 14, 21 ] },
+   { item: "paper", "qty": 100, "tags": ["red", "blank", "plain"], "dim_cm": [ 14, 21 ] },
+   { item: "planner", "qty": 75, "tags": ["blank", "red"], "dim_cm": [ 22.85, 30 ] },
+   { item: "postcard", "qty": 45, "tags": ["blue"], "dim_cm": [ 10, 15.25 ] }
+]
+
+Match an Array
+The following example queries for all documents where the field tags value is an array with exactly two elements, "red" and "blank", in the specified order
+{ tags: ["red", "blank"] }
+or use all to ignore order
+{ tags: { $all: ["red", "blank"] } } 
+
+Query an Array for an Element
+The following example queries for all documents where tags is an array that contains the string "red" as one of its elements
+{ tags: "red" }
+
+For example, the following operation queries for all documents where the array dim_cm contains at least one element whose value is greater than 25
+{ dim_cm: { $gt: 25 } }
+
+Specify Multiple Conditions for Array Elements
+The following example queries for documents where the dim_cm array contains elements that in some combination satisfy the query conditions; e.g., one element can satisfy the greater than 15 condition and another element can satisfy the less than 20 condition, or a single element can satisfy both
+{ dim_cm: { $gt: 15, $lt: 20 } }
+
+Query for an Array Element that Meets Multiple Criteria
+The following example queries for documents where the dim_cm array contains at least one element that is both greater than ($gt) 22 and less than ($lt) 30:
+db.inventory.find( { dim_cm: { $elemMatch: { $gt: 22, $lt: 30 } } } )
+
+Query for an Element by the Array Index Position
+The following example queries for all documents where the second element in the array dim_cm is greater than 25
+db.inventory.find( { "dim_cm.1": { $gt: 25 } } )
+
+Query an Array by Array Length
+Use the $size operator to query for arrays by number of elements. For example, the following selects documents where the array tags has 3 elements.
+db.inventory.find( { "tags": { $size: 3 } } )
+
+Query an Array of Embedded Documents
+
+[
+   { "item": "journal", "instock": [ { "warehouse": "A", "qty": 5 }, { "warehouse": "C", "qty": 15 } ] },
+   { "item": "notebook", "instock": [ { "warehouse": "C", "qty": 5 } ] },
+   { "item": "paper", "instock": [ { "warehouse": "A", "qty": 60 }, { "warehouse": "B", "qty": 15 } ] },
+   { "item": "planner", "instock": [ { "warehouse": "A", "qty": 40 }, { "warehouse": "B", "qty": 5 } ] },
+   { "item": "postcard", "instock": [ { "warehouse": "B", "qty": 15 }, { "warehouse": "C", "qty": 35 } ] }
+]
+
+Query for a Document Nested in an Array
+The following example selects all documents where an element in the instock array matches the specified document:
+{ "instock": { warehouse: "A", qty: 5 } }
+
+Use the Array Index to Query for a Field in the Embedded Document
+The following example selects all documents where the instock array has as its first element a document that contains the field qty whose value is less than or equal to 20:
+{ 'instock.0.qty': { $lte: 20 } } 
+
+A Single Nested Document Meets Multiple Query Conditions on Nested Fields
+The following example queries for documents where the instock array has at least one embedded document that contains both the field qty equal to 5 and the field warehouse equal to A:
+{ "instock": { $elemMatch: { qty: 5, warehouse: "A" } } }
+
+The following example queries for documents where the instock array has at least one embedded document that contains the field qty that is greater than 10 and less than or equal to 20:
+{ "instock": { $elemMatch: { qty: { $gt: 10, $lte: 20 } } } } 
+
+Combination of Elements Satisfies the Criteria
+The following query matches documents where any document nested in the instock array has the qty field greater than 10 and any document (but not necessarily the same embedded document) in the array has the qty field less than or equal to 20:
+{ "instock.qty": { $gt: 10,  $lte: 20 } } 
+
+The following example queries for documents where the instock array has at least one embedded document that contains the field qty equal to 5 and at least one embedded document (but not necessarily the same embedded document) that contains the field warehouse equal to A:
+{ "instock.qty": 5, "instock.warehouse": "A" } 
+
+Aggregation Example
+https://media.mongodb.org/zips.json
+
+db.zipcodes.aggregate( [
+   { $group: { _id: "$state", totalPop: { $sum: "$pop" } } },
+   { $match: { totalPop: { $gte: 10*1000*1000 } } }
+] )
+
+Equivalent SQL
+SELECT state, SUM(pop) AS totalPop
+FROM zipcodes
+GROUP BY state
+HAVING totalPop >= (10*1000*1000)
+
+Return Average City Population by State
+The following aggregation operation returns the average populations for cities in each state:
+db.zipcodes.aggregate( [
+   { $group: { _id: { state: "$state", city: "$city" }, pop: { $sum: "$pop" } } },
+   { $group: { _id: "$_id.state", avgCityPop: { $avg: "$pop" } } }
+] )
+
+Return Largest and Smallest Cities by State
+The following aggregation operation returns the smallest and largest cities by population for each state:
+db.zipcodes.aggregate( [
+   { $group:
+      {
+        _id: { state: "$state", city: "$city" },
+        pop: { $sum: "$pop" }
+      }
+   },
+   { $sort: { pop: 1 } },
+   { $group:
+      {
+        _id : "$_id.state",
+        biggestCity:  { $last: "$_id.city" },
+        biggestPop:   { $last: "$pop" },
+        smallestCity: { $first: "$_id.city" },
+        smallestPop:  { $first: "$pop" }
+      }
+   }
+
+Indexes
+{state: "FL"} create index on state field.
+
+
+Airlines Data
+Match
+{
+  country: "Mexico",
+  base: "DWC"
+}
+Project
+{
+  airline: 1,
+  name: 1,
+  country: 1
+}
+
+db.air_airlines.aggregate([{
+  $group: {
+    _id: {
+      active: '$active',
+      country: '$country'
+    },
+    flightCount: {
+      $sum: 1
+    }
+  }
+}, {
+  $match: {
+    flightCount: {
+      $gte: 5
+    }
+  }
+}])
+
+Geospatial Example
+insert into places collection
+[{
+    "name": "Central Park",
+   "location": { "type": "Point", "coordinates": [ -73.97, 40.77 ] },
+   "category": "Parks"
+},
+{
+   "name": "Sara D. Roosevelt Park",
+   "location": { "type": "Point", "coordinates": [ -73.9928, 40.7193 ] },
+   "category": "Parks"
+},
+{
+   "name": "Polo Grounds",
+   "location": { "type": "Point", "coordinates": [ -73.9375, 40.8303 ] },
+   "category": "Stadiums"
+}]
+
+create index for 2dsphere
+
+The following query uses the $near operator to return documents that are at least 1000 meters from and at most 5000 meters from the specified GeoJSON point, sorted in order from nearest to farthest
+{
+     location:
+       { $near:
+          {
+            $geometry: { type: "Point",  coordinates: [ -73.9667, 40.78 ] },
+            $minDistance: 1000,
+            $maxDistance: 5000
+          }
+       }
+   }
+
+The following operation uses the $geoNear aggregation operation to return documents that match the query filter { category: "Parks" }, sorted in order of nearest to farthest to the specified GeoJSON point
+
+db.places.aggregate( [
+   {
+      $geoNear: {
+         near: { type: "Point", coordinates: [ -73.9667, 40.78 ] },
+         spherical: true,
+         query: { category: "Parks" },
+         distanceField: "calcDistance"
+      }
+   }
+] )
+
+{
+  near: { type: "Point", coordinates: [ -73.99279 , 40.719296 ] },
+        distanceField: "dist.calculated",
+        maxDistance: 2,
+        query: { category: "Parks" },
+        includeLocs: "dist.location",
+        spherical: true
+}

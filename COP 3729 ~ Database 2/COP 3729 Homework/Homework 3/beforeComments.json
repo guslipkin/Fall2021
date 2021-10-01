@@ -1,0 +1,72 @@
+[{
+  "_id": {
+    "$oid": "61576e2e25b679c792eb90c9"
+  },
+  "name": "Gus Lipkin",
+  "email": "glipkin6737@floridapoly.edu",
+  "creationDate": {
+    "$date": "1997-08-01T00:00:00Z"
+  },
+  "url": "gus.com",
+  "title": "This is a title",
+  "text": "Blogs are dumb.",
+  "comments": []
+},{
+  "_id": {
+    "$oid": "61576e3d25b679c792eb90ca"
+  },
+  "name": "Nate Fuller",
+  "email": "nfuller7999@floridapoly.edu",
+  "creationDate": {
+    "$date": {
+      "$numberLong": "-11817878400000"
+    }
+  },
+  "url": "nfuller.com",
+  "title": "Blogging in the 16th century",
+  "text": "Look at me! I'm blogging on sheepskin that's being read out in all the nearby towns by their town criers.",
+  "comments": []
+},{
+  "_id": {
+    "$oid": "61576e4325b679c792eb90cb"
+  },
+  "name": "Luis Moraguez",
+  "email": "lmoraguez6380@floridapoly.edu",
+  "creationDate": {
+    "$date": {
+      "$numberLong": "-2585088000000"
+    }
+  },
+  "url": "lmoraguez.com",
+  "title": "Does blogging with a graph count as telework?",
+  "text": "I'm blogging with a telegraph. People just don't seem to understand when I ask them to like and subscribe.",
+  "comments": []
+},{
+  "_id": {
+    "$oid": "61576e4a25b679c792eb90cc"
+  },
+  "name": "Ahna Cecil",
+  "email": "acecil7688@floridapoly.edu",
+  "creationDate": {
+    "$date": {
+      "$numberLong": "-581904000000"
+    }
+  },
+  "url": "acecil.com",
+  "title": "Mike TeeVee's got nothing on me",
+  "text": "This new Television thing is super cool. I'm so hip that I decided to combine the words \"blog\" and \"video\" to create the first ever vlog.",
+  "comments": []
+},{
+  "_id": {
+    "$oid": "61576e4f25b679c792eb90cd"
+  },
+  "name": "Nicole Ely",
+  "email": "nely7539@floridapoly.edu",
+  "creationDate": {
+    "$date": "2861-02-15T00:00:00Z"
+  },
+  "url": "nely.com",
+  "title": "Today is the tomorrow you were so worried about yesterday",
+  "text": "The future's cool and all but people still think they're hot shit because they have a blog and it is so annoying!",
+  "comments": []
+}]
