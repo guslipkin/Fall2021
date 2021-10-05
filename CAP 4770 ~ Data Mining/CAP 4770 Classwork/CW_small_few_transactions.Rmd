@@ -1,0 +1,154 @@
+---
+title: "Apriori algorithm: small example"
+output: html_notebook
+---
+
+We will use the `arules` package to generate association rules and the `arulesViz` package to visualize them.
+
+```{r, message=FALSE, warning=FALSE}
+library(arules)
+library(arulesViz)
+library(tidyverse)
+```
+
+Documentation on the `arules` and `arulesViz` packages can be found here: 
+
+<https://cran.r-project.org/web/packages/arules/vignettes/arules.pdf>
+
+<https://cran.r-project.org/web/packages/arulesViz/vignettes/arulesViz.pdf>
+
+
+
+## Example 1
+
+In this example we will define the **transaction** from a _list_ object:
+
+```{r}
+# define lists
+shopping_list <- 
+  
+  
+```
+
+We now change the class of the list into a _transactions_ class object (the `transactions` class represents transaction data used for mining itemsets or rules):
+
+```{r}
+# coerce as transaction
+
+```
+
+The apriori algorithm is used below to generate rules from our shopping list:
+
+```{r}
+# uses the apriori() function
+
+  
+```
+
+We use the `inspect()` function to check the top 3 rules based on _confidence_
+
+
+```{r}
+# inspect by confidence
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+## Example 2
+
+In this example we create transactions from a data frame:
+
+
+```{r}
+## creating transactions from data.frame
+
+```
+
+Again, we _coerce_ the data frame as a `transactions` object:
+
+```{r}
+## coerce
+
+```
+
+We can inspect this new object:
+
+```{r}
+# inspect
+
+```
+
+Below the apriori algorithm is used with its default values:
+
+
+```{r}
+
+```
+
+Let us inspect the generated rules this time based on the top 6 rules by _lift_:
+
+```{r}
+
+```
+
+
+## Example 3
+
+First, let us create transactions from a list:
+
+```{r}
+
+```
+
+Convert list to transactions class:
+
+```{r}
+
+```
+
+An item frequency plot can be created using the `itemFrequencyPlot()` function:
+
+```{r}
+
+
+```
+
+
+Use apriori algorithm with support set to 0.4:
+
+```{r}
+
+
+```
+
+
+
+Inspect the rules:
+
+```{r}
+
+```
+
+Let us visualize these rules using tools from the `arulesViz` package.
+
+
+
+```{r, message=FALSE, warning=FALSE}
+
+```
+
+
+
+
+
+
+
+

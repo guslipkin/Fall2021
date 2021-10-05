@@ -1,0 +1,305 @@
+---
+title: "The Apriori Algorithm"
+subtitle: "Interpreting the output of `apriori()` in `arules`"
+output: html_notebook
+---
+
+
+
+To illustrate how _association rules_ work we will use the R packages `arules` and `arulesViz`, in order to show how to use the **Apriori algorithm** to generate frequent itemsets and rules, and to evaluate and visualize the rules
+
+If you have not installed these packages before, you can type 
+
+`install.packages("arules")`
+
+and
+
+`install.packages("arulesViz")`
+
+in the console to download and install them.
+
+```{r, message=FALSE}
+library(arules)
+library(arulesViz)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+## The Apriori Algorithm 
+
+**Market basket analysis** is an association rule method that identifies associations in transactional data. It is an **unsupervised machine learning** technique used for **knowledge discovery** rather than prediction. This analysis results in a set of association rules that identify patterns of relationships among items. A rule can typicall be expressed in the form
+
+{peanut butter, jelly} $\to$ {bread}
+
+
+The above rule states that if both peanut butter and jelly are purchased, then bread is also likely to be purchased.
+
+Transactional data can be extremely large both in terms of the quantity of transactions and the number of items monitored. Given $k$ items that can either appear or not appear in a set, there are $2^k$ possible item sets that must be searched for rules.
+
+Thus, even if a retailer only has 100 distinct items, he could have $2^{100} = 1.267651\times 10^{30}$ item sets to evaluate, which is quite an impossible task. However, a smart rule learner algorithm can take advantage of the fact that in reality, many of the potential item combinations are rarely found in practice. 
+
+For example, if a retailer sells both firearms and dairy products, a set of {gun, butter} are extremely unlikely to be common. By ignoring these rare cases, it makes it possible to limit the scope of the search for rules to a much more manageable size.
+
+To resolve this issue _R. Agrawal and R. Srikant_ introduced the **apriori algorithm**. The apriori algorithm utilizes a simple prior belief (hence the name a priori) about the properties of frequent items. Using this a priori belief, all subsets of **frequent items** must also be frequent. This makes it possible to limit the number of rules to search for. 
+
+For example, the set {gun, butter} can only be frequent if {gun} and {butter} both occur frequently. Conversely, if neither {gun} nor {butter} are frequent, then any set containing these two items can be excluded from the search.
+
+
+**Measuring Rule Interest: Support and Confidence**
+
+
+Let $I = \{i_1 , i_2, ... , i_d \}$ be the set of all items in a market basket data and $T = \{ t_1, t_2, ..., t_N\}$ be the set of all transactions. Each transaction $t_i$ contains a subset of items chosen from $I$. 
+In association analysis, a collection of zero or more items is termed an **itemset**. If an itemset contains $k$ items, is called a $k$-itemset. 
+
+A transaction $t_j$ is said to contain an itemset $X$ if $X$ is a subset of $t_j$. An important property of an itemset is its _support count_, which refers to the number of transactions that contain a particular itemset. Mathematically, the support count, $\sigma(X)$, for an itemset $X$ can be stated as follows:
+
+$$
+\sigma(X) = \vert \{t_i \colon X \subseteq t_i, \quad t_i \in T\} \vert 
+$$
+
+where the symbol $\vert \cdot \vert$ denotes the number of elements in a set.
+
+There are two statistical measures that can be used to determine whether or not a rule is deemed _interesting_.
+
+- **Support** : This measures how frequently an item set occurs in the data. It can be calculated as
+
+$$
+\text{Support}(X) = \frac{\text{Count}(X)}{N} = \frac{\sigma(X)}{N}
+$$
+
+where $X$ represents an item and $N$ represents the total number of transactions.
+
+An itemset $X$ is called _frequent_ if the support is greater than some user-defined threshold (sometimes referred to as _minsup_)
+
+- **Confidence** : This measures the algorithm's predictive power or accuracy. It is calculated as the support of item $X$ and $Y$ divided by the support of item $X$.
+
+$$
+\text{Confidence}(X \to Y) = \frac{\text{Support}(X\cup Y)}{\text{Support}(X)}
+$$
+
+Confidence measures how frequently items in $Y$ appear in transactions that contain $X$. That is: 
+
+$$
+\text{Confidence}(X \to Y) = \frac{\sigma(X\cup Y)}{\sigma(X)}
+$$
+
+The important thing to note regarding confidence is that 
+$$
+\text{Confidence}(X \to Y)  \neq \text{Confidence}(Y \to X) 
+$$
+
+
+- **Lift**: the lift of a rule is defined as 
+
+$$
+\text{Lift}(X \to Y) = \frac{\text{Support}(X\cup Y)}{\text{Support}(X) \cdot \text{Support}(Y)}
+$$
+
+and can be interpreted as the deviation of the support of the whole rule from the support expected under independence given the supports of both sides of the rule. Greater lift values ($\gg 1$) indicate stronger associations. 
+
+
+To illustrate, consider the following transactional table.
+
+
+
+Transaction     |   Purchases
+----------------|-----------------------
+1               | 	{flowers, get well card, soda}
+2               | 	{toy bear, flowers, balloons, candy}
+3               | 	{get well card, candy, flowers}
+4               | 	{toy bear, balloons, soda}
+5               | 	{flowers, get well card, soda}
+
+
+In this case we have:
+
+$$
+\text{Confidence(get well card}\to \text{flowers)} = \frac{\text{Support(get well card} \cup \text{flowers)}}{\text{Support(get well card)}} = \frac{0.6}{0.6} = 1.0
+$$
+
+$$
+\text{Confidence(flowers}\to \text{get well card)} = \frac{\text{Support(flowers} \cup \text{get well card)}}{\text{Support(flowers)}} = \frac{0.6}{0.8} = 0.75
+$$
+
+This means that a purchase of a get well card results in a purchase of flowers 100% of the time, while a purchase of flowers results in a purchase of a get well card 75% of the time. Rules likes 
+
+{get well card} $\to$ {flowers} 
+
+are considered _strong rules_ because they have both high support and confidence.
+
+### How the Apriori Algorithm Works
+
+
+The algorithm has two main steps:
+
+1. _Identify all item sets that meet a minimum support threshold_  
+
+This process occurs in multiple iterations. Each successive iteration evaluates the support of storing a set of _increasingly large items_. 
+
+The first iteration involves evaluating the set of of 1-item sets. The second iteration involves evaluating the set of 2-item sets, and so on. 
+
+The result of each iteration $k$ is a set of $k$-itemsets that meet the minimum threshold. All item sets from iteration $k$ are combined in order to generate candidate item sets for evaluation in iteration $k+1$. 
+
+The apriori principle can eliminate some of the items before the next iteration begins. For example, if {A}, {B}, and {C} are frequent in iteration 1, but {D} is not, then the second iteration will only consider the item sets {A, B}, {A, C}, and {B, C}.
+
+2. _Create rules_ from these items that meet a _minimum confidence threshold_.
+
+
+
+## Example: groceries data 
+
+Michael Hahsler has authored and maintains two very useful R packages relating to association rule mining: the `arules` package and the `arulesViz` package.
+
+The example uses the `Groceries` dataset from the R `arules` package. The `Groceries` dataset is collected from 30 days of real-world point-of-sale transactions of a grocery store. 
+
+The data contain 9835 transactions, or about 328 transactions per day. If we remove brands and just consider product type, it will give total 169 items. 
+
+- Any guesses about which types of items might be purchased together? 
+
+- Will wine and cheese be a common pairing? Bread and butter? Milk and eggs? 
+
+```{r}
+data(Groceries)
+Groceries
+```
+
+Let us find the items most commonly found in transactional data
+
+```{r}
+summary(Groceries)
+```
+
+
+**Some things to notice**
+
+- Density, 0.026 means 2.6% are non zero matrix cells
+
+- Matrix has 9835 times 169, i.e. 1662115 cells. Hence 9835 times 169 times 0.02609146, i.e. 43367, items were purchased
+
+- Whole milk appeared 2513 times out of 9835 transactions, means 0.26 percent of transactions.
+
+- Average transaction contained 43367/9835 = 4.409456 items
+
+- A total of 2159 transactions contained only a single item, while one transaction had 32 items.
+
+- The first quartile and median purchase size are 2 and 3 items respectively, implying that 25 percent of transactions contained two or fewer items and about half contained around three items.
+
+- The mean of 4.409 matches the value we calculated manually.
+
+
+
+## Generating rules
+
+```{r}
+
+```
+
+
+The apriori algorithm generated 15 rules with the given constraints. Let us discuss the `Parameter Specification` section of the output.
+
+
+- `minval` is the minimum value of the support an itemset should satisfy to be a part of a rule.
+
+- `smax` is the maximum support value for an itemset.
+
+- `arem` is an Additional Rule Evaluation Parameter. In the above code we have constrained the number of rules using Support and Confidence. There are several other ways to constrain the rules using the `arem` parameter in the function.
+
+- `aval` is a logical indicating whether to return the additional rule evaluation measure selected with `arem`.
+
+- `originalSupport` is the traditional support value only considers both `LHS` and `RHS` items for calculating support. If you want to use only the `LHS` items for the calculation then you need to set this to `FALSE`.
+
+- `maxtime` is the maximum amount of time allowed to check for subsets (in seconds).
+
+- `minlen` is the minimum number of items required in the rule. The default value for `minlen` is 1. This means that rules with only one item (i.e., an empty antecedent/LHS) like `{} => {beer}` will be created. These rules mean that no matter what other items are involved, the item in the `RHS` will appear with the probability given by the rule's confidence (which equals the support). If you want to avoid these rules then use the argument `parameter=list(minlen=2)`.
+
+- `maxlen` is the maximum number of items that can be present in the rule.
+
+The top 3 rules sorted by confidence are shown below 
+
+```{r}
+
+
+```
+
+
+
+## Limiting the number of rules 
+
+In many cases, you would like to limit the number of rules generated. For example, you can use association rules as predictors in Regression/Classification. You can generate rules with the `RHS` of the rule as your response and use the rules generated as the modelling features. In this case, you would not want to use all the rules generated as the predictors because many rules are actually subsets of bigger rules and hence you would want to eliminate them. 
+
+Below we generate rules whose `RHS` is pre-defined:
+
+```{r}
+
+```
+
+
+Check the top 5 rules generated in this case:
+
+```{r}
+
+```
+
+
+
+If you want to get stronger rules, you have to increase the `confidence`. If you want lengthier rules increase the `maxlen` parameter. 
+
+
+
+
+## From Data Frame to Transactional Data 
+
+The `AdultUCI` dataset bundled with `arules` package is used below as illustration.
+
+```{r}
+data("AdultUCI")
+class(AdultUCI)
+```
+
+Notice that some of the columns are numeric:
+
+```{r}
+head(AdultUCI)
+```
+
+
+Each transaction of a _transactional dataset_ contains the list of items involved in that transaction. When we convert the dataframe into a transactional dataset, each row of this dataframe will become a transaction. Each column will become an item. But if the value of a column is numeric, it cannot be used as the column can take infinite values. So before converting the dataframe into a transactional dataset, we must ensure that we convert each column into a **factor** or a logical to ensure that the column takes values only from a fixed set.
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+Now we convert the `adult_factor` dataframe into a transactional dataset 
+
+```{r}
+
+```
+
+Let us inspect this transactional dataset
+
+```{r}
+
+```
+
+
+and finally we create some rules from this dataset:
+
+```{r}
+
+```
+
+The top 4 rules organized by lift are shown below:
+
+```{r}
+
+```
+
