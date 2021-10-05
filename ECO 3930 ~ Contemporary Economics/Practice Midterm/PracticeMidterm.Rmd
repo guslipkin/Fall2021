@@ -1,0 +1,83 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+# Questions 1-2
+
+## 1
+
+## 2
+
+# Questions 28-32
+
+```{r}
+library(tidyverse)
+library(data.table)
+```
+
+```{r}
+tut <- fread("tutoring.csv")
+head(tut)
+```
+
+## 28
+```{r}
+t.test(tut$s1, tut$s2)
+
+tut$diff <- tut$s2 - tut$s1
+
+head(tut)
+```
+
+
+## 29
+```{r}
+bins <- seq(2.5,100,5)
+tut$s1Bin <- cut(tut$s1, breaks = seq(0,100,5), labels = bins)
+tut$s2Bin <- cut(tut$s2, breaks = seq(0,100,5), labels = bins)
+
+q29 <- tut %>%
+  group_by(s1Bin) %>%
+  count(t) %>%
+  mutate(percTreatedBin = round(n / sum(n) * 100, 2),
+         percTreatedTotal = round(n / length(tut$t[tut$t == 1]) * 100, 2)) %>%
+  filter(t == 1) %>%
+  select(-t)
+q29$s1Bin <- as.numeric(levels(q29$s1Bin)[(q29$s1Bin)])
+q29
+```
+
+```{r}
+q29 %>%
+  ggplot() +
+  geom_point(aes(x = s1Bin, y = percTreatedTotal)) +
+  geom_vline(xintercept = 60, color = "black") +
+  scale_x_continuous(breaks = bins) +
+  scale_y_binned(n.breaks = 10, limits = c(0,35))
+```
+
+> [INTERPRETATION]
+
+## 30
+```{r}
+q30 <- tut %>%
+  group_by(s1Bin) %>%
+  summarise(s2Mean = mean(s2)) 
+q30$s1Bin <- as.numeric(levels(q30$s1Bin)[(q30$s1Bin)])
+
+q30 %>%
+  ggplot() +
+  geom_point(aes(x = s1Bin, y = s2Mean)) +
+  geom_vline(xintercept = 60) +
+  scale_x_continuous(breaks = bins) +
+  scale_y_binned(n.breaks = 10, limits = c(50, 85))
+```
+
+> [INTERPRETATION]
+
+## 31
+```{r}
+
+```
+
+## 32
