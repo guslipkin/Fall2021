@@ -195,7 +195,9 @@ summary(Groceries)
 ## Generating rules
 
 ```{r}
-
+grocery_rules <- apriori(Groceries,
+                         parameter = list(support = .01,
+                                          confidence = .5))
 ```
 
 
@@ -221,8 +223,10 @@ The apriori algorithm generated 15 rules with the given constraints. Let us disc
 The top 3 rules sorted by confidence are shown below 
 
 ```{r}
-
-
+grocery_rules %>%
+  sort( . , by = "lift") %>%
+  head(3) %>%
+  inspect()
 ```
 
 
@@ -234,14 +238,21 @@ In many cases, you would like to limit the number of rules generated. For exampl
 Below we generate rules whose `RHS` is pre-defined:
 
 ```{r}
-
+wholemilk_rules <- apriori(
+  data = Groceries,
+  parameter = list(support = .001, confidence = .8),
+  appearance = list(rhs = "whole milk")
+)
 ```
 
 
 Check the top 5 rules generated in this case:
 
 ```{r}
-
+wholemilk_rules %>%
+  sort( . , by = "lift") %>%
+  head(5) %>%
+  inspect()
 ```
 
 
@@ -270,36 +281,43 @@ head(AdultUCI)
 Each transaction of a _transactional dataset_ contains the list of items involved in that transaction. When we convert the dataframe into a transactional dataset, each row of this dataframe will become a transaction. Each column will become an item. But if the value of a column is numeric, it cannot be used as the column can take infinite values. So before converting the dataframe into a transactional dataset, we must ensure that we convert each column into a **factor** or a logical to ensure that the column takes values only from a fixed set.
 
 ```{r}
-
+adult_factor <- map_df(AdultUCI, as.factor)
 ```
 
 ```{r}
-
+adult_factor
 ```
 
 
 Now we convert the `adult_factor` dataframe into a transactional dataset 
 
 ```{r}
-
+adult_tr <- as(adult_factor, "transactions")
 ```
 
 Let us inspect this transactional dataset
 
 ```{r}
-
+itemFrequencyPlot(adult_tr, topN = 10)
 ```
 
 
 and finally we create some rules from this dataset:
 
 ```{r}
-
+adult_rules <- apriori(
+  adult_tr,
+  parameter = list(support = .001, minlen = 2),
+  appearance = list(rhs = "income=small")
+)
 ```
 
 The top 4 rules organized by lift are shown below:
 
 ```{r}
-
+adult_rules %>%
+  sort( . , by = "lift") %>%
+  head(4) %>%
+  inspect()
 ```
 

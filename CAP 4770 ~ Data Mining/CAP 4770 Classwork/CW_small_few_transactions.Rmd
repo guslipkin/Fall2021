@@ -25,7 +25,13 @@ In this example we will define the **transaction** from a _list_ object:
 
 ```{r}
 # define lists
-shopping_list <- 
+shopping_list <- list(
+  c("flowers", "card", "soda"),
+  c("toy", "flowers", "balloon", "candy"),
+  c("card", "candy", "flowers"),
+  c("toy", "balloons", "soda"),
+  c("flowers", "card", "soda")
+)
   
   
 ```
@@ -34,15 +40,17 @@ We now change the class of the list into a _transactions_ class object (the `tra
 
 ```{r}
 # coerce as transaction
-
+shopping_tr <- as(shopping_list, "transactions")
 ```
 
 The apriori algorithm is used below to generate rules from our shopping list:
 
 ```{r}
 # uses the apriori() function
-
-  
+shopping_rules <- apriori(shopping_tr,
+                          parameter = list(support = .1,
+                                           confidence = .25,
+                                           minlen = 2))
 ```
 
 We use the `inspect()` function to check the top 3 rules based on _confidence_
@@ -50,15 +58,8 @@ We use the `inspect()` function to check the top 3 rules based on _confidence_
 
 ```{r}
 # inspect by confidence
-
-```
-
-```{r}
-
-```
-
-```{r}
-
+inspect(head(sort(shopping_rules, by = "confidence"), 3))
+image(shopping_tr)
 ```
 
 
@@ -69,34 +70,41 @@ In this example we create transactions from a data frame:
 
 ```{r}
 ## creating transactions from data.frame
-
+students_df <- data.frame(
+  age = factor(c(6, 8, NA, 9, 16)),
+  grade = factor(c("A", "C", "F", NA, "C")),
+  pass = c(T, T, F, T, T)
+)
 ```
 
 Again, we _coerce_ the data frame as a `transactions` object:
 
 ```{r}
 ## coerce
-
+students_tr <- as(students_df, "transactions")
 ```
 
 We can inspect this new object:
 
 ```{r}
 # inspect
-
+inspect(students_tr)
 ```
 
 Below the apriori algorithm is used with its default values:
 
 
 ```{r}
-
+students_rules <- apriori(students_tr)
 ```
 
 Let us inspect the generated rules this time based on the top 6 rules by _lift_:
 
 ```{r}
-
+students_rules %>%
+  sort( . , by = "lift") %>%
+  head() %>%
+  inspect()
 ```
 
 
@@ -105,28 +113,32 @@ Let us inspect the generated rules this time based on the top 6 rules by _lift_:
 First, let us create transactions from a list:
 
 ```{r}
-
+publix <- list(
+  c("milk", "tea", "cake"),
+  c("eggs", "tea", "cold drink"),
+  c("milk", "eggs", "tea", "cold drink"),
+  c("eggs", "cold drink"),
+  c("juice")
+)
 ```
 
 Convert list to transactions class:
 
 ```{r}
-
+publix_tr <- as(publix, "transactions")
 ```
 
 An item frequency plot can be created using the `itemFrequencyPlot()` function:
 
 ```{r}
-
-
+itemFrequencyPlot(publix_tr)
 ```
 
 
 Use apriori algorithm with support set to 0.4:
 
 ```{r}
-
-
+publix_rules <- apriori(publix_tr, parameter = list(support = .4))
 ```
 
 
@@ -134,7 +146,7 @@ Use apriori algorithm with support set to 0.4:
 Inspect the rules:
 
 ```{r}
-
+inspect(publix_rules)
 ```
 
 Let us visualize these rules using tools from the `arulesViz` package.
@@ -142,7 +154,7 @@ Let us visualize these rules using tools from the `arulesViz` package.
 
 
 ```{r, message=FALSE, warning=FALSE}
-
+plot(publix_rules, method = "graph", control = list(type = "items"), engine = "htmlwidget")
 ```
 
 
