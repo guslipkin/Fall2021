@@ -120,109 +120,18 @@ bother trying to calculate how many that is. Why not?
 # Questions 28-32
 > **Data on 400 (hypothetical) observations for these questions is in the ac- companying file “tutoring.csv”.**
 
-```{r}
-library(tidyverse)
-library(data.table)
-library(ivreg)
-```
-
-```{r}
-tut <- fread("tutoring.csv")
-head(tut)
-```
-
 ## 28
-```{r}
-tut$diff <- tut$s2 - tut$s1
-```
-
+> Calculate the simple sample difference.
 
 ## 29
-```{r}
-cutPoint <- 60
-bins <- seq(2.5,100,5)
-
-# tut$s1Bin <- cut(tut$s1, breaks = seq(0,100,5), labels = bins)
-# tut$s2Bin <- cut(tut$s2, breaks = seq(0,100,5), labels = bins)
-# 
-# q29 <- tut %>%
-#   group_by(s1Bin) %>%
-#   count(t) %>%
-#   mutate(percTreatedBin = round(n / sum(n) * 100, 2)) %>%
-#   filter(t == 1) %>%
-#   select(-t)
-
-q29 <- tut[, c("s1Bin", 
-               "s2Bin") := .(cut(tut$s1, breaks = seq(0,100,5), labels = bins), 
-                             cut(tut$s2, breaks = seq(0,100,5), labels = bins))][
-            order(s1Bin, t), .N, by = .(s1Bin, t)][
-            , percTreatedBin := round(N / sum(N) * 100, 2), by = s1Bin][
-            t == 1, !c("t")]
-
-q29$s1Bin <- as.numeric(levels(q29$s1Bin)[q29$s1Bin])
-head(q29)
-```
-
-```{r}
-q29 %>%
-  ggplot() +
-  geom_point(aes(x = s1Bin, y = percTreatedBin)) +
-  geom_vline(xintercept = cutPoint, color = "black") +
-  scale_x_continuous(breaks = bins) +
-  scale_y_binned(n.breaks = 10, limits = c(0,100))
-```
-
-> [INTERPRETATION]
+> Bin the data in 5-point increments, letting each bin be represented by its midpoint. For each bin, calculate the percent that were treated. Plot this against the bin midpoint. Plot a vertical line at the cut point. Interpret the figure.
 
 ## 30
-```{r}
-# q30 <- tut %>%
-#   group_by(s1Bin) %>%
-#   summarise(s2Mean = round(mean(s2), 2))
-q30 <- tut[, .(s2Mean = round(mean(s2)), 2), by = "s1Bin"][order(s1Bin), -c("V2")]
-q30$s1Bin <- as.numeric(levels(q30$s1Bin)[(q30$s1Bin)])
-
-q30 %>%
-  ggplot() +
-  geom_point(aes(x = s1Bin, y = s2Mean)) +
-  geom_vline(xintercept = cutPoint) +
-  scale_x_continuous(breaks = bins) +
-  scale_y_binned(n.breaks = 10, limits = c(50, 85))
-```
-
-> [INTERPRETATION]
+> For each bin from the previous question, calculate the average score on the second exam. Plot this against the bin midpoint. Plot a vertical line at the cut point. Interpret the figure.
 
 ## 31
-```{r}
-# ggplot() +
-#   stat_smooth(data = q30[q30$s1Bin <= cutPoint,], aes(x = s1Bin, y = s2Mean), 
-#               method = "lm", formula = "y~x", color = "orange4", fill = "orange", fullrange = TRUE) +
-#   stat_smooth(data = q30[q30$s1Bin > cutPoint,], aes(x = s1Bin, y = s2Mean),
-#               method = "lm", formula = "y~x", color = "purple4", fill = "purple", fullrange = TRUE) +
-#   geom_point(data = q30, aes(x = s1Bin, y = s2Mean), size = 2) +
-#   geom_vline(xintercept = cutPoint) +
-#   scale_x_continuous(breaks = bins) +
-#   scale_y_binned(n.breaks = 10, limits = c(50, 85))
-# 
-# lm(formula = s2Mean ~ s1Bin, data = q30[q30$s1Bin <= cutPoint])
-# lm(formula = s2Mean ~ s1Bin, data = q30[q30$s1Bin > cutPoint])
-
-ggplot() +
-  stat_smooth(data = q30[s1Bin <= cutPoint], aes(x = s1Bin, y = s2Mean), 
-              method = "lm", formula = "y~x", color = "orange4", fill = "orange", fullrange = TRUE) +
-  stat_smooth(data = q30[s1Bin > cutPoint,], aes(x = s1Bin, y = s2Mean),
-              method = "lm", formula = "y~x", color = "purple4", fill = "purple", fullrange = TRUE) +
-  geom_point(data = q30, aes(x = s1Bin, y = s2Mean), size = 2) +
-  geom_vline(xintercept = cutPoint) +
-  scale_x_continuous(breaks = bins) +
-  scale_y_binned(n.breaks = 10, limits = c(50, 85))
-
-lm(formula = s2Mean ~ s1Bin, data = q30[s1Bin <= cutPoint])
-lm(formula = s2Mean ~ s1Bin, data = q30[s1Bin > cutPoint])
-```
+> Calculate the local effect of intention to treat. You will need to do a regression to accomplish this.
 
 ## 32
-```{r}
-
-```
+> Calculate an estimate of the LATE. You will need to use an instrumental variables estimator.
 
