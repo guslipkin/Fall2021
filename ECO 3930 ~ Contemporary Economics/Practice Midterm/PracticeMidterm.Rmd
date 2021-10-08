@@ -1,17 +1,23 @@
 ---
 title: "R Notebook"
 output:
-  html_notebook:
+   html_notebook:
     toc: yes
     toc_depth: 2
     toc_float: yes
-  #   toc: yes
-  #   toc_depth: 2
-  #   toc_float: yes
-  #   df_print: paged
-  # html_document:
 ---
+
+```{r}
+library(tidyverse)
+library(data.table)
+library(ivreg)
+```
+
 # Questions 1-2
+
+  <!-- pdf_document: -->
+  <!--   toc: yes -->
+  <!--   toc_depth: '2' -->
 
 ## 1
 > Explain briefly how and why simple models, optimization, equilibrium (particularly supply and demand), and an understanding of property rights together form an important part of the core of microeconomic analysis.
@@ -84,25 +90,70 @@ The tragedy of the commons is that every person is seeking to maximize their own
 > Suppose the government can charge a fee to fish in East Lake. How large would the fee need to be to induce the optimum number of people to fish there? How much revenue would the government collect?
 
 $$
-\frac{1200-1050}{30}=\frac{150}{30}=5\\
-5*30=150
+V=v(x)\\
+v(w)=v(e)-f\\
+20=50-.5(n)-f\\
+20=50-.5n-f\\
+-30=-.5n-f\\
+30=.5n+f\\
+0=.5n+f-30
 $$
 
-I could be totally wrong, but I don't want to think I am. We can take the tragedy of the commons value for East Lake of $1200$ and subtract the optimized Dewey value of $1050$. We then want to split the cost among all the people fishing at East Lake, which is $30$. This leaves us with a cost per person of $5$. With $30$ people, the government gets $\$150$ in revenue.
+```{r}
+n <- 30
+
+for(f in 0:1000) {
+  if (0 == (.5 * n) + f - 30) {
+    break
+  }
+}
+
+print(paste0("n: ", n, ", f: ", f))
+print(paste0("Total profit: ", 20*(100-n) + (n*(50-(.5*n))-(n*f))))
+```
+
+```{r}
+n <- 30
+
+for(f in 0:(50-(.5*n))) {
+  if (20*(100-n) == (n*(50-(.5*n)-f))) {
+    print(paste(n, f))
+    break
+  }
+}
+
+20*(100-n) - (n*(50-(.5*n)-f))
+print(paste0("n: ", n, ", f: ", f))
+print(paste0("Total profit: ", 20*(100-n) - (n*(50-(.5*n)-f))))
+```
+
+
+I could be totally wrong, but I don't want to think I am. From above, we have the equation $v(w)=v(e)-f$ where $v(w)$ and $v(e)$ are the profit functions for West and East Lakes respectively, and $f$ is the fee applied to fishing in East Lake. Written out, that is $20(100-n)=n(50-.5n)-fn$ where $n$ is the number of people fishing in East Lake. Since we know that the optimal result is achieved at $n=30$, we can constrain the loop as such and iterate over a value for the fee, $f$, and we get $f=15$ which is a total government revenue of $n*f=30*15=450$.
 
 # Questions 7-10
 
 ## 7 
 > Discuss the limitations of randomized control trials covered in the article by Deaton and Cartwright.
 
+The single biggest issue with randomized controlled trials is that you cannot make predictions for which you have no data. So even though your RCT may cover an extremely wide swathe of the population, there are people outside that group who you cannot make predictions for. As you increase the size of the study, the costs and complexity increase and so researchers must find an appropriate balance between the size and cost.
+
 ## 8
 > Discuss what gave rise to the credibility revolution.
+
+Everyone was publishing papers about whatever hot topic they could find, but if more than one person studied the same thing, they were likely to make different assumptions about the topic, and thus influence the outcome of the study. This gave rise to the credibility revolution where researchers looked to hold each other accountable for their research assumptions and to design better studies.
 
 ## 9 
 > List and discuss several factors that combined to increase the credibility of empirical economics over the course of the credibility revolution.
 
+- Sensitivity Analysis: Adding sensitivity analysis allows research authors to test their assumptions and see how much their results would change if everything was just a little bit different.
+- Randomized Controlled Trials: As discussed above, RCTs can be a powerful tool to conduct studies which might otherwise not be possible. While not common, they have been used in cases such as Andrew Yang's Universal Basic Income pilot program.
+- Better and More Data: More and better data seems like a given. As the quality and quantity increase, your studies will have better results that are more representative of the world at large.
+- Better Research Design: Again, this seems like a given. As the quality of the research design improves, then the quality of the results should improve as well.
+
 ## 10 
 > Discuss a potential downside of the credibility revolution.
+
+One criticism, called `External Validity` is that study based research is too specific and not suited for the world at large. In essence, the need for Better Research Design has created a problem where the studies are so narrow in scope in order to control for outside influences, the study may not be useful in general.
 
 # All Remaining Questions
 > **You are interested in whether a tutoring program improves performance. You have a measure of initial ability, $S_1$. You know who signed up for and received voluntary tutoring, $T$. You later observe a second measure of performance, $S_2$. You are worried unobservables, $U$, influence the initial score, the probability of signing up for tutoring for a given initial score, and the second score.**
@@ -110,8 +161,26 @@ I could be totally wrong, but I don't want to think I am. We can take the traged
 ## 11 
 > Give some examples of unobservables relevant to this case.
 
+- Some students may or may not drink coffee before the exam
+- Some students may have overbearing parents that insist on their little munchkin being given tutoring, regardless of $S_1$
+- Some students may have had a panic attack during the exam due to the lack of a clock in the exam room. Ultimately, a clock was installed before $S_2$
+
 ## 12 
 > Draw the DAG.
+
+```{r}
+library(webshot)
+DiagrammeR::mermaid("
+graph LR
+A(U) -->|Unobserved|B[S1]
+    B --> D
+    A -->|Unobserved|C{T}
+    A -->|Unobserved|D[S2]
+    B --> C
+    C --> D
+")
+```
+
 
 ## 13 
 > What is a backdoor path? Why do you have to block them? How do you block them? Based on the DAG, what backdoor path or paths, if any, can’t be blocked with the data you have?
@@ -128,6 +197,23 @@ I could be totally wrong, but I don't want to think I am. We can take the traged
 
 ## 14
 > What are the observed sample difference, ATT, ATU, ATE, and selection bias?
+
+```{r}
+dt <- data.table(
+  subject = c(1, 2, 3, 4),
+  y0 = c(84, 76, 74, 80),
+  y1 = c(76, 82, 64, 78),
+  t = c(1, 0, 1, 0)
+)
+
+dt[, TE := y1 - y0][t == TRUE, TT := TE][t == FALSE, TU := TE]
+data.table(
+  ATE = c(mean(dt$TE)),
+  ATT = c(mean(dt$TT, na.rm = T)),
+  ATU = c(mean(dt$TU, na.rm = T))
+)
+```
+
 
 ## 15
 > Why, in reality, can’t you actually calculate ATT, ATU, ATE, or selection bias? That is, what is the fundamental problem with causal inference?
@@ -147,8 +233,30 @@ I could be totally wrong, but I don't want to think I am. We can take the traged
 ## 19
 > Show there are 6 possible ways to assign treatment to 2 of 4 students.
 
+```{r}
+combn(4, 2)
+```
+
+I admit that I cheated a little with the code above, but it works. There are six combinations of choosing two students from a group of four. The general formula is $C(n,r)=\frac{n!}{r!(n-r!)}$. We can plug in and get: 
+
+$$
+C(4,2)=\frac{4!}{2!(4-2)!}\\
+=\frac{24}{2!(2)!}\\
+=\frac{24}{4}\\
+=6
+$$
+
 ## 20
 > With the small sample you can construct all possible assignments manually. What are the six sample differences under Fischer’s sharp null?
+
+```{r}
+for(r1 in 1:4) {
+  for(r2 in r1:4) {
+    print(dt[r1:r2, .(y0, y1)])
+  }
+}
+```
+
 
 ## 21
 > Discuss how strong the evidence is for an actual effect based on this (small) sample. Basically, what is the relevant p-value and what do you make of it?
@@ -157,8 +265,13 @@ I could be totally wrong, but I don't want to think I am. We can take the traged
 > **Suppose you have a sample of 400 with 200 randomly treated.**
 
 ## 22
-> Show the expression for the number of ways to randomly choose 200 from 400. Don’t
-bother trying to calculate how many that is. Why not?
+> Show the expression for the number of ways to randomly choose 200 from 400. Don’t bother trying to calculate how many that is. Why not?
+
+$$
+C(400,200)=\frac{400!}{200!(400-200)!}
+$$
+
+For one, *400!==64034522846623895262347970319503005850702583026002959458684445942802397169186831436278478647463264676294350575035856810848298162883517435228961988646802997937341654150838162426461942352307046244325015114448670890662773914918117331955996440709549671345290477020322434911210797593280795101545372667251627877890009349763765710326350331533965349868386831339352024373788157786791506311858702618270169819740062983025308591298346162272304558339520759611505302236086810433297255194852674432232438669948422404232599805551610635942376961399231917134063858996537970147827206606320217379472010321356624613809077942304597360699567595836096158715129913822286578579549361617654480453222007825818400848436415591229454275384803558374518022675900061399560145595206127211192918105032491008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000*, and *200!==788657867364790503552363213932185062295135977687173263294742533244359449963403342920304284011984623904177212138919638830257642790242637105061926624952829931113462857270763317237396988943922445621451664240254033291864131227428294853277524242407573903240321257405579568660226031904170324062351700858796178922222789623703897374720000000000000000000000000000000000000000000000000* and I'm a pretty smart guy, but I'm not smart enough for this shit. The end result is a really big number that is so big it has lost all meaning.
 
 ## 23
 > Practically, how can we approximate the Fisher exact test p-value with large samples?
@@ -173,19 +286,13 @@ bother trying to calculate how many that is. Why not?
 > **Now suppose everyone with an initial score under 60 was assigned to tutoring, but some did not take it, and that a couple of students who scored a bit over 60 were able to get tutoring anyway.**
 
 ## 26
-> How would you go about employing regression discontinuity to get at the causal effect in this case? What do you use as an instrument for treatment? Why do you need an instru- ment? What is an instrumental variable, anyway?
+> How would you go about employing regression discontinuity to get at the causal effect in this case? What do you use as an instrument for treatment? Why do you need an instrument? What is an instrumental variable, anyway?
 
 ## 27
 > Draw a figure clearly illustrating the difference between sharp and fuzzy RDD. Hint: This is not about the outcome measure.
 
 # Questions 28-32
-> **Data on 400 (hypothetical) observations for these questions is in the ac- companying file “tutoring.csv”.**
-
-```{r}
-library(tidyverse)
-library(data.table)
-library(ivreg)
-```
+> **Data on 400 (hypothetical) observations for these questions is in the accompanying file “tutoring.csv”.**
 
 ```{r}
 tut <- fread("tutoring.csv")
