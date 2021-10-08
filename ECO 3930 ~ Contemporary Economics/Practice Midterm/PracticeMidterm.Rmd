@@ -1,35 +1,96 @@
 ---
 title: "R Notebook"
-output: 
+output:
   html_notebook:
-    toc: true
+    toc: yes
     toc_depth: 2
-    toc_float: true
+    toc_float: yes
+  #   toc: yes
+  #   toc_depth: 2
+  #   toc_float: yes
+  #   df_print: paged
+  # html_document:
 ---
 # Questions 1-2
 
 ## 1
-> Explain briefly how and why simple models, optimization, equilibrium (particularly sup- ply and demand), and an understanding of property rights together form an important part of the core of microeconomic analysis.
+> Explain briefly how and why simple models, optimization, equilibrium (particularly supply and demand), and an understanding of property rights together form an important part of the core of microeconomic analysis.
+
+Simple models allow us to take the complex world around us and reduce it to something that is easier to digest and work with. We can then take that model and optimize it so that we can get the best result possible. We can then look at how we can influence the world around us to induce that optimal result. The optimal result is not always the equilibrium result which is the point in supply and demand or in another system that is naturally reached without outside influence. Property rights are deeply intertwined with microeconomics because they define how people perceive ownership of goods. Wikipedia notes that property rights have three attributes and that people have "the right to use the good," "the right to earn income from the good," and "the right to transfer the good to others, alter it, abandon it, or destroy it (the right to ownership cessation)."
 
 ## 2
 > Suppose riding coaster A provides exactly the same total satisfaction as riding coaster B, and that each seats 50 riders per cycle, but that coaster A takes only 2/3 as much time as coaster B to complete a cycle. Use the idea of equilibrium to estimate the length of the line for B relative to the line for A. Explain your approach.
 
+$$
+50a=\frac{2}{3}50b\\
+50a=33.33b
+$$
+
+Let's say that there are $50$ people in line for only ride B, the line will move fully in time $T$. If there are $50$ people in line for ride A, the line will take time $\frac{2}{3}T$. People will want the lines to take as little time as possible, and thus gravitate towards the line that takes the least amount of time. If there are 50 people or less, this is relatively simple. They will choose ride A. However, if there are more than 50 people in line for ride A, then they would want to know the proportion. From the math above, we learn that the ride wait times will be equal if the number of people in line B is two thirds that of line A, with the equation being $a=\frac{2}{3}b$ where $a$ and $b$ are the number of people in each line. If the $b$ side of the equation is larger, then people will shift towards ride A. If $a$ is larger, people will go to ride B.
+
 # Questions 3-6
+> **One-hundred people fish in two lakes, East Lake and West Lake, on any given day. Each may choose to fish in either lake. Let $n$ be the number that fish in East Lake and $100-n$ be the number that fish in West Lake. West Lake is very large and relatively plain with dispersed fish populations. The value someone receives fishing in W is $20$. East Lake is spectacular with concentrated fish populations. The value someone gets from fishing in East Lake is $50-0.5n$.**
 
 ## 3
 > If people individually choose which lake to fish in, how many will fish in East Lake and how many in West Lake, and what is the total value to everyone fishing? (Total value is just the number fishing East multiplied by the individual value of dishing in East, plus the number fishing in West multiplied by the individual value of fishing in West.)
 
+$$
+20=50-.5n\\
+-30=-.5n\\
+n=60
+$$
+The number of people fishing in East Lake is $60$ which leaves $40$ people in West Lake. 
+
+$$
+20*40=800\\
+60*(50-.5(60))=1200\\
+800+1200=2000
+$$
+
+The total value of everyone fishing in the lake is $2000$ where the people in West Lake have a combined total of $800$ and East Lake is $1200$.
+
 ## 4
 > If a benevolent dictator could limit the number fishing in East, how many people fishing in East and how many in West would maximize total value, and what would total value be?
+
+```{r}
+fishW <- 0
+fishE <- 0
+maxP <- 0
+wMax <- 0
+eMax <- 0
+max <- 0
+
+for(i in 0:100) {
+  fishE <- i
+  fishW <- 100 - fishE
+  max <- (20*fishW)+(fishE*(50-(.5*fishE)))
+  if(max > maxP) {
+    eMax <- fishE
+    wMax <- fishW
+    maxP <- max
+  }
+}
+paste(maxP, eMax, wMax)
+```
+
+The maximum profit is $2450$. This happens when the number of people fishing in East Lake is $30$ and the number of people fishing in West Lake is $70$.
 
 ## 5
 > Relate the difference between outcomes in #3 and #4 to property rights and the tragedy of the commons.
 
+The tragedy of the commons is that every person is seeking to maximize their own profit, rather than the profit of the community, or the commons. In question three, people seek to maximize their own profit, and thus the total profit is only $2000$. In question four, the benevolent Dr Dewey decides to maximize collective profit and the total profit becomes $2450$.
+
 ## 6
 > Suppose the government can charge a fee to fish in East Lake. How large would the fee need to be to induce the optimum number of people to fish there? How much revenue would the government collect?
 
+$$
+\frac{1200-1050}{30}=\frac{150}{30}=5\\
+5*30=150
+$$
+
+I could be totally wrong, but I don't want to think I am. We can take the tragedy of the commons value for East Lake of $1200$ and subtract the optimized Dewey value of $1050$. We then want to split the cost among all the people fishing at East Lake, which is $30$. This leaves us with a cost per person of $5$. With $30$ people, the government gets $\$150$ in revenue.
+
 # Questions 7-10
-> **One-hundred people fish in two lakes, East Lake and West Lake, on any given day. Each may choose to fish in either lake. Let $n$ be the number that fish in East Lake and $100-n$ be the number that fish in West Lake. West Lake is very large and relatively plain with dispersed fish populations. The value someone receives fishing in W is $20$. East Lake is spectacular with concentrated fish populations. The value someone gets from fishing in East Lake is $50-0.5n$.**
 
 ## 7 
 > Discuss the limitations of randomized control trials covered in the article by Deaton and Cartwright.
@@ -132,12 +193,16 @@ head(tut)
 ```
 
 ## 28
+> Calculate the simple sample difference.
+
 ```{r}
 tut$diff <- tut$s2 - tut$s1
 ```
 
 
 ## 29
+> Bin the data in 5-point increments, letting each bin be represented by its midpoint. For each bin, calculate the percent that were treated. Plot this against the bin midpoint. Plot a vertical line at the cut point. Interpret the figure.
+
 ```{r}
 cutPoint <- 60
 bins <- seq(2.5,100,5)
@@ -172,9 +237,10 @@ q29 %>%
   scale_y_binned(n.breaks = 10, limits = c(0,100))
 ```
 
-> [INTERPRETATION]
 
 ## 30
+> For each bin from the previous question, calculate the average score on the second exam. Plot this against the bin midpoint. Plot a vertical line at the cut point. Interpret the figure. 
+
 ```{r}
 # q30 <- tut %>%
 #   group_by(s1Bin) %>%
@@ -190,9 +256,10 @@ q30 %>%
   scale_y_binned(n.breaks = 10, limits = c(50, 85))
 ```
 
-> [INTERPRETATION]
 
 ## 31
+> Calculate the local effect of intention to treat. You will need to do a regression to accomplish this.
+
 ```{r}
 # ggplot() +
 #   stat_smooth(data = q30[q30$s1Bin <= cutPoint,], aes(x = s1Bin, y = s2Mean), 
@@ -222,6 +289,8 @@ lm(formula = s2Mean ~ s1Bin, data = q30[s1Bin > cutPoint])
 ```
 
 ## 32
+> Calculate an estimate of the LATE. You will need to use an instrumental variables estimator.
+
 ```{r}
 
 ```
