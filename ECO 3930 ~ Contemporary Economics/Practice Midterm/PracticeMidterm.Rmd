@@ -1,13 +1,16 @@
 ---
-title: "R Notebook"
+title: "Practice Midterm Exam"
+subtitle: "ECO 3930 ~ Contemporary Economic Issues"
+author: "Gus Lipkin - glipkin6737@floridapoly.edu"
 output:
-   html_notebook:
+  pdf_document:
     toc: yes
-    toc_depth: 2
-    toc_float: yes
+    toc_depth: '2'
+    extra_dependencies: ["amsmath"]
 ---
 
-```{r}
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(data.table)
 library(ivreg)
@@ -15,9 +18,10 @@ library(ivreg)
 
 # Questions 1-2
 
-  <!-- pdf_document: -->
-  <!--   toc: yes -->
-  <!--   toc_depth: '2' -->
+   <!-- html_notebook: -->
+   <!--  toc: yes -->
+   <!--  toc_depth: 2 -->
+   <!--  toc_float: yes -->
 
 ## 1
 > Explain briefly how and why simple models, optimization, equilibrium (particularly supply and demand), and an understanding of property rights together form an important part of the core of microeconomic analysis.
@@ -27,10 +31,10 @@ Simple models allow us to take the complex world around us and reduce it to some
 ## 2
 > Suppose riding coaster A provides exactly the same total satisfaction as riding coaster B, and that each seats 50 riders per cycle, but that coaster A takes only 2/3 as much time as coaster B to complete a cycle. Use the idea of equilibrium to estimate the length of the line for B relative to the line for A. Explain your approach.
 
-$$
+\begin{gather*}
 50a=\frac{2}{3}50b\\
 50a=33.33b
-$$
+\end{gather*}
 
 Let's say that there are $50$ people in line for only ride B, the line will move fully in time $T$. If there are $50$ people in line for ride A, the line will take time $\frac{2}{3}T$. People will want the lines to take as little time as possible, and thus gravitate towards the line that takes the least amount of time. If there are 50 people or less, this is relatively simple. They will choose ride A. However, if there are more than 50 people in line for ride A, then they would want to know the proportion. From the math above, we learn that the ride wait times will be equal if the number of people in line B is two thirds that of line A, with the equation being $a=\frac{2}{3}b$ where $a$ and $b$ are the number of people in each line. If the $b$ side of the equation is larger, then people will shift towards ride A. If $a$ is larger, people will go to ride B.
 
@@ -40,18 +44,19 @@ Let's say that there are $50$ people in line for only ride B, the line will move
 ## 3
 > If people individually choose which lake to fish in, how many will fish in East Lake and how many in West Lake, and what is the total value to everyone fishing? (Total value is just the number fishing East multiplied by the individual value of dishing in East, plus the number fishing in West multiplied by the individual value of fishing in West.)
 
-$$
+\begin{gather*}
 20=50-.5n\\
 -30=-.5n\\
 n=60
-$$
+\end{gather*}
+
 The number of people fishing in East Lake is $60$ which leaves $40$ people in West Lake. 
 
-$$
+\begin{gather*}
 20*40=800\\
 60*(50-.5(60))=1200\\
 800+1200=2000
-$$
+\end{gather*}
 
 The total value of everyone fishing in the lake is $2000$ where the people in West Lake have a combined total of $800$ and East Lake is $1200$.
 
@@ -89,7 +94,7 @@ The tragedy of the commons is that every person is seeking to maximize their own
 ## 6
 > Suppose the government can charge a fee to fish in East Lake. How large would the fee need to be to induce the optimum number of people to fish there? How much revenue would the government collect?
 
-$$
+\begin{gather*}
 V=v(x)\\
 v(w)=v(e)-f\\
 20=50-.5(n)-f\\
@@ -97,7 +102,7 @@ v(w)=v(e)-f\\
 -30=-.5n-f\\
 30=.5n+f\\
 0=.5n+f-30
-$$
+\end{gather*}
 
 ```{r}
 n <- 30
@@ -152,7 +157,7 @@ One criticism, called `External Validity` is that study based research is too sp
 ## 12 
 > Draw the DAG.
 
-```{r}
+```{r, echo=FALSE}
 library(webshot)
 DiagrammeR::mermaid("
 graph LR
@@ -219,13 +224,17 @@ data.table(
 ## 15
 > Why, in reality, can’t you actually calculate ATT, ATU, ATE, or selection bias? That is, what is the fundamental problem with causal inference?
 
-
+You can either do something or you can't do something. In this case, you can't calculate ATT, ATU, ATE, or selection bias because you cannot know both outcomes at once. Thus, the fundamental problem with causal inference is that you cannot calculate the real and counterfactual outcomes. 
 
 ## 16
 > Can big data or AI, on their own, possibly resolve this fundamental problem of causal inference? Why or why not?
 
+Big Data and AI are great buzzwords for people that don't know any better. Although big data and AI may be able to give us better and better predictions about what would happen if we could both do and not do something, the laws of linear time are not affected until we have an AI so good that it builds a time machine (which may or may not be possible, but it certainly hasn't happened yet).
+
 ## 17
 > How does random assignment help break selection bias?
+
+I feel like this should be kinda obvious from the words, but okay. You can have bias in your selection. If your assignment is totally random, then there is no selection bias. In the Marvel Cinematic Universe, this was Thanos' whole big thing. He would come in and erase half of all life on any given planet with a completely random mechanism. He was very proud of the fact, that he had no selection bias and he thought that this made the process very fair.
 
 # Questions 18-21
 > **Assume treatment was randomly assigned.**
@@ -244,12 +253,12 @@ combn(4, 2)
 
 I admit that I cheated a little with the code above, but it works. There are six combinations of choosing two students from a group of four. The general formula is $C(n,r)=\frac{n!}{r!(n-r!)}$. We can plug in and get: 
 
-$$
+\begin{gather*}
 C(4,2)=\frac{4!}{2!(4-2)!}\\
-=\frac{24}{2!(2)!}\\
-=\frac{24}{4}\\
-=6
-$$
+C(4,2)=\frac{24}{2!(2)!}\\
+C(4,2)=\frac{24}{4}\\
+C(4,2)=6
+\end{gather*}
 
 ## 20
 > With the small sample you can construct all possible assignments manually. What are the six sample differences under Fisher’s sharp null?
@@ -284,11 +293,41 @@ For one, *400!==6403452284662389526234797031950300585070258302600295945868444594
 ## 23
 > Practically, how can we approximate the Fisher exact test p-value with large samples?
 
+As the dataset gets larger and larger, the Fisher exact test p-value becomes approximately equal to the chi-squared distribution and thus it is acceptable to use a chi-square test instead.
+
 ## 24
 > Now suppose treatment is not randomly assigned. Instead, everyone who scored under a 60 got extra tutoring and no one else did. Explain how a regression discontinuity design can get at the causal effect of tutoring. Draw a picture to illustrate the LATE.
 
+```{r, echo=FALSE, warning=FALSE}
+q24 <- data.table(
+  xx = c(0, 60, 60, 100),
+  yFuzzy = c(0, 25, 75, 100)
+)
+
+ggplot() +
+  geom_point(data = q24, aes(x = xx, y = yFuzzy)) +
+  stat_smooth(data = q24[1:2], aes(x = xx, y = yFuzzy),
+              method = "lm", formula = "y~x", color = "purple", fill = "purple") +
+  stat_smooth(data = q24[3:4], aes(x = xx, y = yFuzzy),
+              method = "lm", formula = "y~x", color = "orange", fill = "orange") +
+  geom_line(data = data.table(xx = c(60, 60), yy = c(50, 75)), aes(x = xx , y = yy), 
+            arrow = arrow(length=unit(0.50,"cm")), size = 1) +
+  geom_line(data = data.table(xx = c(60, 60), yy = c(50, 25)), aes(x = xx , y = yy), 
+            arrow = arrow(length=unit(0.50,"cm")), size = 1) +
+  geom_label(aes(x = 60, y = 50, label = "LATE"), size = 5) +
+  labs(title = "Fuzzy RDD",
+       subtitle = "(Just pretend these are curves like we always do for supply and demand)") +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+```
+
+A regression discontinuity design would allow us to split the results of people who received tutoring and people who did not. This does two things. One, the data is broken down into relevant "buckets" so that one group cannot affect the results for the other group as they would if both groups were lumped together. And two, so that we can compare across groups to see if there was any true effect.
+
 ## 25
 > What is a LATE? Why can we only estimate the LATE, not the ATE? Why do you often need a lot of data to make an RDD work?
+
+The local average treatment effect, or LATE, is the size of the gap between regression lines at the cut point in a regression discontinuity graph. We can only estimate the LATE because, like I said in question 15, we cannot know the outcome of both testing and not-testing everyone. As for why we often need a lot of data for an RDD, that's because the more data there is, the more data that is likely to be at the cut point. We also need more data because we will be splitting the dataset into groups and need a good amount of data on each side of the cut-point.
 
 # Questions 26-27
 > **Now suppose everyone with an initial score under 60 was assigned to tutoring, but some did not take it, and that a couple of students who scored a bit over 60 were able to get tutoring anyway.**
@@ -296,14 +335,16 @@ For one, *400!==6403452284662389526234797031950300585070258302600295945868444594
 ## 26
 > How would you go about employing regression discontinuity to get at the causal effect in this case? What do you use as an instrument for treatment? Why do you need an instrument? What is an instrumental variable, anyway?
 
+Here we would set our discontinuity cut point at $60$, the cutoff for tutoring. From that, we'd be able to see if the people who got tutoring (a score $\le60$) had a significantly different result than those who scored above a $60$ and did not receive tutoring. An instrumental variable is the variable that causes the treatment, but does not directly cause the outcome. In this case, the instrument is the tutoring cutoff point score. We need an instrument to be able to determine a cutoff point in the results. Without the instrument, any cutoff point we determined would be speculation at best because there would be no real reason to separate the data before and after that point.
+
 ## 27
 > Draw a figure clearly illustrating the difference between sharp and fuzzy RDD. Hint: This is not about the outcome measure.
 
-```{r, warning = FALSE}
+```{r, echo=FALSE, warning=FALSE}
 q27 <- data.table(
   xx = c(0, 5, 5, 10),
   ySharp = c(0, 0, 10, 10),
-  yFuzzy = c(0, 0, 5, 10)
+  yFuzzy = c(0, 2.5, 7.5, 10)
 )
 
 sharp <- ggplot() +
@@ -313,7 +354,7 @@ sharp <- ggplot() +
   stat_smooth(data = q27[3:4], aes(x = xx, y = ySharp),
               method = "lm", formula = "y~x", color = "orange", fill = "orange") +
   geom_line(data = data.table(xx = c(5, 5), yy = c(0, 10)), aes(x = xx , y = yy), linetype = "dashed") +
-  labs(title = "Sharp RDD") +
+  labs(title = "Sharp RDD", subtitle = "\n") +
   theme(axis.ticks = element_blank(),
         axis.text = element_blank())
 
@@ -323,14 +364,13 @@ fuzzy <- ggplot() +
               method = "lm", formula = "y~x", color = "purple", fill = "purple") +
   stat_smooth(data = q27[3:4], aes(x = xx, y = yFuzzy),
               method = "lm", formula = "y~x", color = "orange", fill = "orange") +
-  geom_line(data = data.table(xx = c(5, 5), yy = c(0, 5)), aes(x = xx , y = yy), linetype = "dashed") +
-  labs(title = "Fuzzy RDD") +
+  geom_line(data = data.table(xx = c(5, 5), yy = c(2.5, 7.5)), aes(x = xx , y = yy), linetype = "dashed") +
+  labs(title = "Fuzzy RDD", subtitle = "(Just pretend these are curves like we\nalways do for supply and demand)") +
   theme(axis.ticks = element_blank(),
         axis.text = element_blank())
 
 gridExtra::grid.arrange(sharp, fuzzy, ncol = 2)
 ```
-
 
 # Questions 28-32
 > **Data on 400 (hypothetical) observations for these questions is in the accompanying file “tutoring.csv”.**
@@ -345,6 +385,7 @@ head(tut)
 
 ```{r}
 tut$diff <- tut$s2 - tut$s1
+mean(tut$diff)
 ```
 
 
@@ -354,16 +395,6 @@ tut$diff <- tut$s2 - tut$s1
 ```{r}
 cutPoint <- 60
 bins <- seq(2.5,100,5)
-
-# tut$s1Bin <- cut(tut$s1, breaks = seq(0,100,5), labels = bins)
-# tut$s2Bin <- cut(tut$s2, breaks = seq(0,100,5), labels = bins)
-# 
-# q29 <- tut %>%
-#   group_by(s1Bin) %>%
-#   count(t) %>%
-#   mutate(percTreatedBin = round(n / sum(n) * 100, 2)) %>%
-#   filter(t == 1) %>%
-#   select(-t)
 
 q29 <- tut[, c("s1Bin", 
                "s2Bin") := .(cut(tut$s1, breaks = seq(0,100,5), labels = bins), 
@@ -385,14 +416,12 @@ q29 %>%
   scale_y_binned(n.breaks = 10, limits = c(0,100))
 ```
 
+The chart shows us the percent of people in each bin that were treated with tutoring. Before the cutoff point, the people were much more likely to receive tutoring, with an average of about 75% receiving tutoring across bins. After the cutoff point, people were much less likely to receive tutoring, with an average of about 15% across bins.
 
 ## 30
 > For each bin from the previous question, calculate the average score on the second exam. Plot this against the bin midpoint. Plot a vertical line at the cut point. Interpret the figure. 
 
 ```{r}
-# q30 <- tut %>%
-#   group_by(s1Bin) %>%
-#   summarise(s2Mean = round(mean(s2), 2))
 q30 <- tut[, .(s2Mean = round(mean(s2)), 2), by = "s1Bin"][order(s1Bin), -c("V2")]
 q30$s1Bin <- as.numeric(levels(q30$s1Bin)[(q30$s1Bin)])
 
@@ -404,24 +433,12 @@ q30 %>%
   scale_y_binned(n.breaks = 10, limits = c(50, 85))
 ```
 
+The mean score by bucket of `s2Mean` generally increases as the value of `s1Bin` increases. However, `s2Mean` for those who received tutoring is slightly higher just below the cutoff point than it is for those just after the cutoff point. This could be an indication that those close to the point just needed a little bit of extra help.
 
 ## 31
 > Calculate the local effect of intention to treat. You will need to do a regression to accomplish this.
 
-```{r}
-# ggplot() +
-#   stat_smooth(data = q30[q30$s1Bin <= cutPoint,], aes(x = s1Bin, y = s2Mean), 
-#               method = "lm", formula = "y~x", color = "orange4", fill = "orange", fullrange = TRUE) +
-#   stat_smooth(data = q30[q30$s1Bin > cutPoint,], aes(x = s1Bin, y = s2Mean),
-#               method = "lm", formula = "y~x", color = "purple4", fill = "purple", fullrange = TRUE) +
-#   geom_point(data = q30, aes(x = s1Bin, y = s2Mean), size = 2) +
-#   geom_vline(xintercept = cutPoint) +
-#   scale_x_continuous(breaks = bins) +
-#   scale_y_binned(n.breaks = 10, limits = c(50, 85))
-# 
-# lm(formula = s2Mean ~ s1Bin, data = q30[q30$s1Bin <= cutPoint])
-# lm(formula = s2Mean ~ s1Bin, data = q30[q30$s1Bin > cutPoint])
-
+```{r, warning=FALSE}
 ggplot() +
   stat_smooth(data = q30[s1Bin <= cutPoint], aes(x = s1Bin, y = s2Mean), 
               method = "lm", formula = "y~x", color = "orange4", fill = "orange", fullrange = TRUE) +
@@ -432,14 +449,27 @@ ggplot() +
   scale_x_continuous(breaks = bins) +
   scale_y_binned(n.breaks = 10, limits = c(50, 85))
 
-lm(formula = s2Mean ~ s1Bin, data = q30[s1Bin <= cutPoint])
-lm(formula = s2Mean ~ s1Bin, data = q30[s1Bin > cutPoint])
+below <- lm(formula = s2Mean ~ s1Bin, data = q30[s1Bin <= cutPoint])
+above <- lm(formula = s2Mean ~ s1Bin, data = q30[s1Bin > cutPoint])
+
+below
+above
 ```
+
 
 ## 32
 > Calculate an estimate of the LATE. You will need to use an instrumental variables estimator.
 
 ```{r}
-
+b <- as.numeric(below$coefficients[1]) + as.numeric(below$coefficients[2] * 60)
+a <- as.numeric(above$coefficients[1]) + as.numeric(above$coefficients[2] * 60)
+b - a
 ```
+
+```{r}
+ivreg(s2 ~ s1 | t, data = tut)
+lmtest::coeftest(ivreg(s2 ~ s1 | t, data = tut), type = "HC1")
+```
+
+I've done two different things and I'm not sure which is right, or even what to do with the information on the second. The first attempt just found the value of the regression line at `x==60` and took the difference between the two. This makes sense to me since the LATE is the difference between the two regression lines at the cutpoint.
 
