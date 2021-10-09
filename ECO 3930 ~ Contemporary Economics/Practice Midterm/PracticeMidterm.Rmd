@@ -112,22 +112,6 @@ print(paste0("n: ", n, ", f: ", f))
 print(paste0("Total profit: ", 20*(100-n) + (n*(50-(.5*n))-(n*f))))
 ```
 
-```{r}
-n <- 30
-
-for(f in 0:(50-(.5*n))) {
-  if (20*(100-n) == (n*(50-(.5*n)-f))) {
-    print(paste(n, f))
-    break
-  }
-}
-
-20*(100-n) - (n*(50-(.5*n)-f))
-print(paste0("n: ", n, ", f: ", f))
-print(paste0("Total profit: ", 20*(100-n) - (n*(50-(.5*n)-f))))
-```
-
-
 I could be totally wrong, but I don't want to think I am. From above, we have the equation $v(w)=v(e)-f$ where $v(w)$ and $v(e)$ are the profit functions for West and East Lakes respectively, and $f$ is the fee applied to fishing in East Lake. Written out, that is $20(100-n)=n(50-.5n)-fn$ where $n$ is the number of people fishing in East Lake. Since we know that the optimal result is achieved at $n=30$, we can constrain the loop as such and iterate over a value for the fee, $f$, and we get $f=15$ which is a total government revenue of $n*f=30*15=450$.
 
 # Questions 7-10
@@ -185,10 +169,14 @@ A(U) -->|Unobserved|B[S1]
 ## 13 
 > What is a backdoor path? Why do you have to block them? How do you block them? Based on the DAG, what backdoor path or paths, if any, can’t be blocked with the data you have?
 
+A backdoor is an alternative method to reach the same node in a DAG. Backdoor paths are not causal like direct paths are, because they are indirect. Backdoors have the ability to create spurious correlations and red herrings about the causal effects on the dependent variable. If you leave a backdoor open, it leaves room for bias to enter the model and so you must block them in order to be able to properly make an argument for a causal effect.
+
+In this DAG, our confounding variable is $S_1$ because it leads both directly to $S_2$ and to $S_2$ through $T$.
+
 # Questions 14-17
 > **Suppose there are only four students and the data is as shown in the table ~~to the right~~ below.**
 > 
->  Subject | $Y^0$ | $Y^1$ | $T$  
+>  Subject | $Y^1$ | $Y^0$ | $T$  
 >  :-----: | :---: | :---: | :--:
 >  1       | 84    | 76    | 1    
 >  2       | 76    | 82    | 0    
@@ -198,14 +186,28 @@ A(U) -->|Unobserved|B[S1]
 ## 14
 > What are the observed sample difference, ATT, ATU, ATE, and selection bias?
 
+Create the data table
 ```{r}
 dt <- data.table(
   subject = c(1, 2, 3, 4),
-  y0 = c(84, 76, 74, 80),
-  y1 = c(76, 82, 64, 78),
+  y1 = c(84, 76, 74, 80),
+  y0 = c(76, 82, 64, 78),
   t = c(1, 0, 1, 0)
 )
+```
 
+Calculate sample difference
+```{r}
+dt[, diff := y1 - y0][,.(subject, diff)]
+```
+
+Calculate Selection Bias
+```{r}
+mean(dt[t == 1, y0]) - mean(dt[t == 0, y0])
+```
+
+Calculate ATE, ATT, and ATU
+```{r}
 dt[, TE := y1 - y0][t == TRUE, TT := TE][t == FALSE, TU := TE]
 data.table(
   ATE = c(mean(dt$TE)),
@@ -214,9 +216,10 @@ data.table(
 )
 ```
 
-
 ## 15
 > Why, in reality, can’t you actually calculate ATT, ATU, ATE, or selection bias? That is, what is the fundamental problem with causal inference?
+
+
 
 ## 16
 > Can big data or AI, on their own, possibly resolve this fundamental problem of causal inference? Why or why not?
@@ -228,7 +231,9 @@ data.table(
 > **Assume treatment was randomly assigned.**
 
 ## 18
-> What exactly is Fischer’s sharp null in this context? Why is Fisher’s sharp null particularly useful for randomization inference?
+> What exactly is Fisher’s sharp null in this context? Why is Fisher’s sharp null particularly useful for randomization inference?
+
+Fisher wants us to assume that the treatment effect is zero. With this, we can calculate the distribution of sample differences by calculating every from every data combination available in the sample. This is helpful in randomization inference because it allows us to minimize uncertainty from unobserved potential outcomes. Basically, if we're checking against ourselves, then we should be able to detect any bias in the results.
 
 ## 19
 > Show there are 6 possible ways to assign treatment to 2 of 4 students.
@@ -247,19 +252,22 @@ C(4,2)=\frac{4!}{2!(4-2)!}\\
 $$
 
 ## 20
-> With the small sample you can construct all possible assignments manually. What are the six sample differences under Fischer’s sharp null?
+> With the small sample you can construct all possible assignments manually. What are the six sample differences under Fisher’s sharp null?
 
 ```{r}
-for(r1 in 1:4) {
-  for(r2 in r1:4) {
-    print(dt[r1:r2, .(y0, y1)])
-  }
-}
+for(c in 1:ncol(combn(4, 2)))
+  print(paste0(dt[combn(4, 2)[1,c], y1] - dt[combn(4, 2)[2,c], y0], " or ", 
+               dt[combn(4, 2)[2,c], y0] - dt[combn(4, 2)[1,c], y1]))
 ```
-
 
 ## 21
 > Discuss how strong the evidence is for an actual effect based on this (small) sample. Basically, what is the relevant p-value and what do you make of it?
+
+```{r}
+t.test(dt[t == 0, y1])
+```
+
+The null hypothesis, $H_0$, is that there is no causal effect, while the alternative, $H_1$, is that there is a causal effect. With a p-value of $.01632$, which is less than the significance level of $.05$, we reject the null that there is no causal effect and conclude that there is a significant difference. However, because the sample size is so small, it is difficult to rule one way or another. We could decrease the acceptable p-value, but the next common level is at $.01$, which this test fails.
 
 # Questions 22-25
 > **Suppose you have a sample of 400 with 200 randomly treated.**
@@ -290,6 +298,39 @@ For one, *400!==6403452284662389526234797031950300585070258302600295945868444594
 
 ## 27
 > Draw a figure clearly illustrating the difference between sharp and fuzzy RDD. Hint: This is not about the outcome measure.
+
+```{r, warning = FALSE}
+q27 <- data.table(
+  xx = c(0, 5, 5, 10),
+  ySharp = c(0, 0, 10, 10),
+  yFuzzy = c(0, 0, 5, 10)
+)
+
+sharp <- ggplot() +
+  geom_point(data = q27, aes(x = xx, y = ySharp)) +
+  stat_smooth(data = q27[1:2], aes(x = xx, y = ySharp),
+              method = "lm", formula = "y~x", color = "purple", fill = "purple") +
+  stat_smooth(data = q27[3:4], aes(x = xx, y = ySharp),
+              method = "lm", formula = "y~x", color = "orange", fill = "orange") +
+  geom_line(data = data.table(xx = c(5, 5), yy = c(0, 10)), aes(x = xx , y = yy), linetype = "dashed") +
+  labs(title = "Sharp RDD") +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank())
+
+fuzzy <- ggplot() +
+  geom_point(data = q27, aes(x = xx, y = yFuzzy)) +
+  stat_smooth(data = q27[1:2], aes(x = xx, y = yFuzzy),
+              method = "lm", formula = "y~x", color = "purple", fill = "purple") +
+  stat_smooth(data = q27[3:4], aes(x = xx, y = yFuzzy),
+              method = "lm", formula = "y~x", color = "orange", fill = "orange") +
+  geom_line(data = data.table(xx = c(5, 5), yy = c(0, 5)), aes(x = xx , y = yy), linetype = "dashed") +
+  labs(title = "Fuzzy RDD") +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank())
+
+gridExtra::grid.arrange(sharp, fuzzy, ncol = 2)
+```
+
 
 # Questions 28-32
 > **Data on 400 (hypothetical) observations for these questions is in the accompanying file “tutoring.csv”.**
