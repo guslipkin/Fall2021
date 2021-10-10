@@ -145,7 +145,7 @@ class(AdultUCI)
 ```
 
 
-We  convert each column into a **factor** or a logical to ensure that the column takes values only from a fixed set.
+We convert each column into a **factor** or a logical to ensure that the column takes values only from a fixed set.
 
 ```{r}
 adult_factor <- map_df(AdultUCI, as.factor)
@@ -155,17 +155,29 @@ head(adult_factor)
 
 (a) Convert the `adult_factor` dataframe into a transactional dataset. 
 ```{r}
-
+adult_factor <- as(adult_factor, "transactions")
 ```
 
-
-
 (b) Create an item frequency plot showing the top 15 items (use the `itemFrequencyPlot()` function)
-
+```{r}
+itemFrequencyPlot(adult_factor, topN = 15)
+```
 
 (c) Create some rules from this dataset where the right-hand side of the rule is `"workclass=Private"`. Use `parameter = list(support = 0.02, minlen = 2)` for the rules. Show the top 4 rules organized by lift and comment on the results. 
+```{r}
+adult_rules <- apriori(
+  adult_factor,
+  parameter = list(support = .02, minlen = 2),
+  appearance = list(rhs = "workclass=Private")
+)
 
+adult_rules %>%
+  sort( . , by = "lift") %>%
+  head(4) %>%
+  inspect()
+```
 
+This is so sad. These people work so much and make a small income. Many of them are also machine operator inspectors (not sure what that is but it seems to me like they should be paid more.) 
 
 ## Problem 4 (6 points)
 
@@ -180,12 +192,30 @@ courses_df <- read.csv("https://raw.githubusercontent.com/reisanar/datasets/mast
 These data are for purchases of online statistics courses at `statistics.com`. Each row represents the courses attended by a single customer. The firm wishes to assess alternative sequencing and bundling of courses. Use association rules to analyze these data, and interpret several of the resulting rules.
 
 
-(a) Convert the data frame to a matrix first. 
+(a) Convert the data frame to a matrix first.
+```{r}
+courses_mt <- as.matrix(courses_df)
+```
 
 (b) Transform the data into `transactions` type and create an **item frequency plot**.
+```{r}
+courses_tr <- as(courses_mt, "transactions")
+itemFrequencyPlot(courses_tr)
+```
+
 
 (c) Set **support to 0.025** and **confidence to 0.05**. Use the `apriori()` function to perform association rules mining with the apriori algorithm. Present the top 5 rules sorted by lift, and comment on your results.
+```{r}
+courses_rules <- apriori(
+  courses_tr,
+  parameter = list(support = .025, confidence = .05)
+)
 
+courses_rules %>%
+  sort( . , by = "lift") %>%
+  head(5) %>%
+  inspect()
+```
 
-
+This should be relatively straightforward, and I do love a good bundle. People who often buy the `DataMining`, `Regression`, or `Cat.Data` in combination, often buy all three together and should be offered a bundle. People who buy `Intro` and `DOE` or `Survey` should be offered a bundle with `SW`. In fact, you can frequently find such bundles on Humble Bundle!
 
