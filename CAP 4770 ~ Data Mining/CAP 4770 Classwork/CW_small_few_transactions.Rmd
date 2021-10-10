@@ -32,8 +32,6 @@ shopping_list <- list(
   c("toy", "balloons", "soda"),
   c("flowers", "card", "soda")
 )
-  
-  
 ```
 
 We now change the class of the list into a _transactions_ class object (the `transactions` class represents transaction data used for mining itemsets or rules):

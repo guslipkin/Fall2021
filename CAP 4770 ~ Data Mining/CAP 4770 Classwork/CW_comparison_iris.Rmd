@@ -1,0 +1,157 @@
+---
+title: "K-means and Hierarchical Clustering on the `iris` Dataset"
+output: html_notebook
+---
+
+We will do a clustering analysis on the `iris` data set, using the k-means technique and a hierarchical clustering approach 
+
+The iris data set is one of R's built-in data-sets, and is also available at the [UCI Machine Learning Repository](http://archive.ics.uci.edu/ml/).
+
+The data set was created by statistician Ronald Fisher in his 1936 paper The use of multiple measurements in taxonomic problems as an example of linear discriminant analysis.  
+
+The data consists of **3 classes** of flower types:
+
+  * setosa
+  
+  * virginica
+  
+  * versicolor
+  
+The data has **4 attributes**:
+  
+  * sepal width
+  
+  * sepal length
+  
+  * petal width
+  
+  * petal length
+
+
+This famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.
+
+The built-in data set `iris` is a data frame with 150 cases (rows) and 5 variables (columns) named `Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`, and `Species`.
+
+![](https://s3.amazonaws.com/assets.datacamp.com/blog_assets/iris-machinelearning.png)
+
+
+```{r}
+library(tidyverse)
+```
+
+
+Let us first create a plot using the variables `Petal.Width` and `Petal.Width`, coloring every point by their class:
+
+```{r}
+ggplot(iris, aes(x = Petal.Width, y = Petal.Length, color = Species)) +
+  geom_point()
+```
+
+
+## Using k-means
+
+Let us try to find the 3 groups using k-means 
+
+```{r}
+# use kmeans() with the subset of columns we want to consider
+iris_mini <- iris[, c("Petal.Width", "Petal.Length")]
+km_iris <- kmeans(x = iris_mini, centers = 3)
+```
+
+The object `km_iris` contains an attribute called `cluster` that we want to extract to see the different assignments: 
+
+```{r}
+str(km_iris)
+```
+
+Let us plot the points again, now coloring them based on the clusters found by the k-means algorithm:
+
+- First convert the assigment to a _factor_ variable:
+
+```{r}
+km_results <- iris_mini %>%
+                mutate(cluster = factor(km_iris$cluster))
+km_results
+```
+
+- Now plot the points colored by their clusters from the k-means procedure
+
+```{r}
+# k-means results
+km_results %>%
+  ggplot() +
+  geom_point(aes(x = Petal.Width, y = Petal.Length, color = cluster))
+```
+
+
+## Using hierarchical clustering
+
+
+We will perform the same task now using hiercarchical clustering.
+For this we use the function `hclust()` 
+
+```{r}
+# hierarchical clustering with single linkage
+dis <- dist(iris_mini)
+# use distance matrix as input for clustering method
+hc_iris <- hclust(dis, method = "single")
+hc_iris
+```
+
+Explore the structure of the `hc_iris` object:
+
+```{r}
+str(hc_iris)
+```
+
+To find the cluster assignments in this case, let us cut the dendrogram tree to the proper number of clusters using the `cutree()` (in our case 3)
+
+```{r}
+# use cutree() to cut the dendrogram
+cut3 <- cutree(hc_iris, k = 3)
+# save the assignment as a factor
+hc_results <- iris_mini %>%
+                mutate(cluster = factor(cut3))
+hc_results
+```
+
+And now recreate the plot with the assignment provided by the hierarchical clustering technique
+
+```{r}
+hc_results %>%
+  ggplot() +
+  geom_point(aes(x = Petal.Width, y = Petal.Length, color = cluster))
+```
+
+- Maybe if we try a different _linkage_ we can obtain better results: 
+
+
+```{r}
+# hierarchical clustering using complete linkage
+dis2 <- dist(iris_mini)
+# use distance matrix as input for clustering method
+hc_iris2 <- hclust(dis2, method = "complete")
+```
+
+
+- Get new assignments from the complete linkage option
+
+```{r}
+# use cutree() to cut the dendrogram
+newcut3 <- cutree(hc_iris2, k = 3)
+# save the assignment as a factor
+hc_results2 <- iris_mini %>%
+                mutate(cluster = factor(newcut3))
+```
+
+
+- And now recreate the plot with the assignment provided by the hierarchical clustering technique
+
+```{r}
+# create new plot
+hc_results2 %>%
+  ggplot() +
+  geom_point(aes(x = Petal.Width, y = Petal.Length, color = cluster))
+```
+
+
