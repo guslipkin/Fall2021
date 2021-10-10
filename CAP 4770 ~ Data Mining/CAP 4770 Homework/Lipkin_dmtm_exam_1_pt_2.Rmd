@@ -1,0 +1,191 @@
+---
+title: "Data Mining - Exam 1 Part 2"
+author: "Gus Lipkin. `glipkin6737@floridapoly.edu`"
+output: html_notebook
+---
+
+
+(make sure to include your name in the file name, and in the author field. Verify that the output of every chunk of code is included in the final `.html` file. Upload to Canvas both the `.Rmd` and `.html` versions of your R notebook with solutions)
+
+
+Load the `tidyverse`, `caret`, `arules`, and `factoextra` packages
+
+```{r, message=FALSE, warning=FALSE, comment= FALSE}
+library(tidyverse)
+library(caret)
+library(arules)
+library(factoextra)
+```
+
+> Set a random seed: use the numbers included in your email (or student ID) as seed. For example if your email is `flastname1234@school.edu`, use `1234` in the code below:
+
+```{r}
+# modify this number as indicated above
+set.seed(6737)
+```
+
+
+
+## Problem 1 (6 points)
+
+Consider a subset of the `faithful` dataset with waiting time between eruptions and the duration of the eruption for the Old Faithful geyser in Yellowstone National Park, Wyoming, USA.
+
+```{r}
+my_faithful <- faithful %>% 
+                sample_n(200)
+
+# calculate the pre-process parameters from the dataset
+preprocessParams_scale <- preProcess(my_faithful, method = "scale")
+```
+
+
+Use the `caret` package to perform the following transformations to the `my_faithful` data frame: 
+
+(a) **normalization**
+```{r}
+# normalize
+# calculate the pre-process parameters from the dataset
+preprocess_norm <- preProcess(my_faithful, method = "range")
+# transform the dataset using the parameters
+transformed_norm <- predict(preprocess_norm, my_faithful)
+# summarize the transformed dataset
+summary(transformed_norm)
+```
+
+
+(b) **standardization**
+```{r}
+# standardize
+# calculate the pre-process parameters from the dataset
+preprocessParams_std <- preProcess(my_faithful, method = c("scale", "center"))
+# transform the dataset using the parameters
+transformed_std <- predict(preprocessParams_std, my_faithful)
+# summarize the transformed dataset
+summary(transformed_std)
+```
+
+
+(c) **centering**.
+```{r}
+# center
+# calculate the pre-process parameters from the dataset
+preprocessParams_center <- preProcess(my_faithful, method = "center")
+# transform the dataset using the parameters
+transformed_center <- predict(preprocessParams_center, my_faithful)
+# summarize the transformed dataset
+summary(transformed_center)
+```
+
+
+Comments on your results. Verify that in the standardization process, the transformed variables have _unit standard deviation_ (Hint: the `sd()` function in R computes the standard deviation). 
+```{r}
+sd(transformed_std$eruptions)
+sd(transformed_std$waiting)
+```
+
+
+## Problem 2 (6 points)
+
+Use data on 22 public utilities companies, by exploring the [`Utilities.csv`](https://github.com/reisanar/datasets/blob/master/Utilities.csv) dataset. 
+
+ Variables      |  Description
+----------------|---------------------------------------------------------------
+`Company`       | Company name
+`Fixed_charge`  | Fixed-charge coverage ratio (income/debt)
+`RoR`           | Percent rate of return on capital
+`Cost`          | Cost per KW capacity in place
+`Load_factor`   | Annual load factor
+`Demand_growth` | Percent demand growth
+`Sales`         | Sales (KWH use per year)
+`Nuclear`       | Percent nuclear
+`Fuel_Cost`     | Total fuel costs (cents per KWH)
+
+```{r, message=FALSE}
+utilities <- read_csv("https://github.com/reisanar/datasets/raw/master/Utilities.csv")
+head(utilities)
+utilities <- as.data.frame(utilities)
+tibble::remove_rownames(utilities)
+rownames(utilities) <- utilities$Company
+```
+
+(a) Explore the data and create at least **one summary** (for example, average `Cost` per KW capacity)
+```{r}
+utilities %>%
+  filter(Nuclear > 0) %>%
+  ggplot() +
+  geom_point(aes(x = Nuclear, y = Fuel_Cost)) +
+  stat_smooth(aes(x = Nuclear, y = Fuel_Cost), formula = "y~x", method = "lm")
+```
+
+There is a general downward trend in the total cost of electricity as the amount of nuclear power in that area increases. This suggests that nuclear is less expensive than other sources of electricity.
+
+(b) Perform **principal component analysis**, and comment on the results.
+```{r}
+utilities_pca <- prcomp(utilities[,-1], scale. = T)
+utilities_pca
+summary(utilities_pca)
+```
+
+This is actually pretty interesting to me. PC1 and PC2 are relatively close together in the amount that they contribute with 27 and 23 percent, respectively. I also think it's interesting that it doesn't reach 90% until PC6 while in other classworks and homeworks, it has reached 90% earlier.
+
+(c) Create a **biplot** showing the results of the first two principal components (you can use functions from the `factoextra` package for this).
+```{r}
+fviz_pca_biplot(utilities_pca, select.ind = list(names = rownames(utilities)))
+```
+
+This is interesting. There appears to be no general grouping by region. Boston and New England are together and so are Oklahoma and Texas, most likely from natural gas/nuclear and oil respectively, but I'm not really sure. I also think it's interesting that `Load_factor` and `Fuel_Cost`, and `Demand_growth` and `Cost`, and `RoR` and `Fixed_charge` are grouped together the way they are, but I'm not really sure what to make of it.
+
+## Problem 3 (6 points)
+
+The `AdultUCI` dataset bundled with the `arules` package is used below.
+
+```{r}
+data("AdultUCI")
+class(AdultUCI)
+```
+
+
+We  convert each column into a **factor** or a logical to ensure that the column takes values only from a fixed set.
+
+```{r}
+adult_factor <- map_df(AdultUCI, as.factor)
+head(adult_factor)
+```
+
+
+(a) Convert the `adult_factor` dataframe into a transactional dataset. 
+```{r}
+
+```
+
+
+
+(b) Create an item frequency plot showing the top 15 items (use the `itemFrequencyPlot()` function)
+
+
+(c) Create some rules from this dataset where the right-hand side of the rule is `"workclass=Private"`. Use `parameter = list(support = 0.02, minlen = 2)` for the rules. Show the top 4 rules organized by lift and comment on the results. 
+
+
+
+## Problem 4 (6 points)
+
+
+The Institute for Statistics Education at <statistics.com> offers online courses in statistics and analytics, and is seeking information that will help in packaging and sequencing courses. Consider the data in the file `CourseTopics.csv` 
+
+```{r, message=FALSE}
+courses_df <- read.csv("https://raw.githubusercontent.com/reisanar/datasets/master/Coursetopics.csv")
+```
+
+
+These data are for purchases of online statistics courses at `statistics.com`. Each row represents the courses attended by a single customer. The firm wishes to assess alternative sequencing and bundling of courses. Use association rules to analyze these data, and interpret several of the resulting rules.
+
+
+(a) Convert the data frame to a matrix first. 
+
+(b) Transform the data into `transactions` type and create an **item frequency plot**.
+
+(c) Set **support to 0.025** and **confidence to 0.05**. Use the `apriori()` function to perform association rules mining with the apriori algorithm. Present the top 5 rules sorted by lift, and comment on your results.
+
+
+
+
