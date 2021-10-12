@@ -110,14 +110,50 @@ rownames(utilities) <- utilities$Company
 
 (a) Explore the data and create at least **one summary** (for example, average `Cost` per KW capacity)
 ```{r}
+pairs(utilities[,-1])
+```
+
+Let's use this pairs plot to try and identify any good correlations. `Nuclear` and `Fuel_Cost` looks good.
+
+```{r}
 utilities %>%
   filter(Nuclear > 0) %>%
   ggplot() +
-  geom_point(aes(x = Nuclear, y = Fuel_Cost)) +
-  stat_smooth(aes(x = Nuclear, y = Fuel_Cost), formula = "y~x", method = "lm")
+  geom_point(aes(x = Nuclear, y = Fuel_Cost, color = Company)) +
+  stat_smooth(aes(x = Nuclear, y = Fuel_Cost), formula = "y~x", method = "lm") +
+  labs(title = "Fuel Cost vs Percent Nuclear Power")
 ```
 
 There is a general downward trend in the total cost of electricity as the amount of nuclear power in that area increases. This suggests that nuclear is less expensive than other sources of electricity.
+
+I want to try and find some geographic correlations, but I don't know where companies with names like `Commonwealth` or `Central` are located. Maybe we can try and group it another way? Let's try out some k-means clustering.
+
+```{r message=FALSE, warning=FALSE}
+km_util <- kmeans(x = utilities[,-1], centers = 3)
+km_results <- utilities %>%
+  mutate(cluster = factor(km_util$cluster))
+km_results %>%
+  select(Company, cluster) %>%
+  arrange(as.double(cluster))
+GGally::ggpairs(km_results[,-c(1, ncol(km_results))], aes(color = km_results$cluster, alpha = .4), progress = FALSE)
+```
+
+For some reason, `ggpairs` fails when I set my centers to any number above three, so I set it at three. I was hoping for four or five as that should cover the major regions of the US (Northeast, Southeast, Northwest, Southwest, and Central). One cluster is generally the southern and in the southeast, the second large cluster is mostly northern and/or borders the ocean. Maybe the third cluster is just the leftovers? There does appear to be good groupings by cluster in any `Sales` pairing. While some other variables have decent groupings in some pairs, none seem as promising. 
+
+```{r}
+latlong <- data.frame(
+  Company = c("Arizona", "Boston", "NY", "Florida", "Hawaiian", "Idaho", "Kentucky", "Madison", "Nevada", "New England", "Oklahoma", "Puget", "San Diego", "Texas", "Wisconsin", "Virginia"),
+  lat =  c(34.0489,  42.3601, 40.7128, 27.6648, 19.8968,  44.0628,  37.8393, 43.0731, 39.8760,  43.9654, 35.0078, 47.7237,  32.7157,  31.9686, 43.7844, 37.4312),
+  long = c(111.0937, 71.0589, 74.0060, 81.5158, 155.5828, 114.7420, 84.2700, 89.4012, 117.2241, 70.8227, 97.0929, 122.4713, 117.1611, 99.9018, 88.7879, 78.6560)
+) %>%
+  mutate(long = long * -1)
+
+left_join(latlong, km_results, by = "Company") %>%
+  ggplot() +
+  geom_point(aes(x = long, y = lat, color = cluster), size = 2)
+```
+
+Okay, I could've gone for a proper map but that was a lot more work and I don't really know how to do it. It looks like there might be some basic geographic clustering, but without more data or knowing where the ambiguous places are, I don't have enough data to do anything with.
 
 (b) Perform **principal component analysis**, and comment on the results.
 ```{r}
