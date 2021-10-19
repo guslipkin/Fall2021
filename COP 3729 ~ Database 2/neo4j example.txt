@@ -1,0 +1,136 @@
+CRUD Examples
+
+CREATE (ee:Person { name: "Emil", from: "Sweden", klout: 99 })
+
+MATCH (ee:Person) WHERE ee.name = "Emil" RETURN ee;
+
+Create multiple nodes and relationships
+CREATE (js:Person { name: "Johan", from: "Sweden", learn: "surfing" }),
+(ir:Person { name: "Ian", from: "England", title: "author" }),
+(rvb:Person { name: "Rik", from: "Belgium", pet: "Orval" }),
+(ally:Person { name: "Allison", from: "California", hobby: "surfing" }),
+(ee)-[:KNOWS {since: 2001}]->(js),(ee)-[:KNOWS {rating: 5}]->(ir),
+(js)-[:KNOWS]->(ir),(js)-[:KNOWS]->(rvb),
+(ir)-[:KNOWS]->(js),(ir)-[:KNOWS]->(ally),
+(rvb)-[:KNOWS]->(ally)
+
+MATCH (ee:Person)-[:KNOWS]-(friends)
+WHERE ee.name = "Emil" RETURN ee, friends
+
+Pattern matching can be used to make recommendations. 
+Johan is learning to surf, so he may want to find a new friend who already does:
+()empty parenthesis to ignore these nodes
+DISTINCT because more than one path will match the pattern
+surfer will contain Allison, a friend of a friend who surfs
+
+MATCH (js:Person)-[:KNOWS]-()-[:KNOWS]-(surfer)
+WHERE js.name = "Johan" AND surfer.hobby = "surfing"
+RETURN DISTINCT surfer
+
+Understand how your query works by prepending EXPLAIN or PROFILE:
+PROFILE MATCH (js:Person)-[:KNOWS]-()-[:KNOWS]-(surfer)
+WHERE js.name = "Johan" AND surfer.hobby = "surfing"
+RETURN DISTINCT surfer
+
+
+
+Create DB from CSV files
+
+LOAD CSV FROM 'file:///products.csv' AS row
+RETURN count(row);
+
+LOAD CSV WITH HEADERS FROM 'file:///orders.csv' AS row
+RETURN count(row);
+
+LOAD CSV WITH HEADERS FROM 'file:///order-details.csv' AS row
+RETURN count(row);
+
+CREATE CONSTRAINT UniqueProduct ON (p:Product) ASSERT p.id IS UNIQUE;
+CREATE CONSTRAINT UniqueOrder ON (o:Order) ASSERT o.id IS UNIQUE;
+
+LOAD CSV FROM 'file:///products.csv' AS row
+WITH toInteger(row[0]) AS productId, row[1] AS productName, toFloat(row[2]) AS unitCost
+MERGE (p:Product {productId: productId})
+  SET p.productName = productName, p.unitCost = unitCost
+RETURN count(p);
+
+MATCH (p:Product)
+RETURN p LIMIT 20;
+
+LOAD CSV WITH HEADERS FROM 'file:///orders.csv' AS row
+WITH toInteger(row.orderID) AS orderId, datetime(replace(row.orderDate,' ','T')) AS orderDate, row.shipCountry AS country
+MERGE (o:Order {orderId: orderId})
+  SET o.orderDateTime = orderDate, o.shipCountry = country
+RETURN count(o);
+
+MATCH (o:Order)
+RETURN o LIMIT 20;
+
+:auto USING PERIODIC COMMIT 500
+LOAD CSV WITH HEADERS FROM 'file:///order-details.csv' AS row
+WITH toInteger(row.productID) AS productId, toInteger(row.orderID) AS orderId, toInteger(row.quantity) AS quantityOrdered
+MATCH (p:Product {productId: productId})
+MATCH (o:Order {orderId: orderId})
+MERGE (o)-[rel:CONTAINS {quantityOrdered: quantityOrdered}]->(p)
+RETURN count(rel);
+
+
+
+
+Return all nodes relationships and 
+MATCH (n)-[r]->(m) RETURN n,r,m;
+
+Show what exists in database
+MATCH (n)
+RETURN labels(n) as label, count(*);
+
+Top tags in database
+MATCH ()-[:TAGGED]->(t:Tag)
+RETURN t.name,count(*) as posts order by posts desc limit 5;
+
+Top users asking questions
+MATCH (u:User)-[:ASKED]->()
+RETURN u.display_name, count(*) as posts
+ORDER by posts desc limit 10;
+
+top users answering questions
+MATCH (u:User)-[:PROVIDED]->()
+RETURN u.display_name, count(*) as posts
+ORDER by posts desc limit 10;
+
+Top days for questions
+MATCH (q:Question)
+RETURN apoc.date.format(q.creation_date,'s','EE') as day, count(*) as freq
+ORDER BY freq desc;
+*must install APOC plug in
+
+Top times for questions
+MATCH (q:Question)
+RETURN apoc.date.format(q.creation_date,'s','HH') as hour, count(*) as freq
+ORDER BY freq desc LIMIT 7;
+
+Top tags per user
+MATCH (u:User)-[:PROVIDED]->()-[:ANSWERED]->()-[:TAGGED]->(t:Tag)
+WHERE u.display_name = "cybersam"
+RETURN t.name,count(*) as posts order by posts desc limit 10;
+
+shortest path between 2 users
+MATCH path = allShortestPaths(
+  (u:User {display_name:"Swordfish"})-[*]-(me:User {display_name:"cybersam"})
+)
+RETURN path;
+
+Another example
+MATCH path = allShortestPaths(
+  (u:User {display_name:"alexanoid"})-[*]-(me:User {display_name:"InverseFalcon"})
+)
+RETURN path;
+
+
+
+Tags for unanswered questions
+MATCH (q:Question)-[:TAGGED]->(t:Tag)
+WHERE not t.name IN ['neo4j','cypher'] and not (q)<-[:ANSWERED]-()
+RETURN t.name, count(*) as posts
+ORDER BY posts desc LIMIT 10;
+
