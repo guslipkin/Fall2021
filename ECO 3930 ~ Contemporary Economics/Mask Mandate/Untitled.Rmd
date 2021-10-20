@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+base <-
+  ggplot() +
+  xlim(-5, 5) +
+  ylim(-5, 5)
+
+f <- function(x, i) (((-1*a[i])/x)-((a[i]*v[i])/x)+1)
+
+a <- c(0, .25, .5, 1)
+v <- c(0, .25, .5, 1)
+```
+
+```{r}
+i <- 1
+base + 
+  geom_function(fun = function(x, i) (((-1*a[i])/x)-((a[i]*v[i])/x)+1), n = 500) +
+  geom_hline(yintercept = -1)
+```
+

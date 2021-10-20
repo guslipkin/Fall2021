@@ -4,6 +4,78 @@ By: Gus Lipkin
 
 Worked with Jake and Hailey.
 
+
+
+# New Stuff (All Math!)
+
+​	Not going to lie, Hail and I got help from a Calc tutor on this one. Everything in Math Block 1 is taking the given equation in *Objective Function*, substituting for the longer forms of $s$ and $E$ given in their respective paragraphs, then taking the derivative.
+$$
+nc_m+nc_ss(s_0,m,n)+E(n,m-m_v)\\
+
+\textrm{Take the derivative...}\\
+
+\frac{\delta}{\delta m}[nc_mm]+\frac{\delta}{\delta m}[nc_ss(s_0,m,n)]+\frac{\delta}{\delta m}[E(n,m-m_v)]\\
+
+nc_m(1)+m\frac{\delta}{\delta m}(nc_m)+\frac{\delta}{\delta m}[nc_ss(s_0,m,n)]+\frac{\delta}{\delta m}[E(n,m-m_v)]\\
+
+nc_m+0+\frac{\delta}{\delta m}[nc_sn(1-s_0)]+\frac{\delta}{\delta m}[n(\frac{a(m-m_v)}{1-m})]\\
+
+nc_m+n\frac{-a(1+m_v)}{1-m}\\
+$$
+​	Okay, that’s a little messy, but it’s okay, now the math should be relatively easy. All we have to do is set it equal to zero and solve for $m$.
+$$
+0=nc_m+\frac{-a(1+m_v)}{1-m}\\
+
+\frac{-nc_m}{n}=\frac{n}{n}\frac{-a(1+m_v)}{1-m}\\
+
+-c_m=\frac{-a(1+m_v)}{1-m}\\
+
+(1-m)(-c_m)=-a(1+m_v)\\
+
+-c_m+c_mm=-a-am_v\\
+
+\frac{c_m}{c_m}m=-\frac{a}{c_m}-\frac{am_v}{c_m}+\frac{c_m}{c_m}\\
+
+m=\frac{-a}{c_m}-\frac{am_v}{c_m}+1\\
+$$
+​	Okay. Great. We have something that we can stop at. $m$ is the fraction of people that wear masks. $m_v$ is the fraction of people wearing them voluntarily. $c_m$ is the individual cost of wearing a mask. And $a$ is some constant that is greater than zero. Let’s take a moment to run an exercise in futility. (I’ll explain why in a moment). Let’s set $m=m_v$. Everyone that is wearing a mask is doing so voluntarily. Yay! We plug $m$ back in for $m_v$ and…
+
+$$
+\textrm{If: } m=m_v\\
+
+m=\frac{-a}{c_m}-\frac{am}{c_m}+1\\
+
+m=\frac{-a(1-m)}{c_m}+1\\
+
+m-1=\frac{-a(1-m)}{c_m}\\
+
+mc_m-c_m=-a(1-m)\\
+
+mc_m-c_m=-a+am\\
+
+mc_m=-a+c_m+a_m\\
+
+mc_m-a_m=-a+c_m\\
+
+m=\frac{-a+c_m}{c_m-a}\\
+
+m=\frac{c_m-a}{c_m-a}\\
+
+m=1
+$$
+​	Oh no. If everyone is wearing a mask voluntarily, then enforcement costs are optimized when everyone is wearing a mask. Good work, team! In other news, the enforcement costs are also zero when there are no people, and in Africa, every sixty seconds, a minute passes.
+
+​	Let’s get back to the equation that wasn’t dumb. Here it is again for reference:
+$$
+m=\frac{-a}{c_m}-\frac{am_v}{c_m}+1\\
+$$
+*I’ve tried embedding an animated chart below.*
+*If this doesn’t work for you, try clicking this link: https://www.desmos.com/calculator/cudscdr1wx*
+
+<iframe src="https://www.desmos.com/calculator/cudscdr1wx?embed" width="500" height="500" style="border: 2px solid #000" frameborder=0></iframe>
+
+​	I promise this makes sense. The $\textrm{x-axis}$ represents $c_m$, the personal cost of wearing a mask. The $\textrm{y-axis}$ represents the proportion of the population that is wearing a mask. The graph should have bounds at $y=[0,1]$, but zooming out a bit gives a clearer picture. The easiest part to understand is that $m_v$ changes the angle of the corners and how sharply the curve hits the asymptote. Depending on the value of $a$, this can also affect the minimum point at which $c_m$ begins to have an effect. As more people choose to wear a mask, the cost to each person matters less, so the curve flattens out. $a$ changes how far the graphs asymptotes are from $x=0$ and represents the amount of people that are, in essence, anti-mask, and require lots of encouragement to be a decent human being and just wear a mask. The animated chart doesn’t slow down at the bounds, where $a=0$, but at that point, everyone will wear a mask at any value of $c_m$ and the value of $v$ will have no effect. Thus, as the number of anti-maskers increases, it becomes increasingly expensive to enforce mask usage. However, you can learn two things from this. One, if you pay people to wear a mask, you’ll pretty much get everyone to wear a mask. Two, as the cost of wearing a mask increases, you get less and less people wearing a mask, especially so when there are more anti-maskers.
+
 # Introduction
 
 ​	Mask mandates are a controversial and hot topic during the ongoing pandemic. Many people support mask mandates, effectively a law requiring that people wear masks, and many people support not having a mask mandate. Of course, there are always people who sit between. As with any law and pandemic, there are costs associated with enforcement and sickness, and benefits associated with wearing a mask and staying healthy. The goal is to calculate the most economically efficient percentage of people to wear a mask during a mask mandate.
