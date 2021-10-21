@@ -1,0 +1,157 @@
+---
+title: "Clustering Comparison"
+author: "FirstName LastName. FLastName@floridapoly.edu"
+output: html_notebook
+---
+
+
+
+Consider the 2-dimensional data in the file `clusterThis.csv`
+
+Read the data:
+
+```{r, message=FALSE}
+library(tidyverse)
+poly_link <- "https://raw.githubusercontent.com/reisanar/datasets/master/clusterThis.csv"
+polydata <- read_csv(poly_link)
+```
+
+Take a look at the first entries in the dataset
+
+```{r}
+head(polydata)
+```
+
+
+### Part 1
+
+- Plot the points in the data set using `ggplot` and the `geom_point()` function
+
+```{r}
+polydata %>%
+  ggplot() +
+  geom_point(aes(x = x, y = y))
+```
+
+
+- Do you see any type of clusters/groups right away?
+
+- Use **k-means** to try to find 2 clusters in this dataset
+
+
+- Use the base R function `kmeans()` to cluster the points in 2 (two) groups. Call the clustering object `mykmeans`
+
+```{r}
+mykmeans <- kmeans(polydata, centers = 2)
+```
+
+- Explore the `mykmeans` object using the function `str()`
+
+```{r}
+str(mykmeans)
+```
+
+- Use `mykmeans$cluster` to color the points according to the cluster
+
+```{r}
+polydata %>%
+  ggplot() +
+  geom_point(aes(x = x, y = y), color = mykmeans$cluster)
+```
+
+
+
+### Part 2
+
+- Use **hierarchical clustering** to try to find the groups in this dataset. Try _single linkage_. Call the clustering object `hc`
+
+
+```{r}
+# use dist() to compute the distance matrix
+dis <- dist(polydata)
+# use hclust() for 
+hc <- hclust(dis, method = "single")
+```
+
+- Explore the structure of the `hc` object
+
+```{r}
+str(hc)
+```
+
+- Cut the dendrogram tree to the proper number of clusters using the `cutree()`. Call this `comp2`
+
+```{r}
+comp2 <- cutree(hc, k = 2)
+comp2 <- factor(comp2)
+```
+
+- Use `comp2` as the color aesthetic to plot the points with this new cluster assignment:
+
+```{r}
+polydata %>%
+  ggplot() +
+  geom_point(aes(x = x, y = y), color = comp2)
+```
+
+
+### Part 3
+
+
+The clustering found in Part 2 (with hierarchical clustering) might seem more natural than the one found in Part 1 (using k-means algorithm). 
+
+Can you think of a way to have the k-means method find a similar cluster structure to the one in Part 2?
+
+```{r}
+polar <- polydata %>%
+  mutate(r = sqrt(x^2 + y^2),
+         theta = atan(y/x))
+```
+
+```{r}
+polar
+```
+
+```{r}
+polar_kmeans <- kmeans(polar[, c("r", "theta")], centers = 2)
+str(polar_kmeans)
+```
+
+Let us see the results
+
+```{r}
+polar %>%
+  mutate(polar_cluster = factor(polar_kmeans$cluster)) %>%
+  ggplot() +
+  geom_point(aes(x = x, y = y, color = polar_cluster))
+```
+
+
+
+### Part 4
+
+Consider the `mtcars` dataset, that contains data extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models). Check out pictures of the different cars collected by [Mara Averick](https://twitter.com/i/moments/1001619000827228160)
+
+```{r}
+mtcars
+```
+
+
+```{r}
+# compute distance matrix
+d_cars <- dist(mtcars)
+```
+
+Get hierarchical clustering with complete linkage method using all features available
+
+```{r}
+# prepare hierarchical cluster
+hc_mtcars <-  hclust(d_cars, method = "complete")
+```
+
+```{r}
+# labels of the leafs at same level with hang parameter
+plot(hc_mtcars, ann = FALSE, hang = -1)
+rect.hclust(hc_mtcars, k = 4, border = 2:5)
+```
+

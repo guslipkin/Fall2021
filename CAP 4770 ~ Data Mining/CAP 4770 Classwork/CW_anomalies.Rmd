@@ -1,0 +1,218 @@
+---
+title: "Anomaly Detection"
+output: html_notebook
+---
+
+## Univariate Outlier Detection
+
+In the example below we create a vector `x` with 100 entries sampled from the standard normal distribution
+```{r}
+# set a seed for reproducibility
+set.seed(3147)
+# use rnorm() to sample
+x <- rnorm(100)
+```
+
+Obtain a summary of `x`: 
+
+```{r}
+summary(x)
+```
+
+We can get outliers using the `boxplot()` function
+
+```{r}
+# outliers
+boxplot.stats(x)$out
+```
+
+Visualize:
+
+```{r}
+boxplot(x)
+```
+
+The above univariate outlier detection can be used to find outliers in multivariate data in a simple ensemble way. 
+
+In the example below, we first generate a dataframe `df`, which has two columns, `x` and `y`. After that, outliers are detected separately from `x` and `y`. We then take outliers as those data which are outliers for both columns. 
+
+
+```{r}
+# create vector with samples from the normal distribution
+y <- rnorm(100)
+# create data frame with x and y 
+df <- data.frame(x, y)
+# print first 6 rows
+head(df)
+```
+
+Check outliers in first dimension: 
+
+```{r}
+# find the index of outliers from x
+a <- which(x %in% boxplot.stats(x)$out)
+```
+
+Find outliers in second dimension:
+
+```{r}
+# find the index of outliers from y
+b <- which(y %in% boxplot.stats(y)$out)
+```
+
+To get outliers in both, use the `intersect()` function:
+
+```{r}
+# outliers in both x and y
+outlier_list_1 <- intersect(a, b)
+```
+
+Visualize:
+
+```{r}
+plot(df)
+points(df[outlier_list_1,],
+       col = "red", pch = "+", cex = 2.5)
+```
+
+
+Similarly, we can also take outliers as those data which are outliers in _either_ `x` or `y`, using the `union()` function:
+
+```{r}
+# outliers in either x or y
+outlier_list_2 <- union(a, b)
+```
+
+Visualize
+
+```{r}
+plot(df)
+points(df[outlier_list_2,],
+       col = "blue", pch = "x", cex = 2)
+```
+
+
+
+## Outlier Detection with LOF
+
+LOF (Local Outlier Factor) is an algorithm for identifying density-based local outliers (Breunig et al., 2000)[^1]. With LOF, the local density of a point is compared with that of its neighbors. If the former is significantly lower than the latter (with an LOF value greater than one), the point is in a sparser region than its neighbors, which suggests it be an outlier. Below we use the `lof()` implementation included in the `dbscan` package.
+
+```{r, message=FALSE}
+library(dbscan)
+```
+
+An example using the `iris` dataset
+
+```{r}
+# remove "Species", which is a categorical column
+iris_2 <- iris[, 1:4]
+```
+
+Use the `lof()` function, which calculates the Local Outlier Factor (LOF) score for each data point using a kd-tree to speed up kNN search. A LOF score of approximately 1 indicates that density around the point is comparable to its neighbors. Scores significantly larger than 1 indicate outliers.
+
+
+```{r}
+outliers_scores <- lof(iris_2, k = 5)
+```
+
+Create a density plot of the different scores
+
+```{r}
+plot(density(outliers_scores))
+```
+
+We can easily find out the identity of the outliers, as shown below: 
+
+```{r}
+# pick top 5 as outliers
+outliers <- order(outliers_scores, decreasing = TRUE)[1:5]
+# which ones are outliers?
+print(outliers)
+```
+
+Check the values of the features for the outliers
+
+```{r}
+iris_2[outliers, ]
+```
+
+Next, we show outliers with a _biplot_ of the first two _principal components_ 
+
+```{r}
+# number of observations
+n <- nrow(iris_2)
+labels <- 1:n
+# label all points EXCEPT outliers with a "."
+labels[-outliers] <- "."
+# generate biplot
+biplot(prcomp(iris_2), cex = .8, xlabs = labels)
+```
+
+In the above code, `prcomp()` performs a principal component analysis, and `biplot()` plots the data with its first two principal components. The `x`- and `y`-axis are respectively the first and second principal components, the arrows show the original columns (variables), and the five outliers are labeled with their row numbers.
+
+
+
+## Outlier Detection by Clustering
+
+Another way to detect outliers is clustering. By grouping data into clusters, those data not assigned to any clusters are taken as outliers. For example, with density-based clustering such as DBSCAN (Ester et al., 1996)[^2], objects are grouped into one cluster if they are connected to one another by _densely populated areas_. Therefore, objects not assigned to any clusters are isolated from other objects and are taken as outliers. 
+
+We can also detect outliers with the k-means algorithm. With k-means, the data are partitioned into $k$ groups by assigning them to the closest cluster _centers_. After that, we can calculate the distance (or dissimilarity) between each object and its cluster center, and pick those with largest distances as outliers. 
+
+
+```{r}
+# perform k-means with 3 groups
+kmeans_result <- kmeans(iris_2, centers = 3)
+# get cluster centers
+kmeans_result$centers
+```
+
+To see the assignment to each cluster explore the `.$cluster` component of the k-means object:
+
+```{r}
+# cluster IDs
+kmeans_result$cluster
+```
+
+Below we identify the outliers by first computing the distance from every point to its corresponding center (as found by the k-means algorithm), and then sorting the distance vector to select the top 5 observations that felt far away from the center of their corresponding cluster.
+
+
+```{r}
+# calculate distances between objects and cluster centers
+centers <- kmeans_result$centers[kmeans_result$cluster]
+# compute Euclidean distance
+km_distances <- sqrt(rowSums((iris_2 - centers)^2))
+# pick top 5 largest distances
+km_outliers <- order(km_distances, decreasing = TRUE)[1:5]
+# which ones are outliers?
+print(km_outliers)
+```
+
+
+Visualize: let us use `ggplot()` from the `tidyverse` to visualize the results
+
+
+```{r, message=F, warning=FALSE}
+library(tidyverse)
+```
+
+Visualize
+
+```{r}
+ggplot()+ 
+  geom_point(data=iris_2, aes(x = Sepal.Length, y = Sepal.Width, 
+                 color = factor(kmeans_result$cluster))) + 
+  geom_point(aes(x = iris_2[km_outliers, "Sepal.Length"], 
+                 y = iris_2[km_outliers, "Sepal.Width"]), 
+             color = "black") + 
+  labs(title = "Outlier Detection with Clustering", 
+       color = "Groups")
+```
+
+
+
+
+
+[^1]: Breunig, M. M., Kriegel, H.-P., Ng, R. T., and Sander, J. (2000). LOF: identifying density-based local outliers. In SIGMOD '00: Proceedings of the 2000 ACM SIG-MOD international conference on Management of data, pages 93-104, New York, NY, USA. ACM Press.
+
+[^2]: Ester, M., Kriegel, H.-P., Sander, J., and Xu, X. (1996). A density-based
+algorithm for discovering clusters in large spatial databases with noise. In KDD, pages 226-231.
