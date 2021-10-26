@@ -89,13 +89,57 @@
 
 - How is the 33% determined by the 3rd party?
   - Every third discharge? $\frac{1}{3}$ chance at discharge? etc.
+  - *Waiting to hear back from Press Ganey (3rd party)*
+  
 - How many responses each year? 600?
+
+  - *Our response rate as a  facility is at a 20.49% for mailed surveys (national average is 24.7%)  giving us approximately 1664 official reponses. Response rate for emailed surveys (non-reportable) is 12.38% giving us  approximately 339 responses.*
+
 - How many mailed surveys per year?
+
+  - *From 9/1/2020-8/31/2021 we mailed (official reportable surveys) 8124 surveys. We emailed 2738.*
+
 - Is there an existing data dictionary?
+
 - Can people get the mail and email survey?
+
+  - *Waiting to hear back from Press Ganey.*
+
 - What are the HCAHPS survey question domains?
+
+  - *Blue is the domain. White are the questions associated with the domain.*
+
+  > - Communication with Nurses Score
+  >   -  During this hospital stay nurses always treated you with courtesy and respect?
+  >   - During this hospital stay nurses always listened carefully to you?
+  >   - During this hospital stay nurses always explained things in a way you could understand?
+  > - Communication with Doctors Score
+  >   - During this hospital stay doctors always treated you with courtesy and respect?
+  >   - During this hospital stay doctors always listened carefully to you?
+  >   - During this hospital stay doctors always explained things in a way you could understand?
+  > - Staff Responsiveness Score
+  >   - You always got help in getting to the bathroom or in using a bedpan as soon as you wanted.
+  >   - During this hospital stay after you pressed the call button you  always got help as soon as you wanted it
+  > - Room Environment Score
+  >   - Your room and bathroom was always kept clean?
+  >   - During this hospital stay the area around your room was always quiet at night?
+  > - Communication about Medicines Score
+  >   - Before giving you any new medicine hospital staff always  described possible side effects in a way you could understand?
+  >   - Before giving you any new medicine hospital staff always tell you what the medicine was for?
+  > - Discharge Communication Score
+  >   - During your hospital stay did hospital staff talk with you about whether you would have the help you needed when you left the hospital? (y/n)
+  >   - During your hospital stay did you get information in writing about what symptoms or health problems to look out for after you left the hospital? (y/n)
+  > - Care Transition Score
+  >   - During this hospital stay I strongly agree they took my preferences and those of my family or caregiver into account in deciding what my health care needs would be when I left.
+  >   - During this hospital stay I strongly agree I had a good understanding of the things I was responsible for in managing my health.
+  >   - When I left the hospital I strongly agree I clearly understood the purpose for taking each of my medications.
+  > - Rate this hospital a 9 or 10
+
 - Do we know how people were admitted (ambulance, ER walk-in, scheduled) and readmitted?
+
+  - *Yes we have this data. I will be sure to have that available in the data for analysis.*
 
 ### Future Questions
 
 - None :)
+
