@@ -52,15 +52,15 @@ section 3M
         Exploratory Data Analysis									:crit,	p8, after p7, 2w
         Extra research questions where possible		: p9, after q13, 2022-04-15
         Final paper/presentation									:crit, after p9, 2022-04-27
-section 3M Research Q2
+section 3M Research Question 2
 				Q2 Methodology														: q21, after p8, 1w
 				Q2 Implementation													: q22, after q21, 4w
 				Q2 Conclusions														: q23, after q22, 1w
-section 3M Research Q3
+section 3M Research Question 3
 				Q3 Methodology														: q31, after q23, 1w
 				Q3 Implementation													: q32, after q31, 4w
 				Q3 Conclusions														: q33, after q32, 1w
-section 3M Research Q1
+section 3M Research Question 1
 				Q1 Methodology														: q11, after q33, 1w
 				Q1 Implementation													: q12, after q11, 4w
 				Q1 Conclusions														: q13, after q12, 1w
