@@ -1,0 +1,232 @@
+---
+title: "Homework Assignment 3"
+subtitle: "Clustering and Outlier Detection"
+author: "Gus Lipkin - glipkin6737@floridapoly.edu"
+output: html_notebook
+---
+
+# DTMT in 2021 
+* HW3.
+* Due day: Nov 4 - Nov 11 at 11:59pm (EST)
+* The HW3 is modified by Jikhan Jeong and the original one comes from Prof. Rei.
+* If you feel difficult, please go over 
+
+* Point 100 points
+* Reference for data handling in R : https://r4ds.had.co.nz/index.html
+* Reference for mudate function : https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate
+
+Run the code below to lad the `tidyverse` package for data transformation and visualization, the `dbscan` package for clustering and outlier detection, and the `factoextra` package for quick visualizations of models (you are not required to use `factoextra` and can choose to use other methods for creating visualizations that explain your results when requested)
+
+```{r}
+getwd()
+```
+
+```{r, message = FALSE, warning=FALSE}
+library(tidyverse)
+library(factoextra)
+```
+
+# Problem 1 : KMEAN (20 points)
+* ref: 2021-10-19-dbscan-replication-html.html
+* ref: https://r4ds.had.co.nz/index.html
+
+* Read the dataset on corporate data for 22 public utilities in the United States.
+
+```{r, message=FALSE}
+data <- read_csv("https://github.com/reisanar/datasets/raw/master/Utilities.csv")
+summary(data)
+```
+
+```{r}
+head(data)
+```
+
+* sample size is 22.
+```{r}
+dim(data)
+```
+
+### Meaning of key variables
+* RoR  : Percent rate of return on capital
+* Sales : Total Power Sales (KWH use per year)
+
+
+```{r}
+ggplot(data= data) + 
+  geom_point(aes(x = RoR, y = Sales)) +
+  theme_minimal()
+```
+
+* change data as data_1 and add new variables by using log(Sales)
+```{r}
+data_1 <- data %>%
+  mutate(log_sales = log(Sales))
+head(data_1)
+```
+
+* check the graph using data_1
+```{r}
+ggplot(data= data_1) + 
+  geom_point(aes(x = RoR, y = log_sales))+
+  theme_minimal()
+```
+
+```{r}
+data_2 <- data_1[, c(3, 10)]
+
+head(data_2)
+```
+
+### (To-Do, 10 points) Q1-1 
+* Apply k-means with the group
+
+```{r}
+data_2_kmeans <- kmeans(data_2, centers = 3)
+summary(data_2_kmeans)
+
+data_2$cluster <- as.factor(data_2_kmeans$cluster)
+```
+
+### (To-Do, 10 points) Q1-2
+* Please provide cluster plot by using **fviz_cluster**
+* How do you think about the result?
+
+```{r}
+fviz_cluster(data_2_kmeans, data = data_2, choose.vars = c("RoR", "log_sales")) +
+  theme_minimal()
+```
+
+> Since the problem didn't say how many centers to use, I decided to settle on three. There's a general grouping by left, center, and right. I tried more clusters and the grouping continued across the horizontal axis, leading me to believe that the largest deciding factor in the `log_sales` variable is the RoR.
+
+# Problem 2 : Dedensity-based clustering algorithm (DBSCAN); (20 points)
+* using the same dataset with Q1. 
+* dataset : data_2
+* ref: CW_anomalies-replication-2021-10-21.html
+
+```{r}
+dim(data_2)
+```
+
+```{r}
+head(data_2)
+```
+
+### (To-Do, 15 points) Q2-1 : Apply dbscan
+* please run dbscan by using dbscan package
+* there are two hyper-parameters (1) eps (2) minPts
+* For now, please set (1) eps = 0.5, (2) minPts =3
+* (5 points, show the result)Please show your results
+* (5 points, Need to answer) What is the number of clusters? 
+* (5 points, Need to answer) What is the number of noisy points?
+* dataset: data_2
+
+```{r}
+library(dbscan)
+```
+
+```{r}
+# in the result, 0 cluster means noisy point
+data_2_dbscan <- dbscan(x = data_2[,1:2], eps = .5, minPts = 3)
+data_2_dbscan
+```
+
+> There are `two clusters` with `11` noisy points. There are 3 points in group 1 and 8 points in group 2.
+
+### (To-Do, 5 points) Q2-2 : show the graph of dbscan
+* (5 points, Need to show the graph) Please show the graph of the result from the above dbscan using fviz_cluster
+
+```{r}
+fviz_cluster(object = data_2_dbscan, data = data_2, choose.vars = c("RoR", "log_sales")) + 
+  theme_minimal()
+```
+
+# Problem 3 : Paper Review (no code for this problem); (20 points)
+
+* (To DO) 1. Please choose one paper related to your project 
+
+### (To-Do, 5 point) Q3-1
+* (To DO, 5 points) 2. Please share the citation information (5 point) using https://scholar.google.com/
+
+> Lipkin, G., Pierstorff, A., Skoglund, H. (2020). Final Report for Intro to Data Science. Florida Polytechnic University. [https://github.com/guslipkin/disney_ds/blob/master/project/report_and_code.pdf](https://github.com/guslipkin/disney_ds/blob/master/project/report_and_code.pdf)
+
+### (To-Do, 15 point) Q3-2
+* (To Do, 15 points) 3. Please share your story, why do you choose this paper and what makes this paper looks fun in 200 words.(5 points)
+
+> I chose this paper because we were considering doing a continuation of it. In Intro to Data Science, we used basic statistical analysis to find the best times to go to Disney World based on factors such as, time of year, time of day, day of the week, and the weather (rainfall, temperature, humidity, etc) to see if we could pinpoint a time when ride wait times would be shortest. We wanted to revisit that project because we've learned so much more about data analysis since then, including principal component analysis, association rule mining, and from other classes, time series analysis. We're hoping that with these new tools we can improve on what we've already accomplished. We'd like to use PCA to find groups of factors that lead to longer wait times and then also association rule mining to find which rides are likely to have shorter or longer wait times at the same time to learn if there are certain properties that those rides share that make them popular to be busy or not at the same times. I'm also hoping that throwing in a bit of time series analysis will help us get rid of seasonal trends so that we can just work with raw data, although I know that that's not always how it works.
+
+# Problem 4 : Outlier Detection using clustering (20 points)
+* ref: CW_anomalies-replication-2021-10-21.html
+* dataset: data_2 (the same data set with the above)
+
+### (To-Do, 10 point) Q4-1
+* (5 point) please run kmeans with **data_2** dataset with **the cluster number 3 (k=3)** and 
+* (5 point) please provide cluster means for 3 clusters. 
+
+```{r}
+kmeans_result <- kmeans(x = data_2, centers = 3)
+kmeans_result
+
+data_2 %>%
+  mutate(cluster = kmeans_result$cluster) %>%
+  group_by(cluster) %>%
+  summarize(meanRoR = mean(RoR), meanLogSales = mean(log_sales))
+```
+
+### (To-Do, 10 point) Q4-2
+* please go over the code in CW_anomalies-replication-2021-10-21.html and
+* (10 points) please where are the top 5 outliers?
+
+```{r}
+# calculate distances between objects and cluster centers
+centers <- kmeans_result$centers[kmeans_result$cluster, ]
+# compute Euclidean distance
+km_distances <- sqrt(rowSums((iris_2 - centers) ^ 2))
+# pick top 5 largest distances
+km_outliers <- order(km_distances, decreasing = T)[1:5]
+# which ones are outliers?
+print(km_outliers)
+```
+
+
+# Problem 5 : Outliner Detection using LOF (Local Outlier Factor) (20 points)
+
+* Ref: CW_anomalies-replication-2021-10-21.html
+* dataset : data_2
+
+```{r}
+data_2
+```
+
+```{r}
+library(dbscan)
+```
+
+
+### (To-Do, 10 point) Q5-1
+
+* Use the lof() to calculate the LOF score for each data point when k is 3
+* when lof score is bigger than 1 means outliers
+
+```{r}
+lof_scores <-lof(data_2[,1:2], k = 3)
+lof_scores
+```
+
+```{r}
+plot(density(lof_scores))
+```
+
+
+### (To-Do, 10 point) Q5-2
+
+* Please find out the index for the top 5 outliers and show its table
+
+```{r}
+outliers <- order(lof_scores, decreasing = T)[1:5]
+outliers
+```
+
+```{r}
+data_2[outliers,]
+```
+

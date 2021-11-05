@@ -1,0 +1,237 @@
+---
+title: "Topic Modeling"
+output: html_notebook
+---
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(tidytext)
+```
+
+Reference material: <https://www.tidytextmining.com/topicmodeling.html>
+
+
+We often have collections of documents, such as blog posts or news articles, that we would like to divide into _natural groups_ so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, similar to clustering on numeric data, which finds natural groups of items.
+
+**Latent Dirichlet allocation (LDA)** is a particularly popular method for fitting a topic model. It treats each document as a _mixture of topics_, and each topic as a mixture of words. This allows documents to "overlap" each other in terms of content, rather than being separated into discrete groups, in a way that mirrors typical use of natural language.
+
+
+
+Our approach will be to work with `LDA` objects from the `topicmodels` [package](https://cran.r-project.org/package=topicmodels), particularly tidying such models so that they can be manipulated with `ggplot2` and `dplyr`.
+
+
+
+## Latent Dirichlet Allocation
+
+Latent Dirichlet allocation is one of the most common algorithms for topic modeling. It is guided by two principle:
+
+
+- *Every document is a mixture of topics*. We imagine that each document may contain words from several topics in particular proportions. For example, in a two-topic model we could say "Document 1 is 90% topic A and 10% topic B, while Document 2 is 30% topic A and 70% topic B."
+
+- *Every topic is a mixture of words*. For example, we could imagine a two-topic model of American news, with one topic for "politics" and one for "entertainment". The most common words in the politics topic might be “President”, "Congress", and "government", while the entertainment topic may be made up of words such as "movies", "television", and "actor". Importantly, words can be shared between topics; a word like "budget" might appear in both equally.
+
+LDA is a mathematical method for estimating both of these at the same time: finding the mixture of words that is associated with each topic, while also determining the mixture of topics that describes each document. You can read the details of the algorithm in the original paper by David Blei, Andrew Ng, and Michael Jordan published in the [Journal of Machine Learning Research](http://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf).
+
+
+```{r}
+library(topicmodels)
+```
+
+Our sample dataset is `AssociatedPress`, an object of class `DocumentTermMatrix` provided by the package `tm`. It is a document-term matrix which contains the term frequency of 10473 terms in 2246 documents.
+
+```{r}
+data("AssociatedPress")
+AssociatedPress
+```
+
+
+We can use the `LDA()` function from the `topicmodels` package, setting `k = 2`, to create a two-topic LDA model.
+
+This function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.
+
+```{r}
+# set a seed so that the output of the model is predictable
+ap_lda <- LDA()
+ap_lda
+```
+
+
+### Word-topic probabilities
+
+The `tidytext` package provides the `tidy()` method (originally from the `broom` package) for extracting the per-topic-per-word probabilities, called  $\beta$ ("beta"), from the model.
+
+```{r}
+ap_topics <- tidy()
+ap_topics
+```
+
+Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. 
+
+We could use `dplyr`'s `top_n()` to find the 10 terms that are most common within each topic. As a tidy data frame, this lends itself well to a ggplot2 visualization
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+ap_top_terms <- ap_topics %>%
+  dplyr::group_by(topic) %>%
+  dplyr::top_n(10, beta) %>%
+  dplyr::ungroup() %>%
+  dplyr::arrange(topic, -beta)
+```
+
+
+```{r}
+# visualization
+
+```
+
+This visualization lets us understand the two topics that were extracted from the articles. The most common words in topic 1 include “percent”, “million”, “billion”, and “company”, which suggests it may represent _business_ or _financial news_.
+
+Those most common in topic 2 include “president”, “government”, and “soviet”, suggesting that this topic represents _political news_. One important observation about the words in each topic is that some words, such as “new” and “people”, are common within both topics. This is an advantage of topic modeling as opposed to “hard clustering” methods: topics used in natural language could have some overlap in terms of words.
+
+As an alternative, we could consider the terms that had the greatest difference in $\beta$ between topic 1 and topic 2.  This can be estimated based on the log ratio of the two:  $\log_2 (\frac{\beta_2}{\beta_1})$ 
+
+A log ratio is useful because it makes the difference symmetrical in the following way:  $\beta_2$ being twice as large leads to a log ratio of 1, while $\beta_1$ being twice as large results in -1). To constrain it to a set of especially relevant words, we can filter for relatively common words, such as those that have a $\beta > 1/1000$ in at least one topic.
+
+
+```{r}
+beta_spread <- ap_topics %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  spread(topic, beta) %>%
+  filter(topic1 > .001 | topic2 > .001) %>%
+  mutate(log_ratio = log2(topic2 / topic1))
+
+beta_spread
+```
+
+
+The words with the greatest differences between the two topics are visualized below:
+
+```{r topiccompare}
+beta_spread %>%
+  group_by(direction = log_ratio > 0) %>%
+  top_n(10, abs(log_ratio)) %>%
+  ungroup() %>%
+  mutate(term = reorder(term, log_ratio)) %>%
+  ggplot(aes(term, log_ratio)) +
+  geom_col() +
+  labs(y = "Log2 ratio of beta in topic 2 / topic 1") +
+  coord_flip()
+```
+
+We can see that the words more common in topic 2 include political parties such as “democratic” and “republican”, as well as politician’s names such as “dukakis” and “gorbachev”. Topic 1 was more characterized by currencies like “yen” and “dollar”, as well as financial terms such as “index”, “prices” and “rates”. This helps confirm that the two topics the algorithm identified were political and financial news.
+
+
+
+### Document-topic probabilities
+
+
+Besides estimating each topic as a mixture of words, LDA also models each document as a _mixture of topics_. We can examine the per-document-per-topic probabilities, called $\gamma$  ("gamma"), with the `matrix = "gamma"` argument to `tidy()`.
+
+```{r}
+ap_documents <- tidy()
+ap_documents
+```
+
+
+
+Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that only about 24.8% of the words in document 1 were generated from topic 1.
+
+We can see that many of these documents were drawn from a mix of the two topics, but that document 6 was drawn almost entirely from topic 2, having a $\gamma$ from topic 1 close to zero. 
+
+We could `tidy()` the document-term matrix and check what the most common words in that document were.
+
+```{r}
+# use tidy()
+
+```
+
+
+Based on the most common words, this appears to be an article about the relationship between the American government and Panamanian dictator Manuel Noriega, which means the algorithm was right to place it in topic 2 (as political/national news).
+
+
+
+
+## Reviews from TripAdvisor
+
+```{r, message=FALSE, warning=FALSE}
+fcb <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/camp_nou_tripadvisor.csv")
+```
+
+Check the columns names: 
+
+```{r}
+colnames(fcb)
+```
+
+Perform tokenization and count:
+
+```{r}
+fcb_counts <- 
+  
+  
+```
+
+Remove the following words
+"barca", "barcelona", "camp", "nou", "fc", "stadium", "football", "tour"
+
+```{r}
+fcb_counts <- fcb_counts %>% 
+                filter(!word %in% c("barca", "football", "tour",
+                                    "barcelona", "stadium", 
+                                    "camp", "nou", "fc"))
+```
+
+
+Document-term matrix:
+
+Right now our data frame word_counts is in a tidy form, with one-term-per-document-per-row, but the topicmodels package requires a DocumentTermMatrix. We can cast a one-token-per-row table into a `DocumentTermMatrix` with `tidytext`'s function `cast_dtm()`.
+
+```{r}
+fcb_dtm <- 
+  
+```
+
+Check the new object: 
+
+```{r}
+fcb_dtm
+```
+
+We can then use the `LDA()` function (use `k=4`)
+
+```{r}
+fcb_lda <- LDA()
+fcb_lda
+```
+
+Much as we did on the Associated Press data, we can examine per-topic-per-word probabilities.
+
+```{r}
+fcb_topics <- tidy()
+fcb_topics
+```
+
+
+Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. 
+
+We could use `dplyr`'s `top_n()` to find the top 5 terms within each topic.
+
+```{r}
+top_terms <- 
+  
+
+top_terms
+```
+
+Visualization: 
+
+```{r}
+
+
+
+```
+

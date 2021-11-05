@@ -1,0 +1,225 @@
+---
+title: "Text Mining Exploration: Practice Problem"
+output: html_notebook
+---
+
+
+Load the packages needed for this practice set of problems:
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)   # for visualization and data transformation
+library(tidytext)    # for tidy text mining
+library(topicmodels) # for topic modeling with LDA
+```
+
+Read the dataset for this exercise:
+
+```{r, message=FALSE}
+text_rei <- read_csv("https://github.com/reisanar/datasets/raw/master/fl_20_text.csv")
+```
+
+Take a look a random sample from the dataset:
+
+```{r}
+
+```
+
+# Tokenization and `tf-idf`
+
+**Perform tokenization using TF-IDF** 
+
+Recall that: in [TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)  (term frequency – inverse document frequency)
+
+  * TF  = frequency of term
+  * IDF = logarithm of inverse of the frequency with which documents have that term
+  
+
+More formally, for a given document $d$ and term $t$, the **Term Frequency** is the number of times term $t$ appears in document $d$ :
+
+
+$$
+TF(d, t) = \text{# times }t \text{ appears in document }d
+$$
+
+To account for terms that appear frequently in the domain of interest, we compute the **Inverse Document Frequency** of term $t$, calculated over the entire corpus and defined as
+
+$$
+IDF(t) = \ln\left( \frac{\text{total number of documents}}{\text{# documents containing term } t} \right)
+$$
+
+
+- TF-IDF is high where a rare term is present or frequent in a document
+- TF-IDF is near zero where a term is absent from a document, or abundant across all documents
+
+We can use the `tidytext::bind_tf_idf()` function to easily compute TFIDF for every term:
+
+
+```{r}
+rei_tf_idf <- 
+  
+  
+  
+```
+
+Explore:
+
+```{r}
+rei_tf_idf
+```
+
+
+Create a visualization showing the top TF-IDF scores in the text data for this exercise:
+
+```{r}
+text_plot <- 
+  
+  
+text_plot
+```
+
+Save the visualization you create above (you can do this with `ggsave()` and select the format you want, for example `.pdf` or `.png` formats)
+
+
+```{r}
+ggsave("text_tf-idf.pdf", text_plot, width = 10, height = 4)
+```
+
+
+# Topic Modeling
+
+
+We will use Latent Dirichlet Allocation (LDA) for topic modeling, using the `topicmodels` package.
+
+
+Right now our data frame is in a tidy form, with **one-term-per-document-per-row**, but the `topicmodels` package requires a `DocumentTermMatrix`. We can _cast_ a one-token-per-row table into a `DocumentTermMatrix` with `tidytext`'s function `cast_dtm()`. Additionally we remove any stop words.
+
+
+```{r}
+text_tidy <- 
+  
+  
+```
+
+
+Check: 
+
+```{r}
+text_tidy
+```
+
+Use `cast_dtm()`: 
+
+```{r}
+text_dtm <- 
+  
+  
+```
+
+Apply LDA:
+
+```{r}
+text_lda <- 
+text_lda
+```
+
+
+Extract the `beta`s (word-topic probabilities)
+
+```{r}
+text_topics <- 
+  
+  
+```
+
+Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the _probability of that term being generated from that topic_.
+
+We could use `dplyr`'s `top_n()` to find the top 10 terms within each topic:
+
+```{r}
+top_terms <- 
+
+top_terms
+```
+
+Create a chart showing the highest word probabilities for each topic:
+
+```{r}
+graph_topics <- 
+  
+
+graph_topics
+```
+Save the plot: 
+
+```{r}
+ggsave("graph_topics.pdf", graph_topics,  width = 10, height = 4)
+```
+
+
+## Network of bigrams
+
+Next, we create a bigram network. First, perform tokenization and remove stop-words:
+
+```{r}
+text_filtered <- 
+  
+  
+```
+
+We then find the most common combination of words:
+
+```{r}
+text_counts <- 
+  
+  
+```
+
+Print the most frequent bigrams:
+
+```{r}
+# original counts
+text_counts %>% 
+  filter(n > 2)
+```
+
+Load the packages needed for graph visualization:
+
+```{r, message=FALSE, warning=FALSE}
+library(igraph)
+library(ggraph)
+```
+
+Build graph from data frame using the `graph_from_data_frame()` function:
+
+```{r}
+# filter for only relatively common combinations
+bigram_graph <- 
+  
+
+bigram_graph
+```
+
+Create plot:
+
+```{r}
+set.seed(217)
+
+# plot graph
+bigrams_network <- ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link(
+    aes(edge_alpha = n), 
+    show.legend = FALSE,  
+    end_cap = circle(.07, 'inches'), 
+    arrow = arrow(length = unit(2, "mm"))) +
+  geom_node_point(color = "#53316B", 
+                  size = 2) +
+  geom_node_text(aes(label = name), 
+                 vjust = 1.5, hjust = 0.2, size = 3) + 
+  theme_void()
+
+bigrams_network
+```
+
+Save the visualization: 
+
+

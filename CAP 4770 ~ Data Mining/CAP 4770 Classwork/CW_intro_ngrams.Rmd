@@ -1,0 +1,260 @@
+---
+title: "Relationship Between Words"
+output: html_notebook
+---
+
+Reference book: 
+<https://www.tidytextmining.com/>
+
+```{r, message=FALSE, warning=FALSE}
+library(tidytext)
+library(tidyverse)
+```
+
+Many interesting text analyses are based on the **relationships between words**, whether examining which words tend to follow others immediately, or that tend to co-occur within the same documents.
+
+### Tokenizing by n-gram
+
+We will use the `token = "ngrams"` argument in the `unnest_tokens()`, which tokenizes by pairs of adjacent words rather than by individual ones. This allows us to tokenize into consecutive sequences of words, called **n-grams**.
+
+By seeing how often word `X` is followed by word `Y`, we can then build a model of the relationships between them. The parameter `n` is the number of words we wish to capture in each n-gram, and we will start by seting `n` to 2, to indicate we are examining _pairs of two consecutive words_, often called _bigrams_:
+
+```{r, message=FALSE}
+rmp <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/rmp_wit_comments.csv")
+```
+
+Bigrams:
+
+```{r}
+rmp_bigrams <- rmp %>%
+  unnest_tokens(bigram, comments, token = "ngrams", n = 2)
+```
+
+Check the results of this tokenization:
+
+```{r}
+head(rmp_bigrams)
+```
+
+
+#### Counting and filtering n-grams
+
+Our usual tidy tools apply equally well to n-gram analysis. We can examine the most common bigrams using `dplyr`s `count()`:
+
+```{r}
+rmp_bigrams %>%
+  count(bigram, sort = TRUE)
+```
+
+As one might expect, a lot of the most common bigrams are pairs of common (uninteresting) words, such as `to a`: what we call stop-words
+
+We can use `tidyr`s `separate()` function, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, say `word1` and `word2`, at which point we can remove cases where either is a stop-word.
+
+Let us remove the stop-words using the `filter()` function
+
+```{r}
+bigrams_filtered <- rmp_bigrams %>%
+  separate(bigram, into = c("word1", "word2"), sep = " ") %>% 
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+```
+
+Save an object with the separated bigrams:
+
+```{r}
+bigrams_separated <- rmp_bigrams %>%
+  separate(bigram, into = c("word1", "word2"), sep = " ")
+```
+
+
+Count again:
+
+```{r}
+# new bigram counts:
+bigram_counts <- bigrams_filtered %>%
+  count(word1, word2, sort = TRUE)
+bigram_counts
+```
+
+
+In other analyses, we may want to work with the recombined words. `tidyr`'s `unite()` function is the inverse of `separate()`, and allows us to recombine the columns into one. 
+
+
+```{r}
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+bigrams_united
+```
+
+
+
+In other analyses you may be interested in the most common _trigrams_, which are consecutive sequences of 3 words. We can find this by setting `n = 3`:
+
+
+```{r}
+rmp %>%
+  unnest_tokens(trigram, comments, token = "ngrams", n = 3) %>%
+  separate(trigram, c("word1", "word2", "word3"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word, !word2 %in% stop_words$word, !word3 %in% stop_words$word) %>%
+  count(word1, word2, word3, sort = TRUE)
+```
+
+
+
+### Analyzing bigrams
+
+A bigram can also be treated as a _term_ in a document in the same way that we treated individual words. For example, we can look at the `tf-idf` of bigrams. 
+
+```{r}
+bigram_tf_idf <- bigrams_united %>%
+  count(course, bigram) %>%
+  bind_tf_idf(bigram, course, n) %>%
+  arrange(desc(tf_idf))
+bigram_tf_idf
+```
+
+
+Let us check the bigrams with the highest tf-idf:
+
+```{r}
+bigram_tf_idf %>%
+  arrange(desc(tf_idf))
+```
+
+ˆ
+```{r}
+bigram_tf_idf %>%
+  arrange(desc(tf_idf)) %>%
+  group_by(course) %>%
+  top_n(10, tf_idf) %>%
+  ungroup() %>%
+  mutate(bigram = reorder(bigram, tf_idf)) %>%
+  filter(course != "MATH310") %>% 
+  ggplot(aes(bigram, tf_idf, fill = course)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ course, ncol = 3, scales = "free") +
+  coord_flip() +
+  labs(y = "tf-idf of bigram to course",
+       x = "") +
+  theme_minimal()
+```
+
+There are advantages and disadvantages to examining the tf-idf of bigrams rather than individual words. Pairs of consecutive words might capture structure that is not present when one is just counting single words, and may provide context that makes tokens more understandable. However, the per-bigram counts are also sparser: a typical two-word pair is rarer than either of its component words. Thus, bigrams can be especially useful when you have a very large text dataset.
+
+
+### Using bigrams to provide context in sentiment analysis
+
+
+
+One of the problems with sentiment analysis using uni-grams, is illustrated below:
+
+For example, the words "happy" and "like" will be counted as positive, even in a sentence like "I'm not happy and I don't like it!"
+
+Now that we have the data organized into bigrams, it is easy to tell how often words are preceded by a word like "not":
+
+```{r}
+bigrams_separated %>%
+  filter(word1 == "not") %>%
+  count(word1, word2, sort = TRUE)
+```
+
+By performing sentiment analysis on the bigram data, we can examine how often sentiment-associated words are preceded by "not" or other negating words. We could use this to ignore or even reverse their contribution to the sentiment score.
+
+Let us use the AFINN lexicon for sentiment analysis (recall that this lexicon gives a numeric sentiment score for each word, with positive or negative numbers indicating the direction of the sentiment).
+
+```{r}
+AFINN <- get_sentiments("afinn")
+
+AFINN %>% 
+  sample_n(10)
+```
+
+
+We can then examine the most frequent words that were preceded by "not" and were associated with a sentiment.
+
+```{r, message=FALSE}
+bb_lyrics <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/BB_top100_2015.csv")
+```
+
+```{r}
+not_words <- bb_lyrics %>%
+  unnest_tokens(bigram, Lyrics, token = "ngrams", n = 2) %>%
+  separate(bigram, into = c("word1", "word2"), sep = " ") %>%
+  filter(word1 == "not") %>%
+  inner_join(AFINN, by = c(word2 = "word")) %>%
+  count(word2, value, sort = TRUE)
+```
+
+For example, the most common sentiment-associated word to follow "not" was "leave", which would normally have a (negative) score of -1.
+
+```{r}
+not_words
+```
+
+Notice that "like" also appears, which would have a (positive) score of 2.
+
+It is worth asking which words contributed the most in the "wrong" direction. To compute that, we can multiply their score by the number of times they appear (so that a word with a score of +3 occurring 10 times has as much impact as a word with a sentiment score of +1 occurring 30 times). We visualize the result with a bar plot
+
+```{r}
+not_words %>%
+  mutate(contribution = n * value) %>%
+  arrange(desc(abs(contribution))) %>%
+  head(20) %>%
+  mutate(word2 = reorder(word2, contribution)) %>%
+  ggplot(aes(word2, n * value, fill = n * value > 0)) +
+  geom_col(show.legend = FALSE) +
+  xlab("Words preceded by \"not\"") +
+  ylab("Sentiment score * number of occurrences") +
+  coord_flip() +
+  theme_minimal()
+```
+
+The words preceded by "not" that had the greatest contribution to sentiment scores, in either a positive or negative direction.
+
+The bigrams "not good" and "not promised" were the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like "not leave" and "not fail" sometimes suggest text is more negative than it is.
+
+"Not" is not the only term that provides some context for the following word. We could pick four common words (or more) that negate the subsequent term, and use the same joining and counting approach to examine all of them at once.
+
+
+```{r}
+negation_words <- c("not", "no", "never", "without")
+```
+
+```{r}
+negated_words <- bb_lyrics %>%
+  unnest_tokens(bigram, Lyrics, token = "ngrams", n = 2) %>% 
+  separate(bigram, into = c("word1", "word2"), sep = " ") %>% 
+  filter(word1 %in% negation_words) %>%
+  inner_join(AFINN, by = c(word2 = "word")) %>%
+  count(word1, word2, value, sort = TRUE)
+```
+
+
+```{r}
+negated_words
+```
+
+
+We could then visualize what the most common words to follow each particular negation are. 
+
+```{r}
+negated_words %>%
+  mutate(contribution = n * value) %>%
+  group_by(word1) %>%
+  top_n(12, abs(contribution)) %>%
+  ggplot(aes(x = reorder(word2, contribution), y = contribution, fill = n * value > 0)) +
+  scale_fill_brewer(palette = "Dark2") +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ word1, scales = "free") +
+  xlab("Words preceded by negation term") +
+  ylab("Sentiment score * # of occurrences") +
+  coord_flip() + 
+  theme_minimal()
+```
+
+
+These are just a few examples of how finding consecutive words can give context to text mining methods.
+
+
+
+
