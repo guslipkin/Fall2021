@@ -1,0 +1,287 @@
+---
+title: "Homework Assignment 4"
+author: "Gus Lipkin - glipkin6737@floridapoly.edu"
+subtitle: Text-Mining
+output:
+  html_notebook:
+    df_print: paged
+---
+# DTMT in 2021 
+* HW4. Text mining HW
+* Due day: Nov 12 - Nov 18 at 11:59pm (EST)
+* The HW4 is modified by Jikhan Jeong and the original one comes from Prof. Rei.
+* If you feel difficult, please go over the previous R practices as follow;
+
+1. CW_intro_tidytext_format-by-jj.html
+2. CW_sentiment-analysis-jj.html
+
+ps. you need to modify the original code for this homework. 
+
+
+* Point 100 points
+* Reference for data handling in R : https://r4ds.had.co.nz/index.html
+* Reference for mudate function : https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate
+* Reference book: 
+<https://www.tidytextmining.com/>
+
+* Reference Github:
+<https://github.com/dgrtwo/tidy-text-mining>
+
+Run the code below to lad the `tidyverse` package for data transformation and visualization, the `dbscan` package for clustering and outlier detection, and the `factoextra` package for quick visualizations of models (you are not required to use `factoextra` and can choose to use other methods for creating visualizations that explain your results when requested)
+
+```{r}
+getwd()
+```
+
+```{r, message = FALSE, warning=FALSE}
+library(tidyverse)
+library(tidytext)
+library(gutenbergr)
+```
+
+# Problem 1 : Tidytext (20 points)
+* ref: CW_intro_tidytext_format-by-jj.html
+* dataset: time.machine
+
+
+```{r, message=FALSE}
+time.machine <- gutenberg_download(c(35)); summary(time.machine)
+```
+
+```{r}
+head(time.machine)
+```
+
+```{r}
+dim(time.machine)
+```
+
+### (To-Do, 10 points) Q1-1 
+
+* step 1: tokenization using **unnest_kokens** method
+* step 2: remove stop_words using **anti_join** method
+* step 3: show the output after step 1 and 2 using **head** method (5 points)
+* step 4: what are the top 2 word? (5 points)
+
+```{r}
+time.machine <- time.machine %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words)
+
+head(time.machine, 10)
+```
+
+> The top two words are `time` and `machine`
+
+### (To-Do, 10 points) Q1-2
+* step 1: show the historgram of top10 words in machine learning using *slice* method and *ggplot* (10 points) 
+
+* ref: CW_sentiment-analysis-jj.html
+
+```{r}
+time.machine %>%
+  group_by(word) %>%
+  summarise(uses = n()) %>%
+  arrange(desc(uses)) %>%
+  slice(1:10) %>%
+  ggplot() +
+  geom_bar(aes(x = word, y = uses), stat = "identity") +
+  coord_flip() +
+  theme_minimal()
+```
+
+
+# Problem 2 : Sentimental Analysis with *bing* lexicon
+* dataset : lyrics
+
+```{r}
+lyrics <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/BB_top100_2015.csv");lyrics
+```
+
+```{r}
+lyrics <- select(lyrics, -Year, -Source); head(lyrics)
+```
+
+### (To-Do, 10 points) Q2-1 : pre-processing
+* Step 1: select top 5 songs using *filter*
+* Step 2: tokenization using *unnest_tokens*
+* Step 3: remove stopword and format change for UTF-8 using *str_detect* with *filter*
+* Step 4: shows the results in step 3 using *head* (10 points)
+
+```{r}
+top_5 <- lyrics %>%
+  filter(Rank %in% 1:5) %>%
+  unnest_tokens(word, Lyrics) %>%
+  filter(!word %in% stop_words$word,
+         str_detect(word, "[a-z]"))
+
+head(top_5,5)
+```
+
+### (To-Do, 10 points) Q2-2 : Sentiment analysis with bing lexicon
+* Goal: mapping each token with a sentimental  score in *bing* lexicon
+
+```{r}
+# install.packages('textdata')
+library('textdata')
+```
+
+* Step 1: using *inner_join** to map each token to lexicom lable
+* Step 2: count on positive and negative words in each song
+* Step 3: create sentiment variable (sentiment score) as positive (i.e, the number of positive word in a song) - negative (i.e., that of negative word in a song) 
+* Step 4: show the result (5 points)
+* Step 5: What song shows the highest positive sentiment score? (5 points)
+
+
+```{r}
+top_5 %>%
+  inner_join(get_sentiments("bing"), by = "word") %>%
+  count(Song, sentiment) %>%
+  spread(sentiment, n, fill = 0) %>%
+  mutate(sentiment = positive - negative) %>%
+  ggplot() +
+  geom_bar(aes(x = reorder(Song, sentiment),
+               y = sentiment),
+           stat = "identity") +
+  coord_flip() +
+  labs(x = "",
+       title = "Sentiment Analysis of Songs",
+       subtitle = "Top 10 Billboard songs in 2015") +
+  theme_minimal()
+```
+
+# Problem 3 : Paper Review for sentimental analysis (no code for this problem); (20 points)
+
+* (To DO) Please choose one paper related to *sentimental analysis or LDA* for your project  
+
+### (To-Do, 5 point) Q3-1
+
+* (To DO, 5 points) 2. Please share the citation information (5 point) using https://scholar.google.com/
+
+> Happily ever after? A sentiment analysis of 7 disney princess films. Recovery Decision Science. (2016, July 20). Retrieved November 12, 2021, from https://recoverydecisionscience.com/happily-ever-after-a-sentiment-analysis-of-7-disney-princess-films/. 
+
+### (To-Do, 15 point) Q3-2
+
+* (To Do, 15 points) 3. Please share your story, whey do you choose this paper and what makes this paper looks fun in 200 words.( 5 points)
+
+> This is very similar to what we plan on using, down to even using the same dataset. However, rather than analyze general tone over time, they're analyzing the differences between lines spoken by men and lines spoken by women. "Not surprisingly, the result of all three studies shows that male characters and dialogue dominate the final scripts." They attribute this to how most secondary characters are men. I would like to point out that their analysis is flawed. They included Frozen (2013) in the dataset when the main characters, Anna and Elsa, are not part of the official Disney Princess lineup. Here are some of their key findings:
+>
+> - Overall 72% of the dialogue has positive sentiment, while 9% is neutral and 18% is negative (figures are rounded).
+>
+> - Lead female characters have higher positive sentiment densities than their counterpart male roles; 73% for females comparing to 70% for males.
+>
+> - Little Mermaid scores the lowest on positive sentiment and the highest on negative sentiment among these seven movies.
+> 
+> I do wish we were able to split the text by character, but unfortunately our dataset is not as nice as theirs is since we're just using regular subtitle files.
+
+# Problem 4 : Sentimental Analysis witn *nrc* lexicon (20 points)
+* dataset: lyrics
+
+### (To-Do, 10 points) Q4-1, maroon 5's song
+
+* Step1: filter the song of maroon 5 (using "maroon 5", case sensitive)
+* Step2: tokenization
+* Step3: remove stopwords
+* Step4: show the result with head (10 points)
+
+```{r}
+maroon.5 <- lyrics %>% 
+  filter(Artist == "maroon 5") %>%
+  unnest_tokens(word, Lyrics) %>%
+  anti_join(stop_words)
+
+head(maroon.5)
+```
+
+* not for score, but just showing top words in their song
+```{r}
+maroon.5 %>%
+  group_by(word) %>%
+  summarise(uses = n()) %>%
+  arrange(desc(uses))
+```
+
+### (To-Do, 10 point) Q4-2 Sentimental analysis with *nrc* lexicon
+
+* nrc lexicon contains 8 emotions (anger, fear, anticipation, trust, surprise, sadness, joy, and disgust) and 2 sentiments (negative or positive)
+* Step 1: mapping each token with nrc lexicon
+* Step 2: grouping word by each sentiment dimension
+* Step 3: count number of word per sentiment dimension
+* Step 4: show the result in "trust","joy","surprise","anticipation" sentiment dimension only (10 point)
+
+```{r}
+maroon.5_words <- maroon.5 %>%
+  inner_join(get_sentiments("nrc")) %>%
+  group_by(sentiment, word) %>%
+  count(mycount = n()) %>%
+  distinct() %>%
+  filter(sentiment %in%
+           c("trust", "joy", "surprise", "anticipation"))
+
+head(maroon.5_words)
+```
+
+
+* This is not for score; however, showing the correct results with graph. 
+```{r}
+ggplot(data = maroon.5_words, aes(label = word)) +
+  ggrepel::geom_label_repel(
+    aes(x = word, y = rnorm(nrow(maroon.5_words)),
+        label = word),
+    direction = "both", 
+    box.padding = 0.04,
+    segment.color = "transparent", 
+    size = 3) +
+  facet_wrap(~sentiment, ncol = 2) +
+  labs(x = "", y = "") +
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_blank())
+```
+
+
+# Q5 (20point) Word cloud
+
+```{r}
+# install.packages('wordcloud')
+library(wordcloud)
+```
+
+### (To-Do, 10 point) Q5-1 : word cloud
+
+* Goal: showing the word cloud based on word count
+* step 1: removing stop_words
+* step 2; count each word
+* step 3: show *wordcloud* method with the word that appears more than 100 times (ie., max.words=100) (10 points)
+
+```{r}
+maroon.5_wordcloud <- maroon.5 %>%
+  anti_join(stop_words, by = "word") %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words=100))
+```
+
+
+### (To-Do, 10 point) Q5-2: word cloud with *bing* lexicon
+
+
+```{r}
+library(reshape2)
+```
+* Step 1: mapping each token in maroon.5 with bing's lexicon sentiment (positive vs negative)
+* Step 2: count each word per each sentiment
+* Step 3: apply acast in reshape method
+* Step 4: comparison.cloud methods to show positive and negative words with different colors (red and blue), (10 points)
+* Hint: What are the biggest red words? Yes, it should be Love and loving!
+
+```{r}
+maroon.5_wordcloud_sentiment <- maroon.5 %>%
+  inner_join(get_sentiments("bing"), by = "word") %>%
+  group_by(sentiment) %>%
+  count(word) %>%
+  acast(word~sentiment, value.var ="n", fill=0) %>%
+  comparison.cloud(colors = c("blue","red"), max.words = 100)
+```
+

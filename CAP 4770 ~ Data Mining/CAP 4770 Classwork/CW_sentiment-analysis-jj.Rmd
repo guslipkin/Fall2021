@@ -1,0 +1,392 @@
+---
+title: "Intro to Sentiment Analysis"
+output:
+  html_document:
+    df_print: paged
+---
+Modified by Jikhan Jeong
+Data: Nov 19, 2021
+Origial Files comes from Prof. Rei.
+
+Reference book: 
+<https://www.tidytextmining.com/>
+
+Reference Github:
+<https://github.com/dgrtwo/tidy-text-mining>
+
+Sentiment analysis can be thought of as the exercise of taking a sentence,
+paragraph, document, or any piece of natural language, and determining
+whether that text's emotional tone is positive, negative or neutral. One way to
+analyze the sentiment of a text is to consider the text as a combination of its
+individual words and the sentiment content of the whole text as the sum of the
+sentiment content of the individual words.
+
+When human readers approach a text, we use our understanding of the _emotional intent_ of words to infer whether a section of text is positive or negative, or perhaps characterized by some other more nuanced emotion like surprise or disgust. 
+
+
+```{r, echo = FALSE, out.width="20%"}
+knitr::include_graphics("https://github.com/reisanar/figs/raw/master/tidy_text_mining.png")
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidytext)
+library(tidyverse)
+```
+
+The `tidytext` package contains `sentiments` dataset. The three general-purpose lexicons are:
+
+- `AFINN` from [Finn Arup Nielsen](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010),
+
+- `bing` from [Bing Liu and collaborators](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html), and
+
+- `nrc` from [Saif Mohammad and Peter Turney](http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm).
+
+
+The above different sentiment lexicons, based on unigrams (i.e. single words) are derived from a single English word and are assigned different scores of positive/negative sentiments. Each lexicon scores a different way from the others. 
+
+- `AFINN` scores a word with a number, which may range from -5 to +5. 
+
+- `bing` scores a word as either positive or negative. 
+
+- `nrc` categorizes a word under sentiment type categories such as positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust.
+
+
+All of this information is tabulated in the sentiments dataset, and `tidytext` provides a function `get_sentiments()` to get specific sentiment lexicons without the columns that are not used in that lexicon.
+
+# Please download *tidytext* for lexicon
+
+```{r}
+# install.packages('textdata')
+library('textdata')
+print('List of lexicons')
+sentiments
+```
+### Lexicons for sentimental analysis
+* all three lexicons in this example relies on unigrams (one word)
+* do not consider qualifiers such as 'no good'
+
+```{r}
+# sample of sentiments
+sample_n( get_sentiments("afinn") , 5)
+```
+
+```{r}
+# sample of sentiments
+sample_n( get_sentiments("nrc") , 5)
+```
+
+```{r}
+# sample of sentiments
+sample_n( get_sentiments("bing"), 5)
+```
+
+
+There are also some domain-specific sentiment **lexicons** available, constructed to be used with text from a specific content area. 
+
+Not every English word is in the lexicons because many English words are pretty neutral. It is important to keep in mind that these methods do not take into account qualifiers before a word, such as in "no good" or "not true"; a lexicon-based method like this is based on unigrams only. 
+
+One last caveat is that the size of the chunk of text that we use to add up unigram sentiment scores can have an effect on an analysis. A text the size of many paragraphs can often have positive and negative sentiment averaged out to about zero, while sentence-sized or paragraph-sized text often works better.
+
+
+
+# Songs Lyrics Example
+
+
+Read data
+
+```{r, message=FALSE}
+lyrics_2015 <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/BB_top100_2015.csv");lyrics_2015
+```
+### Billboard top 100 dataset
+* Goal: study the sentiment of the top 10 songs lyrics
+
+Take a look at the data you loaded:
+
+```{r}
+head(lyrics_2015)
+```
+
+```{r}
+dim(lyrics_2015)
+```
+```{r}
+colnames(lyrics_2015)
+```
+* reduce variables for 4
+```{r}
+lyrics_2015 <- select(lyrics_2015, -Year, -Source)
+head(lyrics_2015)
+```
+```{r}
+dim(lyrics_2015)
+```
+
+* the code is changed based on the slide (Nov 9, 2021)
+Sample of lyrics
+
+```{r}
+# top 10 songs lyrics
+lyrics_2015 %>% 
+ filter(Rank %in% 1:10) # rank is a variable 
+```
+
+First, let us convert the text to the tidy format using `unnest_tokens()`. Notice that we choose the name `word` for the output column from `unnest_tokens()`. This is a convenient choice because the sentiment lexicons and stop word datasets have columns named `word`; performing inner joins and anti-joins is thus easier.
+* input column *Lyrics* 
+* otput column *word*
+
+```{r}
+lyrics_2015 %>% 
+ filter(Rank %in% 1:10) %>%  # choose top 10 rows
+ unnest_tokens(word, Lyrics) # tokenization of text in Lyrics columns 
+```
+
+Notice that we did not remove any stop-words!
+
+```{r}
+lyrics_2015 %>%
+ filter(Rank %in% 1:10) %>%
+ unnest_tokens(word, Lyrics, token = "words") %>%   
+ filter(!word %in% stop_words$word, str_detect(word, "[a-z]")) 
+```
+
+
+We could explore this dataset by first, checking the frequency of words in the top 10 songs lyrics.
+
+First let us store our tidy text data set in a new object called `bb_top_10`
+
+```{r}
+# BB top 10 songs lyics in 2015 (no stop-words)
+bb_top_10 <- lyrics_2015 %>%
+ filter(Rank %in% 1:10) %>%
+ unnest_tokens(word, 
+ Lyrics, 
+ token = "words") %>%
+ filter(!word %in% stop_words$word, 
+ str_detect(word, "[a-z]"))
+head(bb_top_10)
+```
+
+Check the most used words:
+
+```{r}
+bb_top_10 %>% 
+ group_by(word) %>% 
+ summarise(uses = n()) %>% # n() for count
+ arrange(desc(uses)) %>%   # descending order
+ head(10)
+```
+
+With the information above, we can graphically show a sample of frequent words
+
+```{r}
+bb_top_10 %>% 
+ group_by(word) %>% 
+ summarise(uses = n()) %>% 
+ arrange(desc(uses)) %>% 
+ slice(1:15) %>% 
+ ggplot() + 
+ geom_bar(aes(x = word, y = uses), 
+ stat = "identity") + 
+ coord_flip() + 
+ theme_minimal()
+```
+
+
+## Sentiment Analysis 
+
+Much as removing stop words is an anti-join operation, performing sentiment analysis is an inner join operation.
+* spread in r: https://www.rdocumentation.org/packages/tidyr/versions/1.1.4/topics/spread
+
+```{r}
+bb_top_10 %>%
+ inner_join(get_sentiments("bing")) %>%
+ count(Song, sentiment) %>%
+ spread(sentiment, n, fill = 0)%>%
+ mutate(sentiment = positive - negative)
+```
+### lecibon based on *bing*
+And a visualization of it can tell us about the "sentiment" of each song as a whole:
+* slice in r: https://dplyr.tidyverse.org/reference/slice.html
+slice() lets you index rows by their (integer) locations
+```{r}
+bb_top_10 %>%
+ inner_join(get_sentiments("bing")) %>%
+ count(Song, sentiment) %>%
+ spread(sentiment, n, fill = 0) %>%
+ mutate(sentiment = positive - negative) %>%
+ ggplot() + 
+ geom_bar(aes(x = reorder(Song, sentiment),
+ y = sentiment), 
+ stat = "identity") + 
+ coord_flip() + 
+ labs(x = "", 
+      title = "Sentiment Analysis of Songs", 
+      subtitle = "Top 10 Billboard songs in 2015")
+ theme_minimal()
+```
+
+### lecibon based on *afinn*
+What if we want to find out how the sentiment of the song varies as the song progresses? Let us use now the `afinn` lexicon
+
+```{r}
+bb_top_10 %>%
+inner_join(
+get_sentiments("afinn")
+)
+```
+
+
+```{r}
+# add an index column to keep track of the words used 
+bb_top_10 %>% 
+ group_by(Song) %>% 
+ mutate(index = row_number() ) %>% 
+ inner_join(get_sentiments("afinn"))
+```
+
+```{r}
+bb_top_10 %>% 
+ group_by(Song) %>% 
+ mutate(index = row_number() ) %>% 
+ inner_join(get_sentiments("afinn")) %>% 
+ ggplot() + 
+ geom_col(aes(x = index, y = value)) + 
+ facet_wrap(~Song, scales = "free", ncol = 2) + 
+ labs(title = "Sentiment Analysis of Songs using AFINN lexicon", 
+ subtitle = "Top 10 Billboard songs in 2015", 
+ x = "") + 
+ theme_minimal()
+```
+
+
+Notice that several songs in this top 10 list, contain many words that are not part of the lexicon, and therefore were not scored:
+
+# Example using *nrc* lexicon
+
+### Focus on one artist
+
+
+
+Goal: perform sentiment analysis using the `nrc` lexicon for songs by Taylor Swift
+
+```{r}
+lyrics_2015 %>% 
+ filter(Artist == "taylor swift")
+```
+
+
+First, let us convert the text to the tidy format using `unnest_tokens()`. Notice that we choose the name `word` for the output column from `unnest_tokens()`. This is a convenient choice because the sentiment lexicons and stop word datasets have columns named `word`; performing inner joins and anti-joins is thus easier.
+
+* tokenization
+
+```{r}
+lyrics_2015 %>% 
+ filter(Artist == "taylor swift") %>% 
+ unnest_tokens(word, Lyrics)
+```
+
+Notice that we did not remove any stop-words!
+
+```{r}
+swift <- lyrics_2015 %>% 
+ filter(Artist == "taylor swift") %>% 
+ unnest_tokens(word, Lyrics) %>% 
+ anti_join(stop_words)
+```
+
+
+We could explore this dataset by first, checking the frequency of words in the top 10 songs lyrics.
+
+First let us store our tidy text data set in a new object
+
+* Check the most used words:
+
+```{r}
+# taylor swift songs (no stop-words)
+swift %>% 
+ group_by(word) %>% 
+ summarise(uses = n()) %>% 
+ arrange(desc(uses))
+```
+
+ we can graphically show a sample of frequent words
+
+```{r}
+swift %>% 
+ group_by(word) %>% 
+ summarise(uses = n()) %>% 
+ arrange(desc(uses)) %>% 
+ slice(1:15) %>% 
+ ggplot() + 
+ geom_bar(
+ aes(x = reorder(word, uses), 
+ y = uses), 
+ stat = "identity") + 
+ coord_flip() + 
+ labs(y = "frequency of use",
+ x = "") +
+ theme_minimal()
+```
+
+# Words in 4 different sentiments
+* 1. negative, 2. anger, 3. positive, 4. trust
+
+Show words associated to some of the sentiments:
+
+```{r}
+swift_words <- swift %>%
+  inner_join(get_sentiments("nrc")) %>%
+  group_by(sentiment, word) %>%
+  count(mycount = n()) %>%
+  distinct() %>%
+  filter(sentiment %in%
+  c("negative", "anger","positive","trust"))
+```
+
+```{r}
+ggplot(data = swift_words, aes(label = word)) +
+  ggrepel::geom_label_repel(
+    aes(x = word, y = rnorm(nrow(swift_words)),
+        label = word),
+    direction = "both", 
+    box.padding = 0.04,
+    segment.color = "transparent", 
+    size = 3) +
+  facet_wrap(~sentiment, ncol = 2)+
+  labs(x = "", y = "") +
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid = element_blank(),
+        panel.background = element_blank())
+```
+# Word cloud
+* install package *wordcloud*
+
+```{r}
+# install.packages('wordcloud')
+library(wordcloud)
+```
+
+### word cloud for the most frequent word
+
+```{r}
+swift_wordcloud <- swift %>%
+  anti_join(stop_words) %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words=100))
+```
+
+
+### word cloud for the sentiment dimension
+* using *acast* method in *reshape2* package
+
+```{r}
+library(reshape2)
+swift_wordcloud_sentiment <- swift %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  acast(word~sentiment, value.var ="n", fill=0) %>%
+  comparison.cloud(colors = c("blue","red"), max.words = 100)
+```
+
