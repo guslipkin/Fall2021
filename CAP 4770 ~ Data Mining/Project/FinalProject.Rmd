@@ -1,0 +1,57 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(data.table)
+library(srt)
+library(tidytext)
+```
+
+
+```{r}
+subs <- rbindlist(list(
+  data.table(read_srt(path = "MovieSubtitles/Animated/Aladdin.srt", collapse = " "))[, movie := "Aladdin"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Beauty and the Beast.srt", collapse = " "))[, movie := "Beauty"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Brave.srt", collapse = " "))[, movie := "Brave"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Cinderella.srt", collapse = " "))[, movie := "Cinderella"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Moana.srt", collapse = " "))[, movie := "Moana"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Mulan.srt", collapse = " "))[, movie := "Mulan"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Pocahontas.srt", collapse = " "))[, movie := "Pocahontas"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Sleeping Beauty.srt", collapse = " "))[, movie := "Sleeping"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Snow White and The Seven Dwarfs.srt", collapse = " "))[, movie := "Snow"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/Tangled.srt", collapse = " "))[, movie := "Tangled"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/The Little Mermaid.srt", collapse = " "))[, movie := "Mermaid"],
+  data.table(read_srt(path = "MovieSubtitles/Animated/The Princess and the Frog.srt", collapse = " "))[, movie := "Frog"]))
+subs[sample(1:nrow(subs), size = 10)]
+```
+
+
+```{r}
+subs %>%
+  unnest_tokens(word, subtitle) %>%
+  inner_join(get_sentiments("afinn"), by = "word") %>%
+  group_by(movie) %>%
+  summarise(totalSentiment = sum(value)) %>%
+  arrange(desc(totalSentiment))
+
+subs %>%
+  unnest_tokens(word, subtitle) %>%
+  inner_join(get_sentiments("bing"), by = "word") %>%
+  group_by(movie) %>%
+  count(sentiment) %>%
+  pivot_wider(names_from = sentiment, id_cols = c("movie", "n"), values_from = n) %>%
+  mutate(totalSentiment = positive - negative) %>%
+  arrange(desc(totalSentiment))
+
+subs %>%
+  unnest_tokens(word, subtitle) %>%
+  inner_join(get_sentiments("nrc"), by = "word") %>%
+  group_by(movie) %>%
+  count(sentiment) %>%
+  arrange(movie, sentiment) %>%
+  pivot_wider(names_from = sentiment, id_cols = c("movie", "n"), values_from = n)
+```
+
