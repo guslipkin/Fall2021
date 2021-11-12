@@ -52,6 +52,8 @@ subs %>%
   group_by(movie) %>%
   count(sentiment) %>%
   arrange(movie, sentiment) %>%
-  pivot_wider(names_from = sentiment, id_cols = c("movie", "n"), values_from = n)
+  pivot_wider(names_from = sentiment, id_cols = c("movie", "n"), values_from = n) %>%
+  mutate(totalSentiment = positive - negative) %>%
+  arrange(desc(totalSentiment))
 ```
 
