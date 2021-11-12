@@ -54,6 +54,8 @@ subs %>%
   arrange(movie, sentiment) %>%
   pivot_wider(names_from = sentiment, id_cols = c("movie", "n"), values_from = n) %>%
   mutate(totalSentiment = positive - negative) %>%
-  arrange(desc(totalSentiment))
+  rowwise() %>%
+  mutate(totalFeeling = sum(c_across(c(2:6, 9:11)))) %>%
+  arrange(desc(totalFeeling))
 ```
 
