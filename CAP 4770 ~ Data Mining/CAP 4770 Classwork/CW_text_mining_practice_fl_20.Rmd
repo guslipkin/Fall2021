@@ -9,6 +9,7 @@ Load the packages needed for this practice set of problems:
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)   # for visualization and data transformation
 library(tidytext)    # for tidy text mining
+library(slam)
 library(topicmodels) # for topic modeling with LDA
 ```
 
@@ -21,7 +22,7 @@ text_rei <- read_csv("https://github.com/reisanar/datasets/raw/master/fl_20_text
 Take a look a random sample from the dataset:
 
 ```{r}
-
+sample(t(text_rei), size = 5)
 ```
 
 # Tokenization and `tf-idf`
@@ -55,10 +56,12 @@ We can use the `tidytext::bind_tf_idf()` function to easily compute TFIDF for ev
 
 
 ```{r}
-rei_tf_idf <- 
-  
-  
-  
+rei_tf_idf <- text_rei %>%
+  unnest_tokens(word, comments) %>%
+  count(due_date, word, sort = TRUE) %>%
+  ungroup() %>%
+  bind_tf_idf(word, due_date, n) %>%
+  arrange(desc(tf_idf))
 ```
 
 Explore:
@@ -71,9 +74,17 @@ rei_tf_idf
 Create a visualization showing the top TF-IDF scores in the text data for this exercise:
 
 ```{r}
-text_plot <- 
-  
-  
+text_plot <- rei_tf_idf %>%
+  group_by(due_date) %>%
+  top_n(8) %>%
+  ungroup() %>%
+  mutate(word = fct_inorder(word)) %>%
+  ggplot(aes(y = fct_rev(word), x = tf_idf, fill = due_date)) +
+  geom_col() +
+  guides(fill = FALSE) +
+  labs(y = "tf-idf", x = NULL) +
+  facet_wrap(~ due_date, scales = "free") +
+  theme_minimal()
 text_plot
 ```
 
@@ -81,7 +92,7 @@ Save the visualization you create above (you can do this with `ggsave()` and sel
 
 
 ```{r}
-ggsave("text_tf-idf.pdf", text_plot, width = 10, height = 4)
+ggsave("text_tf-idf.png", text_plot, width = 10, height = 4)
 ```
 
 

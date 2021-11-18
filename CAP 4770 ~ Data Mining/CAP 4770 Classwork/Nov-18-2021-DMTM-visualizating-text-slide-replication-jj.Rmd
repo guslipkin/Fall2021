@@ -1,0 +1,248 @@
+---
+title: "Nov-18-2021-DMTM-visualizating-text-slide-replication-jj"
+author: "Jikhan-Jeong"
+date: "11/18/2021"
+output: html_notebook
+---
+
+# DMTM-visualizating-text-slide-replication-jj
+* name: Jikhan Jeong (JJ)
+* data: Nov-18-2021
+* origianl code and data comes from prof. Rei
+* The replication of the file *visuualizing text data*
+
+```{r}
+queen <- c(
+"Buddy, you are a boy, make a big noise"
+,
+"Playing in the street, gonna be a big man someday"
+,
+"You got mud on your face, you big disgrace"
+,
+"Kicking your can all over the place, singing"
+)
+
+class(queen) # "character"
+queen
+```
+
+```{r}
+library(tidyverse)
+text_df <- tibble(line = 1:4, text = queen);text_df
+```
+
+```{r}
+class(text_df)
+```
+### Tokenization 
+* using **unnest_tokens** method
+
+```{r}
+library(tidytext)
+text_df %>%
+ unnest_tokens(output = word, input = text)
+```
+### Harry-Potter book corpus data from prof. Rei
+
+* ref: https://github.com/bradleyboehmke/harrypotter
+
+```{r}
+hp <- read_csv("https://github.com/reisanar/datasets/raw/master/hp.csv")
+head(hp)
+```
+
+```{r}
+dim(hp)
+```
+### Step-by-step Tokenization
+
+* original data
+
+```{r}
+head(hp)
+```
+
+* tokenized
+
+```{r}
+hp_words_tokenized <- hp %>%
+  unnest_tokens(word, text) 
+  
+head(hp_words_tokenized)
+```
+
+* tokenized + stopwords removal
+
+```{r}
+hp_words_tokenized_stopwords_removed <- hp %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words, by ="word") 
+  
+head(hp_words_tokenized_stopwords_removed)
+```
+
+
+* tokenization + stopwords removal + groupby book 
+
+```{r}
+hp_words <- hp %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words, by ="word") %>%
+  group_by(book) 
+
+head(hp_words)
+```
+
+** each token counts in each book 
+```{r}
+hp_tokens <- hp %>% 
+ unnest_tokens(word, text) %>%
+ anti_join(stop_words, by = "word") %>% # remove stopwords
+ group_by(book) %>% 
+ count(word, sort = TRUE) %>% 
+ top_n(9, n) %>% 
+ ungroup() %>% 
+ mutate(word = fct_inorder(word))
+
+head(hp_tokens,20)
+```
+* create a bar plot showing the token frequency
+
+* **fct_rev**
+* ref: https://www.rdocumentation.org/packages/forcats/versions/0.5.1/topics/fct_rev
+```{r}
+# fct_rev: Reverse order of factor levels
+f <- factor(c("b", "b", "a", "c", "c", "c"));f
+print(f)
+print(fct_rev(f))
+```
+
+```{r}
+ggplot(hp_tokens, aes(x = n, y = fct_rev(word), fill = book)) +
+ geom_col() +
+ guides(fill = FALSE) +
+ labs(x = NULL, y = NULL) +
+ scale_fill_viridis_d() +
+ facet_wrap(vars(book), scales = "free_y") +
+ theme_minimal()
+```
+### Token Frequency: n-grams
+
+* **fct_inorder**
+* ref: https://www.rdocumentation.org/packages/forcats/versions/0.5.1/topics/fct_inorder
+```{r}
+# fct_inorder: Reorder factor levels by first appearance, frequency, or numeric order
+f <- factor(c("b", "b", "a", "c", "c", "c"))
+f
+fct_inorder(f)
+```
+
+```{r}
+hp_bigrams <- hp %>% 
+ unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
+ separate(bigram, c("word1", "word2"), sep = " ") %>% 
+ filter(!word1 %in% stop_words$word) %>% # remove stopwords
+ filter(!word2 %in% stop_words$word) %>% # remove stopwords
+ unite(bigram, word1, word2, sep = " ") %>% 
+ group_by(book) %>% 
+ count(bigram, sort = TRUE) %>% 
+ top_n(9, n) %>% 
+ ungroup() %>% 
+ mutate(bigram = fct_inorder(bigram))
+```
+
+
+### Sentimental analysis
+
+```{r}
+head(hp)
+```
+
+* call lexicon for sentimnetal analysis
+
+```{r}
+# https://tidyr.tidyverse.org/reference/pivot_wider.html
+
+hp_sentiment <- hp %>% 
+ unnest_tokens(word, text) %>%
+ group_by(book) %>% 
+ mutate(word_count = 1:n(), index = word_count %/% 500 + 1) %>% 
+ inner_join(get_sentiments("bing")) %>%
+ count(book, index = index, sentiment) %>% 
+ pivot_wider(names_from = sentiment, values_from = n) %>%
+ mutate(net_sentiment = positive - negative)
+
+
+hp_sentiment
+```
+
+```{r}
+dim(hp_sentiment)
+```
+
+```{r}
+head(hp_sentiment,20)
+```
+
+```{r}
+tail(hp_sentiment,20)
+```
+
+```{r}
+ggplot(hp_sentiment, 
+ aes(x = index, y = net_sentiment, fill = net_sentiment > 0)) +
+ geom_col() +
+ guides(fill = FALSE) + 
+ labs(x = NULL, y = "Net sentiment") +
+ scale_fill_manual(name = "", labels = c("Positive", "Negative"),
+ values = c("#FF851B", "#3D9970")) +
+ facet_wrap(vars(book), scales = "free_x") +
+ theme_minimal()
+```
+
+### TF-IDF
+* Get a list of words in all the books 
+```{r}
+# Get a list of words in all the books 
+hp_words <- hp %>% 
+ unnest_tokens(word, text) %>% 
+ count(book, word, sort = TRUE) %>% 
+ ungroup()
+
+dim(hp_words)
+```
+
+* Add the tf-idf for these words
+```{r}
+# Add the tf-idf for these words
+
+hp_tf_idf <- hp_words %>% 
+ bind_tf_idf(word, book, n) %>%
+ arrange(desc(tf_idf))
+
+head(hp_tf_idf)
+```
+
+* Get the top 8 uniquest words
+
+```{r}
+# Get the top 8 uniquest words
+
+hp_tf_idf_plot <- hp_tf_idf %>% 
+ group_by(book) %>% 
+ top_n(8) %>% 
+ ungroup() %>% 
+ mutate(word = fct_inorder(word))
+
+head(hp_tf_idf_plot)
+```
+
+```{r}
+ggplot(hp_tf_idf_plot, aes(y = fct_rev(word), x = tf_idf, fill = book)) +
+ geom_col() +
+ guides(fill = FALSE) +
+ labs(y = "tf-idf", x = NULL) +
+ facet_wrap(~ book, scales = "free") +
+ theme_minimal()
+```
+

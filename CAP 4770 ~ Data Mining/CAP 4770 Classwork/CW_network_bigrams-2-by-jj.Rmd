@@ -1,0 +1,116 @@
+---
+title: "Network of Bigrams"
+output:
+  html_notebook:
+    df_print: paged
+---
+* Modified by JJ
+* Original one from prof. Rei
+* Date: Nov 16, 2021
+
+
+Reference book: 
+<https://www.tidytextmining.com/>
+
+```{r, message=FALSE, warning=FALSE}
+library(tidytext)
+library(tidyverse)
+```
+
+We will use text data built from the different entries in the News page of Florida Polytechnic University <https://floridapoly.edu/news/>
+
+```{r, message=FALSE}
+polynews <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/poly_news_FL20.csv"); head(polynews)
+```
+
+```{r}
+dim(polynews)
+```
+
+We may be interested in visualizing all of the relationships among words simultaneously, rather than just the top few at a time. As one common visualization, we can arrange the words into a network, or _graph_. Here we refer to a graph not in the sense of a visualization, but as a combination of connected nodes. A graph can be constructed from a tidy object since it has three variables
+
+- `from`: the node an edge is coming from
+
+- `to`: the node an edge is going towards
+
+- `weight`: A numeric value associated with each edge
+
+
+The `igraph` [package](https://igraph.org/) has many powerful functions for manipulating and analyzing networks. `igraph` is a collection of network analysis tools with the emphasis on efficiency, portability and ease of use. `igraph` is open source and free. 
+
+
+One way to create an `igraph` object from tidy data is the `graph_from_data_frame()` function, which takes a data frame of edges with columns for `"from"`, `"to"`, and edge attributes (in this case `n`):
+
+```{r, message=FALSE}
+library(igraph)
+```
+
+First, perform tokenization and remove stop-words:
+
+```{r}
+poly_filtered <-  polynews %>%
+  unnest_tokens(bigram, news_summary, token = "ngrams", n = 2) %>%
+  separate(bigram, into = c("word1","word2"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word, !is.na(word1)) %>%
+  filter(!word2 %in% stop_words$word, !is.na(word2))
+  
+  
+```
+
+We then find the most common combination of words:
+
+```{r}
+poly_counts <- poly_filtered %>% 
+ count(word1, word2, sort = TRUE) %>% 
+ filter(n > 5)
+
+head(poly_counts)
+```
+
+Build graph from data frame:
+
+```{r}
+# filter for only relatively common combinations
+bigram_graph <- poly_counts %>%
+                filter(n > 1) %>%
+                graph_from_data_frame()
+
+bigram_graph
+```
+
+`igraph` has plotting functions built in, but they are not what the package is designed to do, so many other packages have developed visualization methods for graph objects. We recommend the `ggraph` [package](https://cran.r-project.org/web/packages/ggraph/index.html) (Pedersen 2017), because it implements these visualizations in terms of the _grammar of graphics_, which we are already familiar with from `ggplot2`.
+
+```{r}
+library(ggraph)
+```
+
+```{r}
+set.seed(2017) # tackling the random ness
+
+# set arrow
+a <- grid::arrow(
+      type = "closed",
+      length = unit(.10,"inches"))
+
+# plot graph
+ggraph(bigram_graph, layout = "fr") +
+    geom_edge_link(aes(edge_alpha = n),
+    show.legend = FALSE, arrow = a,
+    end_cap = circle(.07,'inches')) +
+    geom_node_point(color = "#53316B",
+    size = 4) +
+    geom_node_text(aes(label = name),
+    vjust = 1.5, hjust = 0.2)
+    theme_void()
+```
+
+We conclude with a few polishing operations to make a better looking graph:
+
+- We add the `edge_alpha` aesthetic to the link layer to make links transparent based on how common or rare the bigram is.
+
+- We add directionality with an arrow, constructed using `grid::arrow()`, including an `end_cap` option that tells the arrow to end before touching the node.
+
+- We tinker with the options to the node layer to make the nodes more attractive (larger, blue points)
+
+- We add a theme that is useful for plotting networks, `theme_void()`
+
