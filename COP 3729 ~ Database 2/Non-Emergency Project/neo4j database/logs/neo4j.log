@@ -1,0 +1,9 @@
+2021-11-23 23:32:58.384+0000 INFO  Starting...
+2021-11-23 23:33:01.668+0000 INFO  ======== Neo4j 4.3.3 ========
+2021-11-23 23:33:11.238+0000 INFO  Sending metrics to CSV file at /Users/guslipkin/Library/Application Support/Neo4j Desktop/Application/relate-data/dbmss/dbms-eadff033-589e-4c7a-b809-0dee9e11304d/metrics
+2021-11-23 23:33:11.309+0000 INFO  Bolt enabled on localhost:7687.
+2021-11-23 23:33:12.604+0000 INFO  Remote interface available at http://localhost:7474/
+2021-11-23 23:33:12.607+0000 INFO  Started.
+2021-11-23 23:42:08.512+0000 INFO  Neo4j Server shutdown initiated by request
+2021-11-23 23:42:08.514+0000 INFO  Stopping...
+2021-11-23 23:42:14.409+0000 INFO  Stopped.

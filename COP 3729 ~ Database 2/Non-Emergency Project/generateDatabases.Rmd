@@ -12,7 +12,7 @@ library(data.table)
 neo4j <- fread("SharedBorders.csv")
 
 genCreate <- function(x) {
-  paste0("(", gsub(" ", "_", tolower(x)), ":County { name: \"", x, "\"}),")
+  paste0("(", gsub("( )|(-)", "_", tolower(x)), ":County { name: \"", x, "\"}),")
 }
 
 write.table(c("CREATE ", genCreate(unique(neo4j$county1))), 
@@ -22,7 +22,7 @@ write.table(c("CREATE ", genCreate(unique(neo4j$county1))),
             quote = FALSE)
 
 genKnows <- function(x, y) {
-  paste0("(", gsub(" ", "_", tolower(x)), ")-[:BORDERS]->(", gsub(" ", "_", tolower(y)), ")")
+  paste0("(", gsub("( )|(-)", "_", tolower(x)), ")-[:BORDERS]->(", gsub("( )|(-)", "_", tolower(y)), ")")
 }
 
 uniqueBorders <- unique(neo4j[, c("county1", "county2") := list(pmin(county1, county2),
@@ -41,12 +41,12 @@ write.table(c(genKnows(uniqueBorders$county1, uniqueBorders$county2)),
 ```{r, eval=FALSE}
 cities <- fread("CityCounty.csv")
 
-write.table(paste0("SET city:", gsub(" ", "_", tolower(cities$city)), " \"", cities$county, "\""),
+write.table(paste0("SET city:", gsub("( )|(-)", "_", tolower(cities$city)), " \"", cities$county, "\""),
             file = "redis.txt",
             row.names = FALSE,
             col.names = FALSE,
             quote = FALSE,
-            eol = ",\n")
+            eol = "\n")
 ```
 
 

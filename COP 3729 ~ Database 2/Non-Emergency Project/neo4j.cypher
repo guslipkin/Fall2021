@@ -65,7 +65,7 @@ CREATE
 (collier:County { name: "Collier"}),
 (broward:County { name: "Broward"}),
 (monroe:County { name: "Monroe"}),
-(miami-dade:County { name: "Miami-Dade"}),
+(miami_dade:County { name: "Miami-Dade"}),
 (escambia)-[:BORDERS]->(santa_rosa),
 (okaloosa)-[:BORDERS]->(santa_rosa),
 (okaloosa)-[:BORDERS]->(walton),
@@ -120,7 +120,6 @@ CREATE
 (baker)-[:BORDERS]->(duval),
 (baker)-[:BORDERS]->(clay),
 (duval)-[:BORDERS]->(nassau),
-(duval)-[:BORDERS]->(duval),
 (clay)-[:BORDERS]->(duval),
 (bradford)-[:BORDERS]->(duval),
 (duval)-[:BORDERS]->(union),
@@ -223,7 +222,7 @@ CREATE
 (broward)-[:BORDERS]->(hendry),
 (collier)-[:BORDERS]->(hendry),
 (broward)-[:BORDERS]->(collier),
-(collier)-[:BORDERS]->(miami-dade),
+(collier)-[:BORDERS]->(miami_dade),
 (collier)-[:BORDERS]->(monroe),
-(broward)-[:BORDERS]->(miami-dade),
-(miami-dade)-[:BORDERS]->(monroe)
+(broward)-[:BORDERS]->(miami_dade),
+(miami_dade)-[:BORDERS]->(monroe)

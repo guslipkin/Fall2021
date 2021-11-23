@@ -1,876 +1,876 @@
-SET city:alachua "Alachua",
-SET city:alford "Jackson",
-SET city:altamonte_springs "Seminole",
-SET city:altha "Calhoun",
-SET city:altoona "Lake",
-SET city:alva "Lee",
-SET city:andover "Miami-Dade",
-SET city:andrews "Levy",
-SET city:anna_maria "Manatee",
-SET city:apalachicola "Franklin",
-SET city:apollo_beach "Hillsborough",
-SET city:apopka "Orange",
-SET city:arcadia "DeSoto",
-SET city:archer "Alachua",
-SET city:asbury_lake "Clay",
-SET city:astatula "Lake",
-SET city:astor "Lake",
-SET city:atlantic_beach "Duval",
-SET city:atlantis "Palm Beach",
-SET city:auburndale "Polk",
-SET city:aventura "Miami-Dade",
-SET city:avon_park "Highlands",
-SET city:azalea_park "Orange",
-SET city:babson_park "Polk",
-SET city:bagdad "Santa Rosa",
-SET city:bal_harbour "Miami-Dade",
-SET city:baldwin "Duval",
-SET city:bartow "Polk",
-SET city:bascom "Jackson",
-SET city:bay_hill "Orange",
-SET city:bay_lake "Orange",
-SET city:bay_pines "Pinellas",
-SET city:bayonet_point "Pasco",
-SET city:bayport "Hernando",
-SET city:bayshore_gardens "Manatee",
-SET city:beacon_square "Pasco",
-SET city:bee_ridge "Sarasota",
-SET city:bell "Gilchrist",
-SET city:bellair-meadowbrook_terrace "Clay",
-SET city:belle_glade "Palm Beach",
-SET city:belle_glade_camp "Palm Beach",
-SET city:belle_isle "Orange",
-SET city:belleair "Pinellas",
-SET city:belleair_beach "Pinellas",
-SET city:belleair_bluffs "Pinellas",
-SET city:belleair_shore "Pinellas",
-SET city:belleview "Marion",
-SET city:bellview "Escambia",
-SET city:beverly_beach "Flagler",
-SET city:beverly_hills "Citrus",
-SET city:big_coppitt_key "Monroe",
-SET city:big_pine_key "Monroe",
-SET city:biscayne_park "Miami-Dade",
-SET city:bithlo "Orange",
-SET city:black_diamond "Citrus",
-SET city:bloomingdale "Hillsborough",
-SET city:blountstown "Calhoun",
-SET city:boca_del_mar "Palm Beach",
-SET city:boca_pointe "Palm Beach",
-SET city:boca_raton "Palm Beach",
-SET city:bokeelia "Lee",
-SET city:bonifay "Holmes",
-SET city:bonita_springs "Lee",
-SET city:bonnie_lock-woodsetter_north "Broward",
-SET city:boulevard_gardens "Broward",
-SET city:bowling_green "Hardee",
-SET city:boyette "Hillsborough",
-SET city:boynton_beach "Palm Beach",
-SET city:bradenton "Manatee",
-SET city:bradenton_beach "Manatee",
-SET city:brandon "Hillsborough",
-SET city:branford "Suwannee",
-SET city:brent "Escambia",
-SET city:briny_breezes "Palm Beach",
-SET city:bristol "Liberty",
-SET city:broadview-pompano_park "Broward",
-SET city:broadview_park "Broward",
-SET city:bronson "Levy",
-SET city:brooker "Bradford",
-SET city:brookridge "Hernando",
-SET city:brooksville "Hernando",
-SET city:broward_estates "Broward",
-SET city:brownsville "Miami-Dade",
-SET city:buckhead_ridge "Glades",
-SET city:buckingham "Lee",
-SET city:buena_ventura_lakes "Osceola",
-SET city:bunche_park "Miami-Dade",
-SET city:bunnell "Flagler",
-SET city:burnt_store_marina "Lee",
-SET city:bushnell "Sumter",
-SET city:butler_beach "St. Johns",
-SET city:callahan "Nassau",
-SET city:callaway "Bay",
-SET city:campbell "Osceola",
-SET city:campbellton "Jackson",
-SET city:canal_point "Palm Beach",
-SET city:cape_canaveral "Brevard",
-SET city:cape_coral "Lee",
-SET city:captiva "Lee",
-SET city:carol_city "Miami-Dade",
-SET city:carrabelle "Franklin",
-SET city:carver_ranches "Broward",
-SET city:caryville "Washington",
-SET city:casselberry "Seminole",
-SET city:cedar_grove "Bay",
-SET city:cedar_key "Levy",
-SET city:celebration "Osceola",
-SET city:center_hill "Sumter",
-SET city:century "Escambia",
-SET city:century_village "Palm Beach",
-SET city:chambers_estates "Broward",
-SET city:charleston_park "Lee",
-SET city:charlotte_harbor "Charlotte",
-SET city:charlotte_park "Charlotte",
-SET city:chattahoochee "Gadsden",
-SET city:cheval "Hillsborough",
-SET city:chiefland "Levy",
-SET city:chipley "Washington",
-SET city:christmas "Orange",
-SET city:chula_vista "Broward",
-SET city:chuluota "Seminole",
-SET city:cinco_bayou "Okaloosa",
-SET city:citrus_hills "Citrus",
-SET city:citrus_park "Hillsborough",
-SET city:citrus_ridge "Lake",
-SET city:citrus_springs "Citrus",
-SET city:clearwater "Pinellas",
-SET city:clermont "Lake",
-SET city:cleveland "Charlotte",
-SET city:clewiston "Hendry",
-SET city:cloud_lake "Palm Beach",
-SET city:cocoa "Brevard",
-SET city:cocoa_beach "Brevard",
-SET city:cocoa_west "Brevard",
-SET city:coconut_creek "Broward",
-SET city:coleman "Sumter",
-SET city:collier_manor-cresthaven "Broward",
-SET city:combee_settlement "Polk",
-SET city:conway "Orange",
-SET city:cooper_city "Broward",
-SET city:coral_gables "Miami-Dade",
-SET city:coral_springs "Broward",
-SET city:coral_terrace "Miami-Dade",
-SET city:cortez "Manatee",
-SET city:cottondale "Jackson",
-SET city:country_club "Miami-Dade",
-SET city:country_estates "Broward",
-SET city:country_walk "Miami-Dade",
-SET city:crescent_beach "St. Johns",
-SET city:crescent_city "Putnam",
-SET city:crestview "Okaloosa",
-SET city:crooked_lake_park "Polk",
-SET city:cross_city "Dixie",
-SET city:crystal_lake "Polk",
-SET city:crystal_river "Citrus",
-SET city:crystal_springs "Pasco",
-SET city:cudjoe_key "Monroe",
-SET city:cutler "Miami-Dade",
-SET city:cutler_ridge "Miami-Dade",
-SET city:cypress_gardens "Polk",
-SET city:cypress_lake "Lee",
-SET city:cypress_lakes "Palm Beach",
-SET city:cypress_quarters "Okeechobee",
-SET city:dade_city "Pasco",
-SET city:dade_city_north "Pasco",
-SET city:dania_beach "Broward",
-SET city:davenport "Polk",
-SET city:davie "Broward",
-SET city:daytona_beach "Volusia",
-SET city:daytona_beach_shores "Volusia",
-SET city:de_bary "Volusia",
-SET city:de_funiak_springs "Walton",
-SET city:de_land "Volusia",
-SET city:de_land_southwest "Volusia",
-SET city:de_leon_springs "Volusia",
-SET city:deerfield_beach "Broward",
-SET city:delray_beach "Palm Beach",
-SET city:deltona "Volusia",
-SET city:desoto_lakes "Sarasota",
-SET city:destin "Okaloosa",
-SET city:doctor_phillips "Orange",
-SET city:doral "Miami-Dade",
-SET city:dover "Hillsborough",
-SET city:duck_key "Monroe",
-SET city:dundee "Polk",
-SET city:dunedin "Pinellas",
-SET city:dunes_road "Palm Beach",
-SET city:dunnellon "Marion",
-SET city:eagle_lake "Polk",
-SET city:east_bronson "Levy",
-SET city:east_dunbar "Lee",
-SET city:east_lake "Pinellas",
-SET city:east_lake-orient_park "Hillsborough",
-SET city:east_palatka "Putnam",
-SET city:east_perrine "Miami-Dade",
-SET city:east_williston "Levy",
-SET city:eastpoint "Franklin",
-SET city:eatonville "Orange",
-SET city:ebro "Washington",
-SET city:edgewater "Volusia",
-SET city:edgewood "Orange",
-SET city:eglin_afb "Okaloosa",
-SET city:egypt_lake-leto "Hillsborough",
-SET city:el_portal "Miami-Dade",
-SET city:elfers "Pasco",
-SET city:ellenton "Manatee",
-SET city:englewood "Sarasota",
-SET city:ensley "Escambia",
-SET city:estates_of_fort_lauderdale "Broward",
-SET city:estero "Lee",
-SET city:esto "Holmes",
-SET city:eustis "Lake",
-SET city:everglades "Collier",
-SET city:fairview_shores "Orange",
-SET city:fanning_springs "Levy",
-SET city:feather_sound "Pinellas",
-SET city:fellsmere "Indian River",
-SET city:fern_park "Seminole",
-SET city:fernandina_beach "Nassau",
-SET city:ferndale "Lake",
-SET city:ferry_pass "Escambia",
-SET city:fish_hawk "Hillsborough",
-SET city:fisher_island "Miami-Dade",
-SET city:five_points "Columbia",
-SET city:flagler_beach "Flagler",
-SET city:floral_city "Citrus",
-SET city:florida_city "Miami-Dade",
-SET city:florida_ridge "Indian River",
-SET city:forest_city "Seminole",
-SET city:fort_lauderdale "Broward",
-SET city:fort_meade "Polk",
-SET city:fort_myers "Lee",
-SET city:fort_myers_beach "Lee",
-SET city:fort_myers_shores "Lee",
-SET city:fort_pierce "St. Lucie",
-SET city:fort_pierce_north "St. Lucie",
-SET city:fort_pierce_south "St. Lucie",
-SET city:fort_walton_beach "Okaloosa",
-SET city:fort_white "Columbia",
-SET city:fountainbleau "Miami-Dade",
-SET city:franklin_park "Broward",
-SET city:freeport "Walton",
-SET city:fremd_village-padgett_island "Palm Beach",
-SET city:frostproof "Polk",
-SET city:fruit_cove "St. Johns",
-SET city:fruitland_park "Lake",
-SET city:fruitville "Sarasota",
-SET city:fussels_corner "Polk",
-SET city:gainesville "Alachua",
-SET city:gandy "Pinellas",
-SET city:gateway "Lee",
-SET city:geneva "Seminole",
-SET city:gibsonia "Polk",
-SET city:gibsonton "Hillsborough",
-SET city:gifford "Indian River",
-SET city:gladeview "Miami-Dade",
-SET city:glen_ridge "Palm Beach",
-SET city:glen_st._mary "Baker",
-SET city:glencoe "Volusia",
-SET city:glenvar_heights "Miami-Dade",
-SET city:godfrey_road "Broward",
-SET city:golden_beach "Miami-Dade",
-SET city:golden_gate "Collier",
-SET city:golden_glades "Miami-Dade",
-SET city:golden_heights "Broward",
-SET city:golden_lakes "Palm Beach",
-SET city:goldenrod "Orange",
-SET city:golf "Palm Beach",
-SET city:gonzalez "Escambia",
-SET city:goodland "Collier",
-SET city:gotha "Orange",
-SET city:goulding "Escambia",
-SET city:goulds "Miami-Dade",
-SET city:graceville "Jackson",
-SET city:grand_ridge "Jackson",
-SET city:greater_carrollwood "Hillsborough",
-SET city:greater_northdale "Hillsborough",
-SET city:greater_sun_center "Hillsborough",
-SET city:green_cove_springs "Clay",
-SET city:green_meadow "Broward",
-SET city:greenacres "Palm Beach",
-SET city:greensboro "Gadsden",
-SET city:greenville "Madison",
-SET city:greenwood "Jackson",
-SET city:gretna "Gadsden",
-SET city:grove_city "Charlotte",
-SET city:groveland "Lake",
-SET city:gulf_breeze "Santa Rosa",
-SET city:gulf_gate_estates "Sarasota",
-SET city:gulf_stream "Palm Beach",
-SET city:gulfport "Pinellas",
-SET city:gun_club_estates "Palm Beach",
-SET city:haines_city "Polk",
-SET city:hallandale "Broward",
-SET city:hampton "Bradford",
-SET city:hamptons_at_boca_raton "Palm Beach",
-SET city:harbor_bluffs "Pinellas",
-SET city:harbour_heights "Charlotte",
-SET city:harlem "Hendry",
-SET city:harlem_heights "Lee",
-SET city:hastings "St. Johns",
-SET city:havana "Gadsden",
-SET city:haverhill "Palm Beach",
-SET city:hawthorne "Alachua",
-SET city:heathrow "Seminole",
-SET city:hernando "Citrus",
-SET city:hernando_beach "Hernando",
-SET city:hialeah "Miami-Dade",
-SET city:hialeah_gardens "Miami-Dade",
-SET city:high_point "Hernando",
-SET city:high_springs "Alachua",
-SET city:highland_beach "Palm Beach",
-SET city:highland_city "Polk",
-SET city:highland_park "Polk",
-SET city:hiland_park "Bay",
-SET city:hill_'n_dale "Hernando",
-SET city:hillcrest_heights "Polk",
-SET city:hilliard "Nassau",
-SET city:hillsboro_beach "Broward",
-SET city:hillsboro_pines "Broward",
-SET city:hillsboro_ranches "Broward",
-SET city:hobe_sound "Martin",
-SET city:holden_heights "Orange",
-SET city:holiday "Pasco",
-SET city:holly_hill "Volusia",
-SET city:hollywood "Broward",
-SET city:holmes_beach "Manatee",
-SET city:homestead "Miami-Dade",
-SET city:homestead_base "Miami-Dade",
-SET city:homosassa "Citrus",
-SET city:homosassa_springs "Citrus",
-SET city:horseshoe_beach "Dixie",
-SET city:howey-in-the-hills "Lake",
-SET city:hudson "Pasco",
-SET city:hunters_creek "Orange",
-SET city:hutchinson_island_south "St. Lucie",
-SET city:hypoluxo "Palm Beach",
-SET city:immokalee "Collier",
-SET city:indialantic "Brevard",
-SET city:indian_harbour_beach "Brevard",
-SET city:indian_river_estates "St. Lucie",
-SET city:indian_river_shores "Indian River",
-SET city:indian_rocks_beach "Pinellas",
-SET city:indian_shores "Pinellas",
-SET city:indiantown "Martin",
-SET city:inglis "Levy",
-SET city:interlachen "Putnam",
-SET city:inverness "Citrus",
-SET city:inverness_highlands_north "Citrus",
-SET city:inverness_highlands_south "Citrus",
-SET city:inwood "Polk",
-SET city:iona "Lee",
-SET city:islamorada,_village_of_islands "Monroe",
-SET city:islandia "Miami-Dade",
-SET city:istachatta "Hernando",
-SET city:ivanhoe_estates "Broward",
-SET city:ives_estates "Miami-Dade",
-SET city:jacksonville "Duval",
-SET city:jacksonville_beach "Duval",
-SET city:jacob_city "Jackson",
-SET city:jan_phyl_village "Polk",
-SET city:jasmine_estates "Pasco",
-SET city:jasper "Hamilton",
-SET city:jay "Santa Rosa",
-SET city:jennings "Hamilton",
-SET city:jensen_beach "Martin",
-SET city:june_park "Brevard",
-SET city:juno_beach "Palm Beach",
-SET city:juno_ridge "Palm Beach",
-SET city:jupiter "Palm Beach",
-SET city:jupiter_inlet_colony "Palm Beach",
-SET city:jupiter_island "Martin",
-SET city:kathleen "Polk",
-SET city:kendale_lakes "Miami-Dade",
-SET city:kendall "Miami-Dade",
-SET city:kendall_green "Broward",
-SET city:kendall_west "Miami-Dade",
-SET city:kenneth_city "Pinellas",
-SET city:kensington_park "Sarasota",
-SET city:key_biscayne "Miami-Dade",
-SET city:key_colony_beach "Monroe",
-SET city:key_largo "Monroe",
-SET city:key_west "Monroe",
-SET city:keystone "Hillsborough",
-SET city:keystone_heights "Clay",
-SET city:kings_point "Palm Beach",
-SET city:kissimmee "Osceola",
-SET city:la_crosse "Alachua",
-SET city:labelle "Hendry",
-SET city:lacoochee "Pasco",
-SET city:lady_lake "Lake",
-SET city:laguna_beach "Bay",
-SET city:lake_alfred "Polk",
-SET city:lake_belvedere_estates "Palm Beach",
-SET city:lake_buena_vista "Orange",
-SET city:lake_butler "Union",
-SET city:lake_butter "Orange",
-SET city:lake_city "Columbia",
-SET city:lake_clarke_shores "Palm Beach",
-SET city:lake_forest "Broward",
-SET city:lake_hamilton "Polk",
-SET city:lake_harbor "Palm Beach",
-SET city:lake_hart "Orange",
-SET city:lake_helen "Volusia",
-SET city:lake_kathryn "Lake",
-SET city:lake_lindsey "Hernando",
-SET city:lake_lorraine "Okaloosa",
-SET city:lake_lucerne "Miami-Dade",
-SET city:lake_mack-forest_hills "Lake",
-SET city:lake_magdalene "Hillsborough",
-SET city:lake_mary "Seminole",
-SET city:lake_panasoffkee "Sumter",
-SET city:lake_park "Palm Beach",
-SET city:lake_placid "Highlands",
-SET city:lake_sarasota "Sarasota",
-SET city:lake_wales "Polk",
-SET city:lake_worth "Palm Beach",
-SET city:lake_worth_corridor "Palm Beach",
-SET city:lakeland "Polk",
-SET city:lakeland_highlands "Polk",
-SET city:lakes_by_the_bay "Miami-Dade",
-SET city:lakeside "Clay",
-SET city:lakeside_green "Palm Beach",
-SET city:lakewood_park "St. Lucie",
-SET city:land_o'_lakes "Pasco",
-SET city:lantana "Palm Beach",
-SET city:largo "Pinellas",
-SET city:lauderdale-by-the-sea "Broward",
-SET city:lauderdale_lakes "Broward",
-SET city:lauderhill "Broward",
-SET city:laurel "Sarasota",
-SET city:laurel_hill "Okaloosa",
-SET city:lawtey "Bradford",
-SET city:layton "Monroe",
-SET city:lazy_lake "Broward",
-SET city:lecanto "Citrus",
-SET city:lee "Madison",
-SET city:leesburg "Lake",
-SET city:lehigh_acres "Lee",
-SET city:leisure_city "Miami-Dade",
-SET city:leisureville "Broward",
-SET city:lely "Collier",
-SET city:lely_resort "Collier",
-SET city:lighthouse_point "Broward",
-SET city:limestone_creek "Palm Beach",
-SET city:lisbon "Lake",
-SET city:live_oak "Suwannee",
-SET city:loch_lomond "Broward",
-SET city:lochmoor_waterway_estates "Lee",
-SET city:lockhart "Orange",
-SET city:longboat_key "Sarasota",
-SET city:longwood "Seminole",
-SET city:loughman "Polk",
-SET city:lower_grand_lagoon "Bay",
-SET city:lutz "Hillsborough",
-SET city:lynn_haven "Bay",
-SET city:macclenny "Baker",
-SET city:madeira_beach "Pinellas",
-SET city:madison "Madison",
-SET city:maitland "Orange",
-SET city:malabar "Brevard",
-SET city:malone "Jackson",
-SET city:manalapan "Palm Beach",
-SET city:manasota_key "Charlotte",
-SET city:manattee_road "Levy",
-SET city:mango "Hillsborough",
-SET city:mangonia_park "Palm Beach",
-SET city:marathon "Monroe",
-SET city:marco_island "Collier",
-SET city:margate "Broward",
-SET city:marianna "Jackson",
-SET city:marineland "Flagler",
-SET city:mary_esther "Okaloosa",
-SET city:masaryktown "Hernando",
-SET city:mascotte "Lake",
-SET city:matlacha "Lee",
-SET city:matlacha_isles-matlacha_shores "Lee",
-SET city:mayo "Lafayette",
-SET city:mcgregor "Lee",
-SET city:mcintosh "Marion",
-SET city:meadow_woods "Orange",
-SET city:medley "Miami-Dade",
-SET city:medulla "Polk",
-SET city:melbourne "Brevard",
-SET city:melbourne_beach "Brevard",
-SET city:melbourne_village "Brevard",
-SET city:melrose_park "Broward",
-SET city:memphis "Manatee",
-SET city:merritt_island "Brevard",
-SET city:mexico_beach "Bay",
-SET city:miami "Miami-Dade",
-SET city:miami_beach "Miami-Dade",
-SET city:miami_gardens "Broward",
-SET city:miami_lakes "Miami-Dade",
-SET city:miami_shores "Miami-Dade",
-SET city:miami_springs "Miami-Dade",
-SET city:micanopy "Alachua",
-SET city:micco "Brevard",
-SET city:middleburg "Clay",
-SET city:midway "Seminole",
-SET city:milton "Santa Rosa",
-SET city:mims "Brevard",
-SET city:minneola "Lake",
-SET city:miramar "Broward",
-SET city:miramar_beach "Walton",
-SET city:mission_bay "Palm Beach",
-SET city:molino "Escambia",
-SET city:monticello "Jefferson",
-SET city:montverde "Lake",
-SET city:moore_haven "Glades",
-SET city:mount_dora "Lake",
-SET city:mount_plymouth "Lake",
-SET city:mulberry "Polk",
-SET city:myrtle_grove "Escambia",
-SET city:naples "Collier",
-SET city:naples_manor "Collier",
-SET city:naples_park "Collier",
-SET city:naranja "Miami-Dade",
-SET city:nassau_village-ratliff "Nassau",
-SET city:neptune_beach "Duval",
-SET city:new_port_richey "Pasco",
-SET city:new_port_richey_east "Pasco",
-SET city:new_smyrna_beach "Volusia",
-SET city:newberry "Alachua",
-SET city:niceville "Okaloosa",
-SET city:nobleton "Hernando",
-SET city:nokomis "Sarasota",
-SET city:noma "Holmes",
-SET city:norland "Miami-Dade",
-SET city:north_andrews_gardens "Broward",
-SET city:north_beach "Indian River",
-SET city:north_brooksville "Hernando",
-SET city:north_de_land "Volusia",
-SET city:north_fort_myers "Lee",
-SET city:north_key_largo "Monroe",
-SET city:north_lauderdale "Broward",
-SET city:north_miami "Miami-Dade",
-SET city:north_miami_beach "Miami-Dade",
-SET city:north_palm_beach "Palm Beach",
-SET city:north_port "Sarasota",
-SET city:north_redington_beach "Pinellas",
-SET city:north_river_shores "Martin",
-SET city:north_sarasota "Sarasota",
-SET city:north_weeki_wachee "Hernando",
-SET city:oak_hill "Volusia",
-SET city:oak_point "Broward",
-SET city:oak_ridge "Orange",
-SET city:oakland "Orange",
-SET city:oakland_park "Broward",
-SET city:ocala "Marion",
-SET city:ocean_breeze_park "Martin",
-SET city:ocean_city "Okaloosa",
-SET city:ocean_ridge "Palm Beach",
-SET city:ocoee "Orange",
-SET city:odessa "Pasco",
-SET city:ojus "Miami-Dade",
-SET city:okahumpka "Lake",
-SET city:okeechobee "Okeechobee",
-SET city:oldsmar "Pinellas",
-SET city:olga "Lee",
-SET city:olympia_heights "Miami-Dade",
-SET city:opa-locka "Miami-Dade",
-SET city:opa-locka_north "Miami-Dade",
-SET city:orange_city "Volusia",
-SET city:orange_park "Clay",
-SET city:orangetree "Collier",
-SET city:orchid "Indian River",
-SET city:orlando "Orange",
-SET city:orlovista "Orange",
-SET city:ormond-by-the-sea "Volusia",
-SET city:ormond_beach "Volusia",
-SET city:osprey "Sarasota",
-SET city:otter_creek "Levy",
-SET city:oviedo "Seminole",
-SET city:pace "Santa Rosa",
-SET city:page_park "Lee",
-SET city:pahokee "Palm Beach",
-SET city:paisley "Lake",
-SET city:palatka "Putnam",
-SET city:palm_aire "Broward",
-SET city:palm_bay "Brevard",
-SET city:palm_beach "Palm Beach",
-SET city:palm_beach_gardens "Palm Beach",
-SET city:palm_beach_shores "Palm Beach",
-SET city:palm_city "Martin",
-SET city:palm_coast "Flagler",
-SET city:palm_harbor "Pinellas",
-SET city:palm_river-clair_mel "Hillsborough",
-SET city:palm_shores "Brevard",
-SET city:palm_springs "Palm Beach",
-SET city:palm_springs_north "Miami-Dade",
-SET city:palm_valley "St. Johns",
-SET city:palmetto "Manatee",
-SET city:palmetto_estates "Miami-Dade",
-SET city:palmona_park "Lee",
-SET city:panama_city "Bay",
-SET city:panama_city_beach "Bay",
-SET city:paradise_heights "Orange",
-SET city:parker "Bay",
-SET city:parkland "Broward",
-SET city:paxton "Walton",
-SET city:pebble_creek "Hillsborough",
-SET city:pelican_bay "Collier",
-SET city:pembroke_park "Broward",
-SET city:pembroke_pines "Broward",
-SET city:penney_farms "Clay",
-SET city:pensacola "Escambia",
-SET city:perry "Taylor",
-SET city:pierson "Volusia",
-SET city:pine_castle "Orange",
-SET city:pine_hills "Orange",
-SET city:pine_island_center "Lee",
-SET city:pine_island_ridge "Broward",
-SET city:pine_lakes "Lake",
-SET city:pine_manor "Lee",
-SET city:pine_ridge "Citrus",
-SET city:pinecrest "Miami-Dade",
-SET city:pineland "Lee",
-SET city:pinellas_park "Pinellas",
-SET city:pinewood "Miami-Dade",
-SET city:pittman "Lake",
-SET city:placid_lakes "Highlands",
-SET city:plant_city "Hillsborough",
-SET city:plantation "Broward",
-SET city:plantation_island "Collier",
-SET city:plantation_mobile_home_park "Palm Beach",
-SET city:poinciana "Osceola",
-SET city:polk_city "Polk",
-SET city:pomona_park "Putnam",
-SET city:pompano_beach "Broward",
-SET city:pompano_beach_highlands "Broward",
-SET city:pompano_estates "Broward",
-SET city:ponce_de_leon "Holmes",
-SET city:ponce_inlet "Volusia",
-SET city:port_charlotte "Charlotte",
-SET city:port_la_belle "Hendry",
-SET city:port_orange "Volusia",
-SET city:port_richey "Pasco",
-SET city:port_salerno "Martin",
-SET city:port_st._joe "Gulf",
-SET city:port_st._john "Brevard",
-SET city:port_st._lucie "St. Lucie",
-SET city:pretty_bayou "Bay",
-SET city:princeton "Miami-Dade",
-SET city:progress_village "Hillsborough",
-SET city:punta_gorda "Charlotte",
-SET city:punta_rassa "Lee",
-SET city:quincy "Gadsden",
-SET city:raiford "Union",
-SET city:ramblewood_east "Broward",
-SET city:ravenswood_estates "Broward",
-SET city:reddick "Marion",
-SET city:redington_beach "Pinellas",
-SET city:redington_shores "Pinellas",
-SET city:richmond_heights "Miami-Dade",
-SET city:richmond_west "Miami-Dade",
-SET city:ridge_manor "Hernando",
-SET city:ridge_wood_heights "Sarasota",
-SET city:ridgecrest "Pinellas",
-SET city:rio "Martin",
-SET city:riverland "Broward",
-SET city:riverview "Hillsborough",
-SET city:riviera_beach "Palm Beach",
-SET city:rock_island "Broward",
-SET city:rockledge "Brevard",
-SET city:rolling_oaks "Broward",
-SET city:roosevelt_gardens "Broward",
-SET city:roseland "Indian River",
-SET city:rotonda "Charlotte",
-SET city:royal_palm_beach "Palm Beach",
-SET city:royal_palm_estates "Palm Beach",
-SET city:royal_palm_ranches "Broward",
-SET city:ruskin "Hillsborough",
-SET city:safety_harbor "Pinellas",
-SET city:samoset "Manatee",
-SET city:samsula-spruce_creek "Volusia",
-SET city:san_antonio "Pasco",
-SET city:san_carlos_park "Lee",
-SET city:sandalfoot_cove "Palm Beach",
-SET city:sanford "Seminole",
-SET city:sanibel "Lee",
-SET city:sarasota "Sarasota",
-SET city:sarasota_springs "Sarasota",
-SET city:satellite_beach "Brevard",
-SET city:sawgrass "St. Johns",
-SET city:schall_circle "Palm Beach",
-SET city:scott_lake "Miami-Dade",
-SET city:sea_ranch_lakes "Broward",
-SET city:sebastian "Indian River",
-SET city:sebring "Highlands",
-SET city:seffner "Hillsborough",
-SET city:seminole "Pinellas",
-SET city:seminole_manor "Palm Beach",
-SET city:sewall's_point "Martin",
-SET city:shady_hills "Pasco",
-SET city:shalimar "Okaloosa",
-SET city:sharpes "Brevard",
-SET city:siesta_key "Sarasota",
-SET city:silver_lake "Lake",
-SET city:silver_springs_shores "Marion",
-SET city:sky_lake "Orange",
-SET city:sneads "Jackson",
-SET city:solana "Charlotte",
-SET city:sopchoppy "Wakulla",
-SET city:sorrento "Lake",
-SET city:south_apopka "Orange",
-SET city:south_bay "Palm Beach",
-SET city:south_beach "Indian River",
-SET city:south_bradenton "Manatee",
-SET city:south_brooksville "Hernando",
-SET city:south_daytona "Volusia",
-SET city:south_gate_ridge "Sarasota",
-SET city:south_highpoint "Pinellas",
-SET city:south_miami "Miami-Dade",
-SET city:south_miami_heights "Miami-Dade",
-SET city:south_palm_beach "Palm Beach",
-SET city:south_pasadena "Pinellas",
-SET city:south_patrick_shores "Brevard",
-SET city:south_sarasota "Sarasota",
-SET city:south_venice "Sarasota",
-SET city:southchase "Orange",
-SET city:southeast_arcadia "DeSoto",
-SET city:southgate "Sarasota",
-SET city:spring_hill "Hernando",
-SET city:spring_lake "Hernando",
-SET city:springfield "Bay",
-SET city:st._augustine "St. Johns",
-SET city:st._augustine_beach "St. Johns",
-SET city:st._augustine_shores "St. Johns",
-SET city:st._augustine_south "St. Johns",
-SET city:st._cloud "Osceola",
-SET city:st._george "Broward",
-SET city:st._james_city "Lee",
-SET city:st._leo "Pasco",
-SET city:st._lucie "St. Lucie",
-SET city:st._marks "Wakulla",
-SET city:st._pete_beach "Pinellas",
-SET city:st._petersburg "Pinellas",
-SET city:stacey_street "Palm Beach",
-SET city:starke "Bradford",
-SET city:stock_island "Monroe",
-SET city:stuart "Martin",
-SET city:sugarmill_woods "Citrus",
-SET city:suncoast_estates "Lee",
-SET city:sunny_isles_beach "Miami-Dade",
-SET city:sunrise "Broward",
-SET city:sunset "Miami-Dade",
-SET city:sunshine_acres "Broward",
-SET city:sunshine_ranches "Broward",
-SET city:surfside "Miami-Dade",
-SET city:sweetwater "Miami-Dade",
-SET city:sylvan_shores "Highlands",
-SET city:taft "Orange",
-SET city:tallahassee "Leon",
-SET city:tamarac "Broward",
-SET city:tamiami "Miami-Dade",
-SET city:tampa "Hillsborough",
-SET city:tangelo_park "Orange",
-SET city:tangerine "Orange",
-SET city:tarpon_springs "Pinellas",
-SET city:tavares "Lake",
-SET city:tavernier "Monroe",
-SET city:taylor_creek "Okeechobee",
-SET city:tedder "Broward",
-SET city:temple_terrace "Hillsborough",
-SET city:tequesta "Palm Beach",
-SET city:terra_mar "Broward",
-SET city:the_crossings "Miami-Dade",
-SET city:the_hammocks "Miami-Dade",
-SET city:the_meadows "Sarasota",
-SET city:the_villages "Sumter",
-SET city:thonotosassa "Hillsborough",
-SET city:three_lakes "Miami-Dade",
-SET city:three_oaks "Lee",
-SET city:tice "Lee",
-SET city:tierra_verde "Pinellas",
-SET city:tildenville "Orange",
-SET city:timber_pines "Hernando",
-SET city:titusville "Brevard",
-SET city:town_'n'_country "Hillsborough",
-SET city:treasure_island "Pinellas",
-SET city:trenton "Gilchrist",
-SET city:trinity "Pasco",
-SET city:twin_lakes "Broward",
-SET city:tyndall_afb "Bay",
-SET city:umatilla "Lake",
-SET city:union_park "Orange",
-SET city:university "Hillsborough",
-SET city:university_park "Miami-Dade",
-SET city:upper_grand_lagoon "Bay",
-SET city:utopia "Broward",
-SET city:valparaiso "Okaloosa",
-SET city:valrico "Hillsborough",
-SET city:vamo "Sarasota",
-SET city:venice "Sarasota",
-SET city:venice_gardens "Sarasota",
-SET city:vernon "Washington",
-SET city:vero_beach "Indian River",
-SET city:vero_beach_south "Indian River",
-SET city:village_park "Broward",
-SET city:villages_of_oriole "Palm Beach",
-SET city:villano_beach "St. Johns",
-SET city:villas "Lee",
-SET city:vineyards "Collier",
-SET city:virginia_gardens "Miami-Dade",
-SET city:wabasso "Indian River",
-SET city:wabasso_beach "Indian River",
-SET city:wahneta "Polk",
-SET city:waldo "Alachua",
-SET city:warm_mineral_springs "Sarasota",
-SET city:warrington "Escambia",
-SET city:washington_park "Broward",
-SET city:watertown "Columbia",
-SET city:wauchula "Hardee",
-SET city:wausau "Washington",
-SET city:waverly "Polk",
-SET city:webster "Sumter",
-SET city:wedgefield "Orange",
-SET city:weeki_wachee "Hernando",
-SET city:weeki_wachee_gardens "Hernando",
-SET city:wekiwa_springs "Seminole",
-SET city:welaka "Putnam",
-SET city:wellington "Palm Beach",
-SET city:wesley_chapel "Pasco",
-SET city:wesley_chapel_south "Pasco",
-SET city:west_and_east_lealman "Pinellas",
-SET city:west_bradenton "Manatee",
-SET city:west_de_land "Volusia",
-SET city:west_ken-lark "Broward",
-SET city:west_little_river "Miami-Dade",
-SET city:west_melbourne "Brevard",
-SET city:west_miami "Miami-Dade",
-SET city:west_palm_beach "Palm Beach",
-SET city:west_pensacola "Escambia",
-SET city:west_perrine "Miami-Dade",
-SET city:west_samoset "Manatee",
-SET city:west_vero_corridor "Indian River",
-SET city:westchase "Hillsborough",
-SET city:westchester "Miami-Dade",
-SET city:westgate-belvedere_homes "Palm Beach",
-SET city:weston "Broward",
-SET city:westview "Miami-Dade",
-SET city:westville "Holmes",
-SET city:westwood_lakes "Miami-Dade",
-SET city:wewahitchka "Gulf",
-SET city:whiskey_creek "Lee",
-SET city:whisper_walk "Palm Beach",
-SET city:white_city "St. Lucie",
-SET city:white_springs "Hamilton",
-SET city:whitfield "Manatee",
-SET city:wildwood "Sumter",
-SET city:williamsburg "Orange",
-SET city:williston "Levy",
-SET city:williston_highlands "Levy",
-SET city:willow_oak "Polk",
-SET city:wilton_manors "Broward",
-SET city:wimauma "Hillsborough",
-SET city:windermere "Orange",
-SET city:winston "Polk",
-SET city:winter_beach "Indian River",
-SET city:winter_garden "Orange",
-SET city:winter_haven "Polk",
-SET city:winter_park "Orange",
-SET city:winter_springs "Seminole",
-SET city:woodville "Leon",
-SET city:worthington_springs "Union",
-SET city:wright "Okaloosa",
-SET city:yalaha "Lake",
-SET city:yankeetown "Levy",
-SET city:yulee "Nassau",
-SET city:zellwood "Orange",
-SET city:zephyrhills "Pasco",
-SET city:zephyrhills_north "Pasco",
-SET city:zephyrhills_south "Pasco",
-SET city:zephyrhills_west "Pasco",
+SET city:alachua "Alachua"
+SET city:alford "Jackson"
+SET city:altamonte_springs "Seminole"
+SET city:altha "Calhoun"
+SET city:altoona "Lake"
+SET city:alva "Lee"
+SET city:andover "Miami-Dade"
+SET city:andrews "Levy"
+SET city:anna_maria "Manatee"
+SET city:apalachicola "Franklin"
+SET city:apollo_beach "Hillsborough"
+SET city:apopka "Orange"
+SET city:arcadia "DeSoto"
+SET city:archer "Alachua"
+SET city:asbury_lake "Clay"
+SET city:astatula "Lake"
+SET city:astor "Lake"
+SET city:atlantic_beach "Duval"
+SET city:atlantis "Palm Beach"
+SET city:auburndale "Polk"
+SET city:aventura "Miami-Dade"
+SET city:avon_park "Highlands"
+SET city:azalea_park "Orange"
+SET city:babson_park "Polk"
+SET city:bagdad "Santa Rosa"
+SET city:bal_harbour "Miami-Dade"
+SET city:baldwin "Duval"
+SET city:bartow "Polk"
+SET city:bascom "Jackson"
+SET city:bay_hill "Orange"
+SET city:bay_lake "Orange"
+SET city:bay_pines "Pinellas"
+SET city:bayonet_point "Pasco"
+SET city:bayport "Hernando"
+SET city:bayshore_gardens "Manatee"
+SET city:beacon_square "Pasco"
+SET city:bee_ridge "Sarasota"
+SET city:bell "Gilchrist"
+SET city:bellair_meadowbrook_terrace "Clay"
+SET city:belle_glade "Palm Beach"
+SET city:belle_glade_camp "Palm Beach"
+SET city:belle_isle "Orange"
+SET city:belleair "Pinellas"
+SET city:belleair_beach "Pinellas"
+SET city:belleair_bluffs "Pinellas"
+SET city:belleair_shore "Pinellas"
+SET city:belleview "Marion"
+SET city:bellview "Escambia"
+SET city:beverly_beach "Flagler"
+SET city:beverly_hills "Citrus"
+SET city:big_coppitt_key "Monroe"
+SET city:big_pine_key "Monroe"
+SET city:biscayne_park "Miami-Dade"
+SET city:bithlo "Orange"
+SET city:black_diamond "Citrus"
+SET city:bloomingdale "Hillsborough"
+SET city:blountstown "Calhoun"
+SET city:boca_del_mar "Palm Beach"
+SET city:boca_pointe "Palm Beach"
+SET city:boca_raton "Palm Beach"
+SET city:bokeelia "Lee"
+SET city:bonifay "Holmes"
+SET city:bonita_springs "Lee"
+SET city:bonnie_lock_woodsetter_north "Broward"
+SET city:boulevard_gardens "Broward"
+SET city:bowling_green "Hardee"
+SET city:boyette "Hillsborough"
+SET city:boynton_beach "Palm Beach"
+SET city:bradenton "Manatee"
+SET city:bradenton_beach "Manatee"
+SET city:brandon "Hillsborough"
+SET city:branford "Suwannee"
+SET city:brent "Escambia"
+SET city:briny_breezes "Palm Beach"
+SET city:bristol "Liberty"
+SET city:broadview_pompano_park "Broward"
+SET city:broadview_park "Broward"
+SET city:bronson "Levy"
+SET city:brooker "Bradford"
+SET city:brookridge "Hernando"
+SET city:brooksville "Hernando"
+SET city:broward_estates "Broward"
+SET city:brownsville "Miami-Dade"
+SET city:buckhead_ridge "Glades"
+SET city:buckingham "Lee"
+SET city:buena_ventura_lakes "Osceola"
+SET city:bunche_park "Miami-Dade"
+SET city:bunnell "Flagler"
+SET city:burnt_store_marina "Lee"
+SET city:bushnell "Sumter"
+SET city:butler_beach "St Johns"
+SET city:callahan "Nassau"
+SET city:callaway "Bay"
+SET city:campbell "Osceola"
+SET city:campbellton "Jackson"
+SET city:canal_point "Palm Beach"
+SET city:cape_canaveral "Brevard"
+SET city:cape_coral "Lee"
+SET city:captiva "Lee"
+SET city:carol_city "Miami-Dade"
+SET city:carrabelle "Franklin"
+SET city:carver_ranches "Broward"
+SET city:caryville "Washington"
+SET city:casselberry "Seminole"
+SET city:cedar_grove "Bay"
+SET city:cedar_key "Levy"
+SET city:celebration "Osceola"
+SET city:center_hill "Sumter"
+SET city:century "Escambia"
+SET city:century_village "Palm Beach"
+SET city:chambers_estates "Broward"
+SET city:charleston_park "Lee"
+SET city:charlotte_harbor "Charlotte"
+SET city:charlotte_park "Charlotte"
+SET city:chattahoochee "Gadsden"
+SET city:cheval "Hillsborough"
+SET city:chiefland "Levy"
+SET city:chipley "Washington"
+SET city:christmas "Orange"
+SET city:chula_vista "Broward"
+SET city:chuluota "Seminole"
+SET city:cinco_bayou "Okaloosa"
+SET city:citrus_hills "Citrus"
+SET city:citrus_park "Hillsborough"
+SET city:citrus_ridge "Lake"
+SET city:citrus_springs "Citrus"
+SET city:clearwater "Pinellas"
+SET city:clermont "Lake"
+SET city:cleveland "Charlotte"
+SET city:clewiston "Hendry"
+SET city:cloud_lake "Palm Beach"
+SET city:cocoa "Brevard"
+SET city:cocoa_beach "Brevard"
+SET city:cocoa_west "Brevard"
+SET city:coconut_creek "Broward"
+SET city:coleman "Sumter"
+SET city:collier_manor_cresthaven "Broward"
+SET city:combee_settlement "Polk"
+SET city:conway "Orange"
+SET city:cooper_city "Broward"
+SET city:coral_gables "Miami-Dade"
+SET city:coral_springs "Broward"
+SET city:coral_terrace "Miami-Dade"
+SET city:cortez "Manatee"
+SET city:cottondale "Jackson"
+SET city:country_club "Miami-Dade"
+SET city:country_estates "Broward"
+SET city:country_walk "Miami-Dade"
+SET city:crescent_beach "St Johns"
+SET city:crescent_city "Putnam"
+SET city:crestview "Okaloosa"
+SET city:crooked_lake_park "Polk"
+SET city:cross_city "Dixie"
+SET city:crystal_lake "Polk"
+SET city:crystal_river "Citrus"
+SET city:crystal_springs "Pasco"
+SET city:cudjoe_key "Monroe"
+SET city:cutler "Miami-Dade"
+SET city:cutler_ridge "Miami-Dade"
+SET city:cypress_gardens "Polk"
+SET city:cypress_lake "Lee"
+SET city:cypress_lakes "Palm Beach"
+SET city:cypress_quarters "Okeechobee"
+SET city:dade_city "Pasco"
+SET city:dade_city_north "Pasco"
+SET city:dania_beach "Broward"
+SET city:davenport "Polk"
+SET city:davie "Broward"
+SET city:daytona_beach "Volusia"
+SET city:daytona_beach_shores "Volusia"
+SET city:de_bary "Volusia"
+SET city:de_funiak_springs "Walton"
+SET city:de_land "Volusia"
+SET city:de_land_southwest "Volusia"
+SET city:de_leon_springs "Volusia"
+SET city:deerfield_beach "Broward"
+SET city:delray_beach "Palm Beach"
+SET city:deltona "Volusia"
+SET city:desoto_lakes "Sarasota"
+SET city:destin "Okaloosa"
+SET city:doctor_phillips "Orange"
+SET city:doral "Miami-Dade"
+SET city:dover "Hillsborough"
+SET city:duck_key "Monroe"
+SET city:dundee "Polk"
+SET city:dunedin "Pinellas"
+SET city:dunes_road "Palm Beach"
+SET city:dunnellon "Marion"
+SET city:eagle_lake "Polk"
+SET city:east_bronson "Levy"
+SET city:east_dunbar "Lee"
+SET city:east_lake "Pinellas"
+SET city:east_lake_orient_park "Hillsborough"
+SET city:east_palatka "Putnam"
+SET city:east_perrine "Miami-Dade"
+SET city:east_williston "Levy"
+SET city:eastpoint "Franklin"
+SET city:eatonville "Orange"
+SET city:ebro "Washington"
+SET city:edgewater "Volusia"
+SET city:edgewood "Orange"
+SET city:eglin_afb "Okaloosa"
+SET city:egypt_lake_leto "Hillsborough"
+SET city:el_portal "Miami-Dade"
+SET city:elfers "Pasco"
+SET city:ellenton "Manatee"
+SET city:englewood "Sarasota"
+SET city:ensley "Escambia"
+SET city:estates_of_fort_lauderdale "Broward"
+SET city:estero "Lee"
+SET city:esto "Holmes"
+SET city:eustis "Lake"
+SET city:everglades "Collier"
+SET city:fairview_shores "Orange"
+SET city:fanning_springs "Levy"
+SET city:feather_sound "Pinellas"
+SET city:fellsmere "Indian River"
+SET city:fern_park "Seminole"
+SET city:fernandina_beach "Nassau"
+SET city:ferndale "Lake"
+SET city:ferry_pass "Escambia"
+SET city:fish_hawk "Hillsborough"
+SET city:fisher_island "Miami-Dade"
+SET city:five_points "Columbia"
+SET city:flagler_beach "Flagler"
+SET city:floral_city "Citrus"
+SET city:florida_city "Miami-Dade"
+SET city:florida_ridge "Indian River"
+SET city:forest_city "Seminole"
+SET city:fort_lauderdale "Broward"
+SET city:fort_meade "Polk"
+SET city:fort_myers "Lee"
+SET city:fort_myers_beach "Lee"
+SET city:fort_myers_shores "Lee"
+SET city:fort_pierce "St Lucie"
+SET city:fort_pierce_north "St Lucie"
+SET city:fort_pierce_south "St Lucie"
+SET city:fort_walton_beach "Okaloosa"
+SET city:fort_white "Columbia"
+SET city:fountainbleau "Miami-Dade"
+SET city:franklin_park "Broward"
+SET city:freeport "Walton"
+SET city:fremd_village_padgett_island "Palm Beach"
+SET city:frostproof "Polk"
+SET city:fruit_cove "St Johns"
+SET city:fruitland_park "Lake"
+SET city:fruitville "Sarasota"
+SET city:fussels_corner "Polk"
+SET city:gainesville "Alachua"
+SET city:gandy "Pinellas"
+SET city:gateway "Lee"
+SET city:geneva "Seminole"
+SET city:gibsonia "Polk"
+SET city:gibsonton "Hillsborough"
+SET city:gifford "Indian River"
+SET city:gladeview "Miami-Dade"
+SET city:glen_ridge "Palm Beach"
+SET city:glen_st_mary "Baker"
+SET city:glencoe "Volusia"
+SET city:glenvar_heights "Miami-Dade"
+SET city:godfrey_road "Broward"
+SET city:golden_beach "Miami-Dade"
+SET city:golden_gate "Collier"
+SET city:golden_glades "Miami-Dade"
+SET city:golden_heights "Broward"
+SET city:golden_lakes "Palm Beach"
+SET city:goldenrod "Orange"
+SET city:golf "Palm Beach"
+SET city:gonzalez "Escambia"
+SET city:goodland "Collier"
+SET city:gotha "Orange"
+SET city:goulding "Escambia"
+SET city:goulds "Miami-Dade"
+SET city:graceville "Jackson"
+SET city:grand_ridge "Jackson"
+SET city:greater_carrollwood "Hillsborough"
+SET city:greater_northdale "Hillsborough"
+SET city:greater_sun_center "Hillsborough"
+SET city:green_cove_springs "Clay"
+SET city:green_meadow "Broward"
+SET city:greenacres "Palm Beach"
+SET city:greensboro "Gadsden"
+SET city:greenville "Madison"
+SET city:greenwood "Jackson"
+SET city:gretna "Gadsden"
+SET city:grove_city "Charlotte"
+SET city:groveland "Lake"
+SET city:gulf_breeze "Santa Rosa"
+SET city:gulf_gate_estates "Sarasota"
+SET city:gulf_stream "Palm Beach"
+SET city:gulfport "Pinellas"
+SET city:gun_club_estates "Palm Beach"
+SET city:haines_city "Polk"
+SET city:hallandale "Broward"
+SET city:hampton "Bradford"
+SET city:hamptons_at_boca_raton "Palm Beach"
+SET city:harbor_bluffs "Pinellas"
+SET city:harbour_heights "Charlotte"
+SET city:harlem "Hendry"
+SET city:harlem_heights "Lee"
+SET city:hastings "St Johns"
+SET city:havana "Gadsden"
+SET city:haverhill "Palm Beach"
+SET city:hawthorne "Alachua"
+SET city:heathrow "Seminole"
+SET city:hernando "Citrus"
+SET city:hernando_beach "Hernando"
+SET city:hialeah "Miami-Dade"
+SET city:hialeah_gardens "Miami-Dade"
+SET city:high_point "Hernando"
+SET city:high_springs "Alachua"
+SET city:highland_beach "Palm Beach"
+SET city:highland_city "Polk"
+SET city:highland_park "Polk"
+SET city:hiland_park "Bay"
+SET city:hill_'n_dale "Hernando"
+SET city:hillcrest_heights "Polk"
+SET city:hilliard "Nassau"
+SET city:hillsboro_beach "Broward"
+SET city:hillsboro_pines "Broward"
+SET city:hillsboro_ranches "Broward"
+SET city:hobe_sound "Martin"
+SET city:holden_heights "Orange"
+SET city:holiday "Pasco"
+SET city:holly_hill "Volusia"
+SET city:hollywood "Broward"
+SET city:holmes_beach "Manatee"
+SET city:homestead "Miami-Dade"
+SET city:homestead_base "Miami-Dade"
+SET city:homosassa "Citrus"
+SET city:homosassa_springs "Citrus"
+SET city:horseshoe_beach "Dixie"
+SET city:howey_in_the_hills "Lake"
+SET city:hudson "Pasco"
+SET city:hunters_creek "Orange"
+SET city:hutchinson_island_south "St Lucie"
+SET city:hypoluxo "Palm Beach"
+SET city:immokalee "Collier"
+SET city:indialantic "Brevard"
+SET city:indian_harbour_beach "Brevard"
+SET city:indian_river_estates "St Lucie"
+SET city:indian_river_shores "Indian River"
+SET city:indian_rocks_beach "Pinellas"
+SET city:indian_shores "Pinellas"
+SET city:indiantown "Martin"
+SET city:inglis "Levy"
+SET city:interlachen "Putnam"
+SET city:inverness "Citrus"
+SET city:inverness_highlands_north "Citrus"
+SET city:inverness_highlands_south "Citrus"
+SET city:inwood "Polk"
+SET city:iona "Lee"
+SET city:islamorada,_village_of_islands "Monroe"
+SET city:islandia "Miami-Dade"
+SET city:istachatta "Hernando"
+SET city:ivanhoe_estates "Broward"
+SET city:ives_estates "Miami-Dade"
+SET city:jacksonville "Duval"
+SET city:jacksonville_beach "Duval"
+SET city:jacob_city "Jackson"
+SET city:jan_phyl_village "Polk"
+SET city:jasmine_estates "Pasco"
+SET city:jasper "Hamilton"
+SET city:jay "Santa Rosa"
+SET city:jennings "Hamilton"
+SET city:jensen_beach "Martin"
+SET city:june_park "Brevard"
+SET city:juno_beach "Palm Beach"
+SET city:juno_ridge "Palm Beach"
+SET city:jupiter "Palm Beach"
+SET city:jupiter_inlet_colony "Palm Beach"
+SET city:jupiter_island "Martin"
+SET city:kathleen "Polk"
+SET city:kendale_lakes "Miami-Dade"
+SET city:kendall "Miami-Dade"
+SET city:kendall_green "Broward"
+SET city:kendall_west "Miami-Dade"
+SET city:kenneth_city "Pinellas"
+SET city:kensington_park "Sarasota"
+SET city:key_biscayne "Miami-Dade"
+SET city:key_colony_beach "Monroe"
+SET city:key_largo "Monroe"
+SET city:key_west "Monroe"
+SET city:keystone "Hillsborough"
+SET city:keystone_heights "Clay"
+SET city:kings_point "Palm Beach"
+SET city:kissimmee "Osceola"
+SET city:la_crosse "Alachua"
+SET city:labelle "Hendry"
+SET city:lacoochee "Pasco"
+SET city:lady_lake "Lake"
+SET city:laguna_beach "Bay"
+SET city:lake_alfred "Polk"
+SET city:lake_belvedere_estates "Palm Beach"
+SET city:lake_buena_vista "Orange"
+SET city:lake_butler "Union"
+SET city:lake_butter "Orange"
+SET city:lake_city "Columbia"
+SET city:lake_clarke_shores "Palm Beach"
+SET city:lake_forest "Broward"
+SET city:lake_hamilton "Polk"
+SET city:lake_harbor "Palm Beach"
+SET city:lake_hart "Orange"
+SET city:lake_helen "Volusia"
+SET city:lake_kathryn "Lake"
+SET city:lake_lindsey "Hernando"
+SET city:lake_lorraine "Okaloosa"
+SET city:lake_lucerne "Miami-Dade"
+SET city:lake_mack_forest_hills "Lake"
+SET city:lake_magdalene "Hillsborough"
+SET city:lake_mary "Seminole"
+SET city:lake_panasoffkee "Sumter"
+SET city:lake_park "Palm Beach"
+SET city:lake_placid "Highlands"
+SET city:lake_sarasota "Sarasota"
+SET city:lake_wales "Polk"
+SET city:lake_worth "Palm Beach"
+SET city:lake_worth_corridor "Palm Beach"
+SET city:lakeland "Polk"
+SET city:lakeland_highlands "Polk"
+SET city:lakes_by_the_bay "Miami-Dade"
+SET city:lakeside "Clay"
+SET city:lakeside_green "Palm Beach"
+SET city:lakewood_park "St Lucie"
+SET city:land_o'_lakes "Pasco"
+SET city:lantana "Palm Beach"
+SET city:largo "Pinellas"
+SET city:lauderdale_by_the_sea "Broward"
+SET city:lauderdale_lakes "Broward"
+SET city:lauderhill "Broward"
+SET city:laurel "Sarasota"
+SET city:laurel_hill "Okaloosa"
+SET city:lawtey "Bradford"
+SET city:layton "Monroe"
+SET city:lazy_lake "Broward"
+SET city:lecanto "Citrus"
+SET city:lee "Madison"
+SET city:leesburg "Lake"
+SET city:lehigh_acres "Lee"
+SET city:leisure_city "Miami-Dade"
+SET city:leisureville "Broward"
+SET city:lely "Collier"
+SET city:lely_resort "Collier"
+SET city:lighthouse_point "Broward"
+SET city:limestone_creek "Palm Beach"
+SET city:lisbon "Lake"
+SET city:live_oak "Suwannee"
+SET city:loch_lomond "Broward"
+SET city:lochmoor_waterway_estates "Lee"
+SET city:lockhart "Orange"
+SET city:longboat_key "Sarasota"
+SET city:longwood "Seminole"
+SET city:loughman "Polk"
+SET city:lower_grand_lagoon "Bay"
+SET city:lutz "Hillsborough"
+SET city:lynn_haven "Bay"
+SET city:macclenny "Baker"
+SET city:madeira_beach "Pinellas"
+SET city:madison "Madison"
+SET city:maitland "Orange"
+SET city:malabar "Brevard"
+SET city:malone "Jackson"
+SET city:manalapan "Palm Beach"
+SET city:manasota_key "Charlotte"
+SET city:manattee_road "Levy"
+SET city:mango "Hillsborough"
+SET city:mangonia_park "Palm Beach"
+SET city:marathon "Monroe"
+SET city:marco_island "Collier"
+SET city:margate "Broward"
+SET city:marianna "Jackson"
+SET city:marineland "Flagler"
+SET city:mary_esther "Okaloosa"
+SET city:masaryktown "Hernando"
+SET city:mascotte "Lake"
+SET city:matlacha "Lee"
+SET city:matlacha_isles_matlacha_shores "Lee"
+SET city:mayo "Lafayette"
+SET city:mcgregor "Lee"
+SET city:mcintosh "Marion"
+SET city:meadow_woods "Orange"
+SET city:medley "Miami-Dade"
+SET city:medulla "Polk"
+SET city:melbourne "Brevard"
+SET city:melbourne_beach "Brevard"
+SET city:melbourne_village "Brevard"
+SET city:melrose_park "Broward"
+SET city:memphis "Manatee"
+SET city:merritt_island "Brevard"
+SET city:mexico_beach "Bay"
+SET city:miami "Miami-Dade"
+SET city:miami_beach "Miami-Dade"
+SET city:miami_gardens "Broward"
+SET city:miami_lakes "Miami-Dade"
+SET city:miami_shores "Miami-Dade"
+SET city:miami_springs "Miami-Dade"
+SET city:micanopy "Alachua"
+SET city:micco "Brevard"
+SET city:middleburg "Clay"
+SET city:midway "Seminole"
+SET city:milton "Santa Rosa"
+SET city:mims "Brevard"
+SET city:minneola "Lake"
+SET city:miramar "Broward"
+SET city:miramar_beach "Walton"
+SET city:mission_bay "Palm Beach"
+SET city:molino "Escambia"
+SET city:monticello "Jefferson"
+SET city:montverde "Lake"
+SET city:moore_haven "Glades"
+SET city:mount_dora "Lake"
+SET city:mount_plymouth "Lake"
+SET city:mulberry "Polk"
+SET city:myrtle_grove "Escambia"
+SET city:naples "Collier"
+SET city:naples_manor "Collier"
+SET city:naples_park "Collier"
+SET city:naranja "Miami-Dade"
+SET city:nassau_village_ratliff "Nassau"
+SET city:neptune_beach "Duval"
+SET city:new_port_richey "Pasco"
+SET city:new_port_richey_east "Pasco"
+SET city:new_smyrna_beach "Volusia"
+SET city:newberry "Alachua"
+SET city:niceville "Okaloosa"
+SET city:nobleton "Hernando"
+SET city:nokomis "Sarasota"
+SET city:noma "Holmes"
+SET city:norland "Miami-Dade"
+SET city:north_andrews_gardens "Broward"
+SET city:north_beach "Indian River"
+SET city:north_brooksville "Hernando"
+SET city:north_de_land "Volusia"
+SET city:north_fort_myers "Lee"
+SET city:north_key_largo "Monroe"
+SET city:north_lauderdale "Broward"
+SET city:north_miami "Miami-Dade"
+SET city:north_miami_beach "Miami-Dade"
+SET city:north_palm_beach "Palm Beach"
+SET city:north_port "Sarasota"
+SET city:north_redington_beach "Pinellas"
+SET city:north_river_shores "Martin"
+SET city:north_sarasota "Sarasota"
+SET city:north_weeki_wachee "Hernando"
+SET city:oak_hill "Volusia"
+SET city:oak_point "Broward"
+SET city:oak_ridge "Orange"
+SET city:oakland "Orange"
+SET city:oakland_park "Broward"
+SET city:ocala "Marion"
+SET city:ocean_breeze_park "Martin"
+SET city:ocean_city "Okaloosa"
+SET city:ocean_ridge "Palm Beach"
+SET city:ocoee "Orange"
+SET city:odessa "Pasco"
+SET city:ojus "Miami-Dade"
+SET city:okahumpka "Lake"
+SET city:okeechobee "Okeechobee"
+SET city:oldsmar "Pinellas"
+SET city:olga "Lee"
+SET city:olympia_heights "Miami-Dade"
+SET city:opa_locka "Miami-Dade"
+SET city:opa_locka_north "Miami-Dade"
+SET city:orange_city "Volusia"
+SET city:orange_park "Clay"
+SET city:orangetree "Collier"
+SET city:orchid "Indian River"
+SET city:orlando "Orange"
+SET city:orlovista "Orange"
+SET city:ormond_by_the_sea "Volusia"
+SET city:ormond_beach "Volusia"
+SET city:osprey "Sarasota"
+SET city:otter_creek "Levy"
+SET city:oviedo "Seminole"
+SET city:pace "Santa Rosa"
+SET city:page_park "Lee"
+SET city:pahokee "Palm Beach"
+SET city:paisley "Lake"
+SET city:palatka "Putnam"
+SET city:palm_aire "Broward"
+SET city:palm_bay "Brevard"
+SET city:palm_beach "Palm Beach"
+SET city:palm_beach_gardens "Palm Beach"
+SET city:palm_beach_shores "Palm Beach"
+SET city:palm_city "Martin"
+SET city:palm_coast "Flagler"
+SET city:palm_harbor "Pinellas"
+SET city:palm_river_clair_mel "Hillsborough"
+SET city:palm_shores "Brevard"
+SET city:palm_springs "Palm Beach"
+SET city:palm_springs_north "Miami-Dade"
+SET city:palm_valley "St Johns"
+SET city:palmetto "Manatee"
+SET city:palmetto_estates "Miami-Dade"
+SET city:palmona_park "Lee"
+SET city:panama_city "Bay"
+SET city:panama_city_beach "Bay"
+SET city:paradise_heights "Orange"
+SET city:parker "Bay"
+SET city:parkland "Broward"
+SET city:paxton "Walton"
+SET city:pebble_creek "Hillsborough"
+SET city:pelican_bay "Collier"
+SET city:pembroke_park "Broward"
+SET city:pembroke_pines "Broward"
+SET city:penney_farms "Clay"
+SET city:pensacola "Escambia"
+SET city:perry "Taylor"
+SET city:pierson "Volusia"
+SET city:pine_castle "Orange"
+SET city:pine_hills "Orange"
+SET city:pine_island_center "Lee"
+SET city:pine_island_ridge "Broward"
+SET city:pine_lakes "Lake"
+SET city:pine_manor "Lee"
+SET city:pine_ridge "Citrus"
+SET city:pinecrest "Miami-Dade"
+SET city:pineland "Lee"
+SET city:pinellas_park "Pinellas"
+SET city:pinewood "Miami-Dade"
+SET city:pittman "Lake"
+SET city:placid_lakes "Highlands"
+SET city:plant_city "Hillsborough"
+SET city:plantation "Broward"
+SET city:plantation_island "Collier"
+SET city:plantation_mobile_home_park "Palm Beach"
+SET city:poinciana "Osceola"
+SET city:polk_city "Polk"
+SET city:pomona_park "Putnam"
+SET city:pompano_beach "Broward"
+SET city:pompano_beach_highlands "Broward"
+SET city:pompano_estates "Broward"
+SET city:ponce_de_leon "Holmes"
+SET city:ponce_inlet "Volusia"
+SET city:port_charlotte "Charlotte"
+SET city:port_la_belle "Hendry"
+SET city:port_orange "Volusia"
+SET city:port_richey "Pasco"
+SET city:port_salerno "Martin"
+SET city:port_st_joe "Gulf"
+SET city:port_st_john "Brevard"
+SET city:port_st_lucie "St Lucie"
+SET city:pretty_bayou "Bay"
+SET city:princeton "Miami-Dade"
+SET city:progress_village "Hillsborough"
+SET city:punta_gorda "Charlotte"
+SET city:punta_rassa "Lee"
+SET city:quincy "Gadsden"
+SET city:raiford "Union"
+SET city:ramblewood_east "Broward"
+SET city:ravenswood_estates "Broward"
+SET city:reddick "Marion"
+SET city:redington_beach "Pinellas"
+SET city:redington_shores "Pinellas"
+SET city:richmond_heights "Miami-Dade"
+SET city:richmond_west "Miami-Dade"
+SET city:ridge_manor "Hernando"
+SET city:ridge_wood_heights "Sarasota"
+SET city:ridgecrest "Pinellas"
+SET city:rio "Martin"
+SET city:riverland "Broward"
+SET city:riverview "Hillsborough"
+SET city:riviera_beach "Palm Beach"
+SET city:rock_island "Broward"
+SET city:rockledge "Brevard"
+SET city:rolling_oaks "Broward"
+SET city:roosevelt_gardens "Broward"
+SET city:roseland "Indian River"
+SET city:rotonda "Charlotte"
+SET city:royal_palm_beach "Palm Beach"
+SET city:royal_palm_estates "Palm Beach"
+SET city:royal_palm_ranches "Broward"
+SET city:ruskin "Hillsborough"
+SET city:safety_harbor "Pinellas"
+SET city:samoset "Manatee"
+SET city:samsula_spruce_creek "Volusia"
+SET city:san_antonio "Pasco"
+SET city:san_carlos_park "Lee"
+SET city:sandalfoot_cove "Palm Beach"
+SET city:sanford "Seminole"
+SET city:sanibel "Lee"
+SET city:sarasota "Sarasota"
+SET city:sarasota_springs "Sarasota"
+SET city:satellite_beach "Brevard"
+SET city:sawgrass "St Johns"
+SET city:schall_circle "Palm Beach"
+SET city:scott_lake "Miami-Dade"
+SET city:sea_ranch_lakes "Broward"
+SET city:sebastian "Indian River"
+SET city:sebring "Highlands"
+SET city:seffner "Hillsborough"
+SET city:seminole "Pinellas"
+SET city:seminole_manor "Palm Beach"
+SET city:sewall's_point "Martin"
+SET city:shady_hills "Pasco"
+SET city:shalimar "Okaloosa"
+SET city:sharpes "Brevard"
+SET city:siesta_key "Sarasota"
+SET city:silver_lake "Lake"
+SET city:silver_springs_shores "Marion"
+SET city:sky_lake "Orange"
+SET city:sneads "Jackson"
+SET city:solana "Charlotte"
+SET city:sopchoppy "Wakulla"
+SET city:sorrento "Lake"
+SET city:south_apopka "Orange"
+SET city:south_bay "Palm Beach"
+SET city:south_beach "Indian River"
+SET city:south_bradenton "Manatee"
+SET city:south_brooksville "Hernando"
+SET city:south_daytona "Volusia"
+SET city:south_gate_ridge "Sarasota"
+SET city:south_highpoint "Pinellas"
+SET city:south_miami "Miami-Dade"
+SET city:south_miami_heights "Miami-Dade"
+SET city:south_palm_beach "Palm Beach"
+SET city:south_pasadena "Pinellas"
+SET city:south_patrick_shores "Brevard"
+SET city:south_sarasota "Sarasota"
+SET city:south_venice "Sarasota"
+SET city:southchase "Orange"
+SET city:southeast_arcadia "DeSoto"
+SET city:southgate "Sarasota"
+SET city:spring_hill "Hernando"
+SET city:spring_lake "Hernando"
+SET city:springfield "Bay"
+SET city:st_augustine "St Johns"
+SET city:st_augustine_beach "St Johns"
+SET city:st_augustine_shores "St Johns"
+SET city:st_augustine_south "St Johns"
+SET city:st_cloud "Osceola"
+SET city:st_george "Broward"
+SET city:st_james_city "Lee"
+SET city:st_leo "Pasco"
+SET city:st_lucie "St Lucie"
+SET city:st_marks "Wakulla"
+SET city:st_pete_beach "Pinellas"
+SET city:st_petersburg "Pinellas"
+SET city:stacey_street "Palm Beach"
+SET city:starke "Bradford"
+SET city:stock_island "Monroe"
+SET city:stuart "Martin"
+SET city:sugarmill_woods "Citrus"
+SET city:suncoast_estates "Lee"
+SET city:sunny_isles_beach "Miami-Dade"
+SET city:sunrise "Broward"
+SET city:sunset "Miami-Dade"
+SET city:sunshine_acres "Broward"
+SET city:sunshine_ranches "Broward"
+SET city:surfside "Miami-Dade"
+SET city:sweetwater "Miami-Dade"
+SET city:sylvan_shores "Highlands"
+SET city:taft "Orange"
+SET city:tallahassee "Leon"
+SET city:tamarac "Broward"
+SET city:tamiami "Miami-Dade"
+SET city:tampa "Hillsborough"
+SET city:tangelo_park "Orange"
+SET city:tangerine "Orange"
+SET city:tarpon_springs "Pinellas"
+SET city:tavares "Lake"
+SET city:tavernier "Monroe"
+SET city:taylor_creek "Okeechobee"
+SET city:tedder "Broward"
+SET city:temple_terrace "Hillsborough"
+SET city:tequesta "Palm Beach"
+SET city:terra_mar "Broward"
+SET city:the_crossings "Miami-Dade"
+SET city:the_hammocks "Miami-Dade"
+SET city:the_meadows "Sarasota"
+SET city:the_villages "Sumter"
+SET city:thonotosassa "Hillsborough"
+SET city:three_lakes "Miami-Dade"
+SET city:three_oaks "Lee"
+SET city:tice "Lee"
+SET city:tierra_verde "Pinellas"
+SET city:tildenville "Orange"
+SET city:timber_pines "Hernando"
+SET city:titusville "Brevard"
+SET city:town_'n'_country "Hillsborough"
+SET city:treasure_island "Pinellas"
+SET city:trenton "Gilchrist"
+SET city:trinity "Pasco"
+SET city:twin_lakes "Broward"
+SET city:tyndall_afb "Bay"
+SET city:umatilla "Lake"
+SET city:union_park "Orange"
+SET city:university "Hillsborough"
+SET city:university_park "Miami-Dade"
+SET city:upper_grand_lagoon "Bay"
+SET city:utopia "Broward"
+SET city:valparaiso "Okaloosa"
+SET city:valrico "Hillsborough"
+SET city:vamo "Sarasota"
+SET city:venice "Sarasota"
+SET city:venice_gardens "Sarasota"
+SET city:vernon "Washington"
+SET city:vero_beach "Indian River"
+SET city:vero_beach_south "Indian River"
+SET city:village_park "Broward"
+SET city:villages_of_oriole "Palm Beach"
+SET city:villano_beach "St Johns"
+SET city:villas "Lee"
+SET city:vineyards "Collier"
+SET city:virginia_gardens "Miami-Dade"
+SET city:wabasso "Indian River"
+SET city:wabasso_beach "Indian River"
+SET city:wahneta "Polk"
+SET city:waldo "Alachua"
+SET city:warm_mineral_springs "Sarasota"
+SET city:warrington "Escambia"
+SET city:washington_park "Broward"
+SET city:watertown "Columbia"
+SET city:wauchula "Hardee"
+SET city:wausau "Washington"
+SET city:waverly "Polk"
+SET city:webster "Sumter"
+SET city:wedgefield "Orange"
+SET city:weeki_wachee "Hernando"
+SET city:weeki_wachee_gardens "Hernando"
+SET city:wekiwa_springs "Seminole"
+SET city:welaka "Putnam"
+SET city:wellington "Palm Beach"
+SET city:wesley_chapel "Pasco"
+SET city:wesley_chapel_south "Pasco"
+SET city:west_and_east_lealman "Pinellas"
+SET city:west_bradenton "Manatee"
+SET city:west_de_land "Volusia"
+SET city:west_ken_lark "Broward"
+SET city:west_little_river "Miami-Dade"
+SET city:west_melbourne "Brevard"
+SET city:west_miami "Miami-Dade"
+SET city:west_palm_beach "Palm Beach"
+SET city:west_pensacola "Escambia"
+SET city:west_perrine "Miami-Dade"
+SET city:west_samoset "Manatee"
+SET city:west_vero_corridor "Indian River"
+SET city:westchase "Hillsborough"
+SET city:westchester "Miami-Dade"
+SET city:westgate_belvedere_homes "Palm Beach"
+SET city:weston "Broward"
+SET city:westview "Miami-Dade"
+SET city:westville "Holmes"
+SET city:westwood_lakes "Miami-Dade"
+SET city:wewahitchka "Gulf"
+SET city:whiskey_creek "Lee"
+SET city:whisper_walk "Palm Beach"
+SET city:white_city "St Lucie"
+SET city:white_springs "Hamilton"
+SET city:whitfield "Manatee"
+SET city:wildwood "Sumter"
+SET city:williamsburg "Orange"
+SET city:williston "Levy"
+SET city:williston_highlands "Levy"
+SET city:willow_oak "Polk"
+SET city:wilton_manors "Broward"
+SET city:wimauma "Hillsborough"
+SET city:windermere "Orange"
+SET city:winston "Polk"
+SET city:winter_beach "Indian River"
+SET city:winter_garden "Orange"
+SET city:winter_haven "Polk"
+SET city:winter_park "Orange"
+SET city:winter_springs "Seminole"
+SET city:woodville "Leon"
+SET city:worthington_springs "Union"
+SET city:wright "Okaloosa"
+SET city:yalaha "Lake"
+SET city:yankeetown "Levy"
+SET city:yulee "Nassau"
+SET city:zellwood "Orange"
+SET city:zephyrhills "Pasco"
+SET city:zephyrhills_north "Pasco"
+SET city:zephyrhills_south "Pasco"
+SET city:zephyrhills_west "Pasco"
 SET city:zolfo_springs "Hardee"
