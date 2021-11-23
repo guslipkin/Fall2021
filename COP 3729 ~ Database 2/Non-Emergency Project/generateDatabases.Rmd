@@ -1,0 +1,58 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(data.table)
+```
+
+
+```{r, eval=FALSE}
+neo4j <- fread("SharedBorders.csv")
+
+genCreate <- function(x) {
+  paste0("(", gsub(" ", "_", tolower(x)), ":County { name: \"", x, "\"}),")
+}
+
+write.table(c("CREATE ", genCreate(unique(neo4j$county1))), 
+            file = "neo4j.txt", 
+            row.names = FALSE, 
+            col.names = FALSE, 
+            quote = FALSE)
+
+genKnows <- function(x, y) {
+  paste0("(", gsub(" ", "_", tolower(x)), ")-[:BORDERS]->(", gsub(" ", "_", tolower(y)), ")")
+}
+
+uniqueBorders <- unique(neo4j[, c("county1", "county2") := list(pmin(county1, county2),
+                         pmax(county1, county2))], by = c("county1", "county2"))
+
+write.table(c(genKnows(uniqueBorders$county1, uniqueBorders$county2)), 
+            file = "neo4j.txt", 
+            append = TRUE,
+            row.names = FALSE, 
+            col.names = FALSE, 
+            quote = FALSE,
+            eol = ",\n")
+```
+
+
+```{r, eval=FALSE}
+cities <- fread("CityCounty.csv")
+
+write.table(paste0("SET city:", gsub(" ", "_", tolower(cities$city)), " \"", cities$county, "\""),
+            file = "redis.txt",
+            row.names = FALSE,
+            col.names = FALSE,
+            quote = FALSE,
+            eol = ",\n")
+```
+
+
+```{r}
+directory <- fread("OfficeDirectory.csv")
+
+# cat(sf::dbWriteTable(con, "MyTable", directory, row.names=FALSE, append=TRUE))
+```
+

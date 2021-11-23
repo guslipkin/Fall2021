@@ -1,0 +1,317 @@
+﻿county1,county2
+Escambia,Santa Rosa
+Santa Rosa,Escambia
+Santa Rosa,Okaloosa
+Okaloosa,Santa Rosa
+Okaloosa,Walton
+Walton,Okaloosa
+Walton,Holmes
+Walton,Washington
+Walton,Bay
+Holmes,Walton
+Holmes,Washington
+Holmes,Jackson
+Washington,Walton
+Washington,Holmes
+Washington,Jackson
+Washington,Bay
+Bay,Walton
+Bay,Washington
+Bay,Jackson
+Bay,Calhoun
+Bay,Gulf
+Jackson,Holmes
+Jackson,Washington
+Jackson,Bay
+Jackson,Calhoun
+Jackson,Gadsden
+Jackson,Liberty
+Calhoun,Jackson
+Calhoun,Liberty
+Calhoun,Gulf
+Calhoun,Bay
+Gulf,Bay
+Gulf,Calhoun
+Gulf,Liberty
+Gulf,Franklin
+Gadsden,Jackson
+Gadsden,Leon
+Gadsden,Liberty
+Liberty,Jackson
+Liberty,Calhoun
+Liberty,Gulf
+Liberty,Franklin
+Liberty,Wakulla
+Liberty,Leon
+Liberty,Gadsden
+Franklin,Gulf
+Franklin,Liberty
+Franklin,Wakulla
+Leon,Gadsden
+Leon,Jefferson
+Leon,Wakulla
+Leon,Liberty
+Wakulla,Leon
+Wakulla,Jefferson
+Wakulla,Franklin
+Wakulla,Liberty
+Jefferson,Madison
+Jefferson,Taylor
+Jefferson,Wakulla
+Jefferson,Leon
+Madison,Hamilton
+Madison,Suwanee
+Madison,Lafayette
+Madison,Taylor
+Madison,Jefferson
+Taylor,Madison
+Taylor,Lafayette
+Taylor,Dixie
+Taylor,Jefferson
+Hamilton,Columbia
+Hamilton,Suwanee
+Hamilton,Madison
+Suwanee,Hamilton
+Suwanee,Columbia
+Suwanee,Gilchrist
+Suwanee,Lafayette
+Suwanee,Madison
+Lafayette,Madison
+Lafayette,Suwanee
+Lafayette,Gilchrist
+Lafayette,Dixie
+Lafayette,Taylor
+Columbia,Baker
+Columbia,Union
+Columbia,Alachua
+Columbia,Gilchrist
+Columbia,Suwanee
+Columbia,Hamilton
+Baker,Columbia
+Baker,Union
+Baker,Bradford
+Baker,Nassau
+Baker,Duval
+Baker,Clay
+Nassau,Baker
+Nassau,Duval
+Duval,Baker
+Duval,Nassau
+Duval,Duval
+Duval,Clay
+Duval,Bradford
+Duval,Union
+Clay,Duval
+Clay,St Johns
+Clay,Putnam
+Clay,Bradford
+Clay,Union
+Clay,Baker
+St Johns,Duval
+St Johns,Flagler
+St Johns,Putnam
+St Johns,Clay
+Putnam,Clay
+Putnam,St Johns
+Putnam,Flagler
+Putnam,Volusia
+Putnam,Marion
+Putnam,Alachua
+Putnam,Bradford
+Flagler,St Johns
+Flagler,Volusia
+Flagler,Putnam
+Volusia,Flagler
+Volusia,Brevard
+Volusia,Orange
+Volusia,Seminole
+Volusia,Lake
+Volusia,Marion
+Volusia,Putnam
+Union,Columbia
+Union,Baker
+Union,Duval
+Union,Clay
+Union,Bradford
+Union,Alachua
+Bradford,Union
+Bradford,Baker
+Bradford,Clay
+Bradford,Putnam
+Bradford,Alachua
+Alachua,Columbia
+Alachua,Union
+Alachua,Bradford
+Alachua,Clay
+Alachua,Putnam
+Alachua,Marion
+Alachua,Levy
+Alachua,Gilchrist
+Gilchrist,Lafayette
+Gilchrist,Suwanee
+Gilchrist,Columbia
+Gilchrist,Alachua
+Gilchrist,Levy
+Gilchrist,Dixie
+Dixie,Taylor
+Dixie,Lafayette
+Dixie,Gilchrist
+Dixie,Levy
+Levy,Dixie
+Levy,Gilchrist
+Levy,Alachua
+Levy,Marion
+Levy,Citrus
+Marion,Alachua
+Marion,Putnam
+Marion,Volusia
+Marion,Lake
+Marion,Sumter
+Marion,Citrus
+Marion,Levy
+Citrus,Levy
+Citrus,Marion
+Citrus,Sumter
+Citrus,Hernando
+Sumter,Marion
+Sumter,Lake
+Sumter,Polk
+Sumter,Pasco
+Sumter,Hernando
+Sumter,Citrus
+Lake,Marion
+Lake,Volusia
+Lake,Seminole
+Lake,Orange
+Lake,Polk
+Lake,Sumter
+Hernando,Citrus
+Hernando,Sumter
+Hernando,Pasco
+Pasco,Hernando
+Pasco,Sumter
+Pasco,Polk
+Pasco,Hillsborough
+Pasco,Pinellas
+Seminole,Volusia
+Seminole,Orange
+Seminole,Lake
+Orange,Seminole
+Orange,Brevard
+Orange,Osceola
+Orange,Polk
+Orange,Lake
+Brevard,Volusia
+Brevard,Orange
+Brevard,Indian River
+Brevard,Osceola
+Osceola,Orange
+Osceola,Brevard
+Osceola,Indian River
+Osceola,Okeechobee
+Osceola,Highlands
+Osceola,Polk
+Polk,Sumter
+Polk,Lake
+Polk,Orange
+Polk,Osceola
+Polk,Okeechobee
+Polk,Highlands
+Polk,Hardee
+Polk,Manatee
+Polk,Hillsborough
+Polk,Pasco
+Hillsborough,Pasco
+Hillsborough,Polk
+Hillsborough,Hardee
+Hillsborough,Manatee
+Hillsborough,Pinellas
+Pinellas,Pasco
+Pinellas,Hillsborough
+Manatee,Hillsborough
+Manatee,Polk
+Manatee,Hardee
+Manatee,DeSoto
+Manatee,Sarasota
+Hardee,Hillsborough
+Hardee,Polk
+Hardee,Highlands
+Hardee,DeSoto
+Hardee,Manatee
+Highlands,Polk
+Highlands,Osceola
+Highlands,Okeechobee
+Highlands,Glades
+Highlands,Charlotte
+Highlands,DeSoto
+Highlands,Hardee
+Okeechobee,Osceola
+Okeechobee,Indian River
+Okeechobee,St Lucie
+Okeechobee,Martin
+Okeechobee,Palm Beach
+Okeechobee,Glades
+Okeechobee,Highlands
+Okeechobee,Polk
+Indian River,Brevard
+Indian River,St Lucie
+Indian River,Okeechobee
+Indian River,Osceola
+St Lucie,Indian River
+St Lucie,Martin
+St Lucie,Palm Beach
+St Lucie,Okeechobee
+Martin,St Lucie
+Martin,Palm Beach
+Martin,Okeechobee
+Palm Beach,Martin
+Palm Beach,Broward
+Palm Beach,Hendry
+Palm Beach,Glades
+Palm Beach,Okeechobee
+Sarasota,Manatee
+Sarasota,DeSoto
+Sarasota,Charlotte
+DeSoto,Hardee
+DeSoto,Highlands
+DeSoto,Glades
+DeSoto,Charlotte
+DeSoto,Sarasota
+DeSoto,Manatee
+Charlotte,Sarasota
+Charlotte,DeSoto
+Charlotte,Highlands
+Charlotte,Glades
+Charlotte,Hendry
+Charlotte,Lee
+Glades,DeSoto
+Glades,Highlands
+Glades,Okeechobee
+Glades,Palm Beach
+Glades,Hendry
+Glades,Lee
+Glades,Charlotte
+Lee,Charlotte
+Lee,Glades
+Lee,Hendry
+Lee,Collier
+Hendry,Glades
+Hendry,Palm Beach
+Hendry,Broward
+Hendry,Collier
+Hendry,Lee
+Hendry,Charlotte
+Collier,Lee
+Collier,Hendry
+Collier,Broward
+Collier,Miami-Dade
+Collier,Monroe
+Broward,Palm Beach
+Broward,Miami-Dade
+Broward,Collier
+Broward,Hendry
+Monroe,Collier
+Monroe,Miami-Dade
+Miami-Dade,Broward
+Miami-Dade,Collier
+Miami-Dade,Monroe
