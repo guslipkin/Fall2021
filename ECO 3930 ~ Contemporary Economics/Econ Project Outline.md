@@ -22,3 +22,11 @@
 ## Plan For Analysis
 
 ​	I love data and want to go to each department chair and ask how many tutors they have and for what classes. If they’ll let me have it, I’ll also collect data on how many hours they work each week. This should give me a good baseline to work with on an optimization problem to try and maximize the amount of tutoring hours available to students across the widest breadth of classes possible while also minimizing costs to departments.
+
+
+
+## Dewey says…
+
+> Data would be great. But just working through the theoretical model without any data will be useful. What model? Don't know, have to build one. Tutoring is a congestible public good. Students arrive randomly (some easy distribution). What is the loss of imposing restrictions on tutor subjects over the times the system is not congested, etc...
+
+- 
