@@ -53,7 +53,7 @@ section 3M
         Extra research questions where possible		: p9, after q13, 2022-04-15
         Final paper/presentation									:crit, after p9, 2022-04-27
 section 3M Research Question 2
-				Q2 Methodology														: q21, after p8, 1w
+				Q2 Methodology														: q21, after p8, 2w
 				Q2 Implementation													: q22, after q21, 4w
 				Q2 Conclusions														: q23, after q22, 1w
 section 3M Research Question 3
