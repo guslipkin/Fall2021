@@ -181,7 +181,7 @@ score_list_output
 ```{r}
 plot(
   x = 2:7,
-  y = socre_list_output,
+  y = score_list_output,
   type = "l",
   col = "red",
   lwd = 5,
