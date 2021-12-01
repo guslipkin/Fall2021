@@ -1,0 +1,237 @@
+---
+title: "LDA diagnostics using **topicdoc** package"
+output:
+  html_document:
+    df_print: paged
+---
+* name: Jikhan Jeong
+* Date: Nov 30, 2021
+* Replicated from prof.Rei's slide and code
+* ref: https://cran.r-project.org/web/packages/topicdoc/vignettes/basic_usage.html
+* ref: https://github.com/doug-friedman/topicdoc
+
+### LDA diagnostics using **topicdoc** package
+* ref: https://cran.r-project.org/web/packages/topicdoc/vignettes/basic_usage.html
+
+
+### R version check
+
+* Please install *topicdoc* package
+
+```{r}
+# install.packages('topicdoc')
+library(topicdoc)
+library(topicmodels)
+
+library(tidyverse)
+library(tidytext)
+```
+
+## Reviews from TripAdvisor
+
+```{r, message=FALSE, warning=FALSE}
+review <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/camp_nou_tripadvisor.csv");head(review)
+```
+### Making a function to see the data 
+* R-function : https://www.tutorialspoint.com/r/r_functions.htm
+
+```{r}
+JJ_wanna_check_corpus <- function(your_corpus, head_tail_lines) {
+   print(class(your_corpus))
+   print(summary(your_corpus))
+   print('head--------------------')
+   print(head(your_corpus,head_tail_lines))
+   print('Done--------------------')
+}
+
+JJ_wanna_check_corpus(review ,3)
+```
+
+Perform tokenization and count:
+
+```{r}
+review_counts <- review %>% 
+ unnest_tokens(word, summary) %>% 
+ anti_join(stop_words) %>% 
+ count(title, word, sort = TRUE) %>% 
+ ungroup() 
+```
+
+```{r}
+review_counts <- review_counts %>% 
+                filter(!word %in% c("barca", "football", "tour",
+                                    "barcelona", "stadium", 
+                                    "camp", "nou", "fc"))
+```
+
+
+
+
+### Document-term matrix:
+
+Right now our data frame word_counts is in a tidy form, with one-term-per-document-per-row, but the topicmodels package requires a DocumentTermMatrix. We can cast a one-token-per-row table into a `DocumentTermMatrix` with `tidytext`'s function `cast_dtm()`.
+
+```{r}
+review_dtm <-  review_counts %>%
+                cast_dtm(title, word, n); review_dtm
+```
+
+### Applying LDA with topic 4
+
+We can then use the `LDA()` function (use `k=4`)
+
+```{r}
+review_lda_topic_4 <- LDA(review_dtm, k=4, control=list(seed=4));review_lda_topic_4
+```
+# Diagnostic of LDA results
+
+### Top 7 words in each topics
+* using **terms** in **topicdoc** package
+```{r}
+terms(review_lda_topic_4, 7)
+```
+### Word-topic probabilities
+* extracting the per-topic-per-word probabilities, called β (“beta”), from the model.
+
+```{r}
+beta_review_lda_topic_4 <- tidy(review_lda_topic_4,matrix = "beta");beta_review_lda_topic_4 
+```
+### Document-topic probabilities
+* extracting the per-document-per-topic probabilities, called γ (“gamma”), with the matrix = "gamma" argument to tidy().
+* review is a document; therefore, it is very short. 
+```{r}
+gamma_review_lda_topic_4 <- tidy(review_lda_topic_4,matrix = "gamma");gamma_review_lda_topic_4 
+```
+
+
+### All the diagnostics at once.
+* ref: https://cran.r-project.org/web/packages/topicdoc/vignettes/basic_usage.html
+
+![Alt text](/Users/jjeong/OneDrive - Florida Polytechnic University/Desktop/Text analysis/Week 11 LDA + Invitation + Example/diagnostic.jpg)
+
+
+```{r}
+topic_diagnostics(review_lda_topic_4, review_dtm)
+```
+
+```{r}
+class(topic_diagnostics(review_lda_topic_4, review_dtm))
+```
+### Average of topic_coherence for topic 4 LDA
+* hands-on code
+
+```{r}
+topic_diagnostics(review_lda_topic_4, review_dtm) %>%
+  select(topic_coherence) %>%
+  colMeans()
+```
+## Average of topic_coherence for topic 4 LDA
+
+#### same thing but with own function
+```{r}
+JJ_wanna_know_average_topic_coherence <- function(your_lda, your_dtm_textdata) {
+  average_topic_coherence <-topic_diagnostics(your_lda, your_dtm_textdata) %>%
+  select(topic_coherence) %>%
+  colMeans()
+  print('average topic cohence ---')
+  print(average_topic_coherence[1])
+}
+
+JJ_wanna_know_average_topic_coherence(review_lda_topic_4, review_dtm)
+```
+
+#### own function for the variance of topic coherence
+```{r}
+JJ_wanna_know_variance_topic_coherence <- function(your_lda, your_dtm_textdata) {
+  variance_topic_coherence <-topic_diagnostics(your_lda, your_dtm_textdata) %>%
+  select(topic_coherence) %>%
+  var()
+  print('Varance topic cohence ---')
+  print(variance_topic_coherence[1])
+}
+
+
+JJ_wanna_know_variance_topic_coherence(review_lda_topic_4, review_dtm)
+```
+
+#### own function for average and variance of topic coherence
+```{r}
+JJ_wanna_know_average_and_variance_topic_coherence_at_once<- function(your_lda, your_dtm_textdata) {
+  avg <- JJ_wanna_know_average_topic_coherence(your_lda, your_dtm_textdata)
+  var <- JJ_wanna_know_variance_topic_coherence(your_lda, your_dtm_textdata)
+  return(avg[1])
+  }
+
+JJ_wanna_know_average_and_variance_topic_coherence_at_once(review_lda_topic_4, review_dtm)
+```
+
+# Optimal topic number selection process
+
+### Manual way
+* run lda with different topics numbers from 4-2
+```{r}
+review_lda_topic_4 <- LDA(review_dtm, k=4, control=list(seed=4))
+review_lda_topic_3 <- LDA(review_dtm, k=3, control=list(seed=3))
+review_lda_topic_2 <- LDA(review_dtm, k=2, control=list(seed=2))
+```
+
+* making empty list and append each average coherence score per topics
+```{r}
+avg_cohence_score_list = c()
+avg_cohence_score_list <- append(avg_cohence_score_list,JJ_wanna_know_average_and_variance_topic_coherence_at_once(review_lda_topic_4, review_dtm) )
+avg_cohence_score_list <- append(avg_cohence_score_list,JJ_wanna_know_average_and_variance_topic_coherence_at_once(review_lda_topic_3, review_dtm) )
+avg_cohence_score_list <- append(avg_cohence_score_list,JJ_wanna_know_average_and_variance_topic_coherence_at_once(review_lda_topic_2, review_dtm) )
+avg_cohence_score_list 
+```
+
+* making a data.frame for graph
+```{r}
+df <- data.frame(topic =c("Topic 4", "Topic 3", "Topic2"),avg_coherence_score=avg_cohence_score_list );df
+```
+
+* drawing a ggplot
+* ref; http://www.sthda.com/english/wiki/ggplot2-line-plot-quick-start-guide-r-software-and-data-visualization
+
+```{r}
+#install.packages("ggplot2")
+library(ggplot2)
+
+# Basic line plot with points
+ggplot(data=df, aes(x=topic, y=avg_coherence_score, group=1)) +
+  geom_line()+
+  geom_point()+
+  geom_point(color="red", size=3)
+
+```
+
+### Interpretation
+* topic ?? shows the highest score of average coherence among topic 2,3,4
+
+
+
+### Making the above process as one function.
+
+
+```{r}
+score_list <-c()
+
+JJ_all_one_function <-function(your_dtm, topic_num){
+   for (i in 2:topic_num){
+   score_list<- append(score_list,JJ_wanna_know_average_and_variance_topic_coherence_at_once(LDA(your_dtm, k=i, control=list(seed=i)), your_dtm) )
+   }
+  return(score_list)
+}
+
+socre_list_output <- JJ_all_one_function(review_dtm, topic_num=7);socre_list_output 
+```
+
+```{r}
+plot(x=2:7, y=socre_list_output, type="l", col="red", lwd=5, xlab="topic number", ylab="avg coherence score", main="distribution of avg coherence scores")
+
+```
+# Interpretation
+* overall the average coherence score is the highest in topic number ?? (guess)
+
+
+
+

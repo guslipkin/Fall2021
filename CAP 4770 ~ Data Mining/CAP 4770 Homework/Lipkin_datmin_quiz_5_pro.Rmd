@@ -1,0 +1,194 @@
+---
+title: "Data Mining and Text Mining - Quiz 5"
+author: "Gus Lipkin - glipkin6737@floridapoly.edu"
+output: html_notebook
+---
+* Ref: CW_intro_topic_modeling-3-jj
+* Ref: [Nov 30, 2021] CW_intro_topic_modeling-ex-post-4-jj
+
+Run the code below to load the `tidyverse` package for data transformation and visualization, the `tidytext` package for tidy text mining, and the `topicmodels` package for using the Latent Dirichlet Allocation (LDA) method.
+
+* Please install *topicdoc* package
+
+```{r, message = FALSE, warning=FALSE}
+# install.packages('topicdoc')
+library(topicdoc)
+library(topicmodels)
+
+library(tidyverse)
+library(tidytext)
+```
+
+# Problem 1 (70 points)
+
+Read the dataset for this exercise:
+
+```{r, message=FALSE}
+text <- read_csv("https://github.com/reisanar/datasets/raw/master/poly_news_FL20.csv")
+head(text)
+```
+
+### Q1-1 (10 points): Perform tokenization and count:
+* Please do tokenization, stopword removal, count, and ungroup()
+* text data comes from **news_summary column**
+
+```{r}
+text_count <- text %>% 
+  unnest_tokens(word, news_summary) %>%
+  anti_join(stop_words) %>%
+  count(news_title, word) %>%
+  ungroup()
+
+head(text_count)
+```
+
+### Q1-2 (10 points) Document-term matrix:
+* Right now our data frame word_counts is in a tidy form, with one-term-per-document-per-row, but the topicmodels package requires a DocumentTermMatrix. We can cast a one-token-per-row table into a `DocumentTermMatrix` with `tidytext`'s function `cast_dtm()`.
+
+Use `cast_dtm()`: 
+
+```{r}
+text_dtm <- text_count %>%
+  cast_dtm(news_title, word, n)
+ 
+head(text_dtm)
+```
+
+### Q1-3 (10 points) Applying LDA with topic 4
+* Please set seed as 4, seed=4
+
+```{r}
+text_lda_topic_4 <- LDA(text_dtm, k = 4, seed = 4)
+text_lda_topic_4
+```
+# Diagnostic of LDA with topic 4 results
+
+### Q1-4 (10 points) Top 7 words in each topics
+* using **terms** method
+
+```{r}
+terms(text_lda_topic_4, 7)
+```
+
+### Q1-5 (10 points) Word-topic probabilities
+
+* Extract the `beta`s (word-topic probabilities)
+
+```{r}
+text_review_lda_topic_4 <- tidy(text_lda_topic_4, "beta")
+text_review_lda_topic_4
+```
+
+###  Q1-6 (10 points) Document-topic probabilities
+* Extract the `gamma`s (Document-topic probabilities)
+
+```{r}
+text_review_lda_topic_4 <- tidy(text_lda_topic_4, "gamma")
+text_review_lda_topic_4
+```
+### Q1-7 (10 points) All the diagnostics at once using **topic_diagnostics**
+* ref: https://cran.r-project.org/web/packages/topicdoc/vignettes/basic_usage.html
+* using **topic_diagnostics**
+
+```{r}
+topic_diagnostics(text_lda_topic_4, text_dtm)
+```
+
+# Problem 2 (30 points)
+* Ref: [Nov 30, 2021] CW_intro_topic_modeling-ex-post-4-jj
+
+### Q2-1 (10 points) Average of topic_coherence for topic 4 LDA
+* what is the average of topic_coherence for topic 4 LDA : (please answer)
+
+> The average topic coherence is `-107.9596`
+
+* you can get answer your way or the following approaches
+
+*Q2-1 (option 1) using topic_diagnostics, selecet, colMean()
+
+```{r, ,message=FALSE, warning=FALSE}
+topic_diagnostics(text_lda_topic_4, text_dtm) %>%
+  select(topic_coherence) %>%
+  colMeans()
+```
+
+## Average of topic_coherence for topic 4 LDA with manual functions
+
+* Q2-1 (option 2) using a manual function for average coherence score
+
+#### same thing but with its own function
+```{r}
+JJ_wanna_know_average_topic_coherence <- function(your_lda, your_dtm_textdata) {
+  average_topic_coherence <- topic_diagnostics(your_lda, your_dtm_textdata) %>%
+    select(topic_coherence) %>%
+    colMeans()
+  print('Average topic cohence ---')
+  print(average_topic_coherence[1])
+}
+
+JJ_wanna_know_average_topic_coherence(text_lda_topic_4, text_dtm)
+```
+
+#### (Just run) own function for the variance of topic coherence
+```{r}
+JJ_wanna_know_variance_topic_coherence <- function(your_lda, your_dtm_textdata) {
+  variance_topic_coherence <-topic_diagnostics(your_lda, your_dtm_textdata) %>%
+  select(topic_coherence) %>%
+  var()
+  print('Variance topic cohence ---')
+  print(variance_topic_coherence[1])
+}
+
+
+JJ_wanna_know_variance_topic_coherence(text_lda_topic_4, text_dtm)
+```
+
+#### (Just run) own function for average and variance of topic coherence
+```{r}
+JJ_wanna_know_average_and_variance_topic_coherence_at_once<- function(your_lda, your_dtm_textdata) {
+  avg <- JJ_wanna_know_average_topic_coherence(your_lda, your_dtm_textdata)
+  var <- JJ_wanna_know_variance_topic_coherence(your_lda, your_dtm_textdata)
+  return(avg[1])
+  }
+
+JJ_wanna_know_average_and_variance_topic_coherence_at_once(text_lda_topic_4, text_dtm)
+```
+# Q2-2 (20 points) Optimal topic number selection after run
+* using following functions (JJ_all_one_function)
+* What are the optimal number of topic numbers based on the average coherence score and why? (answer)
+* run LDA with different topics numbers from 2 to 7, please use the following function **_JJ_all_one_function**
+ 
+## Just run 
+```{r}
+score_list <- c()
+
+JJ_all_one_function <-function(your_dtm, topic_num){
+   for (i in 2:topic_num) {
+     score_list <- append(score_list,
+                          JJ_wanna_know_average_and_variance_topic_coherence_at_once(LDA(your_dtm, 
+                                                                                         k=i, 
+                                                                                         control=list(seed=i)), 
+                                                                                     your_dtm))
+   }
+  return(score_list)
+}
+
+score_list_output <- JJ_all_one_function(text_dtm, 7)
+score_list_output
+```
+
+### Just run after the above code
+```{r}
+plot(
+  x = 2:7,
+  y = socre_list_output,
+  type = "l",
+  col = "red",
+  lwd = 5,
+  xlab = "topic number",
+  ylab = "avg coherence score",
+  main = "distribution of avg coherence scores"
+)
+```
+
+> Four topics seems to be the right amount as they are more cohesive as indicated by a score closer to zero.
