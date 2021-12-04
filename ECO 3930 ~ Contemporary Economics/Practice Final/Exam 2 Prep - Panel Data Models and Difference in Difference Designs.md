@@ -4,7 +4,22 @@
 
 1. You suspect those that have more innate ability (A), which does not change over time, and those that scored higher on exam 1 (S1) are less likely to sign up for tutoring (T). Draw the DAG for the causal inference problem. 
 
+   - ```mermaid
+     graph LR
+     
+     U -->|Unobserved|A
+     U -->|Unobserved|T
+     U -->|Unobserved|S2
+     A -->T
+     T -->S2
+     T -->S1
+     A -->S1
+     A -->S2
+     ```
+
 2. Describe how a difference in difference approach would calculate the effect of tutoring. Why does this remove unobserved individual factors that do not change over time? 
+
+   - 
 
 3. What is the parallel trends assumption and why is it crucial to difference in difference designs? Draw a sketch to illustrate. 
 
