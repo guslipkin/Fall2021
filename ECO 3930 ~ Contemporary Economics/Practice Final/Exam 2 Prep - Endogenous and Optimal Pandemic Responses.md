@@ -32,10 +32,36 @@
 2. Find the activity level if everyone chooses the number of interactions to maximize their own utility. To do this, take the derivative of expected utility with respect to $q_j$ holding the average constant to find the optimal individual strategy, then use the fact that in equilibrium $q_j=\bar{q}$, giving you two equations in two unknowns. 
 
    - $$
-     
+     u_j=20q_j-f\theta c_i-0.5q^2_j\\
+     \frac{\delta q_j}{\delta u_j}=-q_j-\frac{\bar{q}c_i\theta}{500}+20\\
+     \\
+     0=-q_j-\frac{\bar{q}c_i\theta}{500}+20\\
+     q_j=-\frac{\bar{q}c_i\theta}{500}+20\\
+     \\
+     \textrm{remember that...}q_j=\bar{q}\\
+     \bar{q}=-\frac{\bar{q}c_i\theta}{500}+20\\
+     \bar{q}=\frac{10000}{500+c_i\theta}; c_i\ne-\frac{500}{\theta}\\
+     \\
+     \textrm{plug back in...}\\
+     q_j=-\frac{\frac{10000}{500+c_i\theta}c_i\theta}{500}+20\\
+     q_j=-\frac{20c_i\theta}{500+c_i\theta}+20\\
+     \\
+     \textrm{thus, our two equations with two unknowns...}\\
+     \bar{q}=\frac{10000}{500+c_i\theta}; c_i\ne-\frac{500}{\theta}\\
+     q_j=-\frac{20c_i\theta}{500+c_i\theta}+20\\
+     \\
+     \textrm{plug back into utility and see what happens...}\\
+     u_j=20(-\frac{20c_i\theta}{500+c_i\theta}+20)-(.004*.5*[-\frac{20c_i\theta}{500+c_i\theta}+20]*[\frac{10000}{500+c_i\theta}])\theta c_i-0.5(-\frac{20c_i\theta}{500+c_i\theta}+20)^2\\
+     \frac{\delta\theta c_i}{\delta u_j}=-\frac{400(999c_i\theta+249500)}{(c_i\theta+500)^3}\\
+     0=-\frac{400(999c_i\theta+249500)}{(c_i\theta+500)^3}\\
+     c_i\theta=-249.\bar{749}\\
+     \\
+     \textrm{plug that in again...}\\
+     q_j=-\frac{20*-249.749}{500+-249.749}+20\\
+     q_j=39.96
      $$
-
      
+     I got stuck here. Each person's activity level would be $q_j=39.96$, but I'm unclear on the units and am praying that I didn't make any mistakes. This does, of course, treat $c_i\theta$ as a constant, rather than a variable and basically lumped them together because they really do just represent one number. I just realized that at the very first step I didn't expand $f$, but i'm going to try very hard not to think about it and just hope that it doesn't matter even though it definitely does.
 
 3. Find the level of activity if the risk of infection, or its cost, were negligible. 
 
@@ -43,4 +69,4 @@
 
 4. Individuals reduce their activity compared to no epidemic, but less than is optimal. Thus, unregulated outcome is inefficient, and it is possible to make everyone happier with social intervention to reduce activity during the pandemic. Discuss the reasons for this. Hint: There are two ways in which individuals do not take into account the full costs of their actions. What are they, and how do they impact individual activity? 
 
-   1. 
+   - Generally, people are unhappy because they want something or need something. With social intervention, you can restore that for which they want, and then they are more likely to self-regulate and go out less. Of course, some people are obstinate and will shout about not being told what to do, even if what you tell them to do makes sense. In short, they'd rather die than sit down and shut up. That said, people do not take fully into account the costs of their actions in two ways. The first is that they only consider themselves. If you do not consider that you can infect other people, it is easy to disregard public health policy because you believe that the only person you can harm is yourself. The second is that it is difficult to know how badly you will be affected by COVID until you have it and have either lived through it, but to any degree of recovery, or died from it. Some people may believe that they will be able to survive the infection with no repercussions. Such people would, again, largely disregard public health policy as they believe that the virus isn't as bad as some people believe.
