@@ -1,0 +1,21 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(data.table)
+dt1 <- fread("tutoring2.csv")
+dt <- dcast(dt1, student ~ exam, value.var = c("exam", "tutor", "score"))
+colnames(dt) <- c("student", "exam1", "exam2", "tutor1", "tutor2", "score1", "score2")
+dt[, scoreDiff := score2 - score1][, tutor1 := NULL]
+head(dt)
+```
+
+```{r}
+summary(lm(score ~ tutor, dt1))
+summary(lm(score ~ tutor + exam, dt1))
+summary(lm(scoreDiff ~ tutor2, dt))
+```
+

@@ -42,7 +42,7 @@
 
 4. How would you employ randomization inference to test the null hypothesis of no association between tutoring and exam scores in the difference in difference model? 
 
-   - Randomization inference can be used to test the null hypothesis that there is no association between tutoring and exam scores in the DID model by 
+   - Randomization inference can be used to test the null hypothesis that there is no association between tutoring and exam scores in the DID model by assuming that there is no treatment effect, also known as Fisher's Sharp Null. In theory, this allows us to specify all counterfactual outcomes. That is, if there is no treatment effect for tutoring’s impact on the calculus exam scores, then the control units for all of the outcomes would be the same even if the students were placed in treatment, which, in this case, is tutoring. Similarly, the treatment units’ outcomes would have been unchanged had they been placed in the control group. Thus, under Fisher’s Sharp Null hypothesis, we can map all of the possible outcomes from our data. Then, all we have to do is construct all possible random assignments and calculate the test statistic for each one. This helps us account for any uncertainty about unobserved potential outcomes. 
 
 5. Write the panel data regression model expressing the score on exam t, Sit as a linear function of tutoring (Tit) and individual specific fixed effects (ui). Show that if you subtract the individual average, the individual specific effect drops out, leaving a model in “demeaned” variables. Discuss why including individual dummy variables and demeaning achieve the same thing. 
 
@@ -62,7 +62,7 @@
 
 6. Why is the panel data regression model from #5 a difference in difference model? Why does this implementation allow for a more general and flexible approach? Hint: think about when the treatment timing varies across units and when there are many observable factors that account for much variation in the dependent variable. 
 
-   - 
+   - The model from question five is a difference in difference model because all of the individual variation is in dummy variables or was de-meaned. This allows us to omit any variables that are constant across time. DID allows us to use a more general and flexible approach because it can help us exploit situations where the treatment effect is staggered over time by taking the difference of the average before and after the difference between treatment and non-treatment.
 
 7. Consider the four models show in the table below. The top number in each cell is the regression coefficient and the bottom number in parentheses is its standard error. Which model is “best” in this context? Why? Interpret the results.
 
@@ -71,6 +71,8 @@
    | Individual Fixed Effects? | No                  | No                  | Yes                 |
    | Tutoring Indicator        | -0.405<br />(1.009) | -1.388<br />(1.409) | 11.361<br />(1.291) |
    | Exam 2 Indicator          |                     | 1.322<br />(1.322)  | -7.029<br />(1.045) |
+   
+   - The third model is the best. At first glance, model one looks pretty good because it has the lowest standard error in any of the models. Of course, that doesn't quite sit right because only tutoring is used as an indicator and not the exam two scores as well. So then, looking for the lowest standard error, we see model three. This makes sense because it is essentially the same as model two, but uses individual fixed effects. So then, I, as the over-achiever I am, recreated the models in R and lo and behold, the third model is indeed, the best. It has the highest $R^2$ and the lowest p-value. Of course, those aren't always the best metrics, but here they are much much better than in models one and two.
 
 > Extra: If you have time to do this it would be a good idea. The data behind the models in #7 is in 
 > the file tutoring2.csv. Implement the models and conduct randomization inference to test the null 
