@@ -18,11 +18,79 @@
 
 ​	Twenty years later, at Western Washington University, Erik Cooper wrote *Tutoring Center Effectiveness: The Effect of Drop-In Tutoring*. Using data collected from the university’s tutoring center during the 2007-2008 school year, they found that “students who visited the TC more than 10 times per quarter had approximately 10% higher rates of persistence and approximately 0.2 points higher average GPA's than students who infrequently visited or who do not visit the TC during their first year of college.”
 
-# The State of Tutoring Today
+# Discussion
+
+## The State of Tutoring Today
+
+​	Tutoring is in a different spot depending on the department. Humanities courses such as English and History have a writing center if you need help with writing. The center is staffed by professors from the humanities department and it is focused on helping with essays, cover letters, and general quality of writing. Perhaps this paper would have turned out better had I gone... The math department has a mix of peer learning strategists (PLS) and regular tutors. The job of a PLS is not to actually help you learn the material, but rather, supposedly, to help you learn how to learn. This position is widely regarded as being completely useless by the peer learning strategists themselves (I spoke with a few of them). While the strategists cover the calculus sequence from pre-calc through calc 2, regular tutors are employed for a variety of other math courses. Tutors for these classes are generally funded by the math department with the exception of statistics which is funded by the department of data science and business analytics. From there, tutors for specific courses are again generally funded by the department that "owns" that course. How a department decides which courses to have tutors for is a mystery. 
+
+​	There is one constant, however, across all tutors and strategists (henceforth just tutors) which is that a tutor is scheduled to tutor for a specific course at a specific time. For example, I am the scheduled tutor for CGS 1100 - Computer Information Technology and Applications. This brings us to the core of the problem. No one has ever come to be tutored for CGS 1100 in the eleven weeks since I started that position. That is not to say that I have never tutored during my scheduled time. I have helped with chemistry 1, physics 1, intro to data science, intro to python, intro to programming, and statistics 1, not to mention the times my friends have called me directly for help with six sigma or quantitative methods. The point is not to brag, although I don't mind doing so, but rather to illustrate that many tutors, myself included, are not a one-trick pony. During the time I am scheduled to tutor, there is also a scheduled tutor for intro to python and intro to programming, so why have I tutored for those classes? Sometimes the other tutors are out sick and the schedule is not updated every week to reflect individual availability, but more frequently, I have tutored those classes because too many people show up for one tutor or because a group of people need help with different topics within the same course. For all the other courses I have tutored for, I simply happened to be available when someone walked in to the tutoring center and asked for help.
+
+​	In the current model, there are inefficiencies from several perspectives. From the students' perspective, tutors are not necessarily listed for the classes they need, and if they are listed, it is at a specific time that may not be accessible to them. Again, using myself as an example, I only tutor from 3-6pm on Friday afternoons. Many students either go home over the weekends for a variety of reasons or have jobs in the evening, or simply want to go out and party because it's a Friday afternoon. From the department paying the tutors' perspective, it is not efficient to pay someone to tutor no one or to tutor for a class that is not in their department. From the tutors' perspective, it is pretty great that you can be paid ten dollars an hour to do absolutely nothing, but also not great if you have a horde of people that need help and you get overwhelmed.
+
+​	How can we improve the tutoring model at Florida Polytechnic University so that students are better served, tutors are being put to proper use, and the departments are not wasting what little money they have?
+
+# Analysis
+
+## The Current Group Tutoring Model
+
+​	The current group tutoring model is quite simple and is outlined below.
+
+- Each department decides which classes they want tutors for
+- Each department then hires a tutor or multiple tutors for each class that they want a tutor for
+- Each tutor then tells their department when they are available to tutor
+- Each department then schedules their tutors
+- Tutors are available at their assigned time
+
+​	A sort of pseudo-entity relationship diagram would look like the below. Florida Polytechnic university has one or more departments. Each department offers one or more classes. Each department also employs any number of tutors. Each tutor then tutors one or more classes. Any number of tutors is scheduled for one or more hours and any number of students can come to any number of hours.
+
+```mermaid
+erDiagram
+
+University ||--|{ Department : has
+Department ||--|{ Class : offers
+Department ||--o{ Tutor : employs
+Tutor }o--|| Class : represents
+Tutor }o--|{ Hours : "is scheduled"
+Class ||--o{ Hours : schedules
+Hours }o--o{ Student : "comes to"
+```
+
+
 
 ## A One-on-One Tutoring Model
 
-## A Group Tutoring Model
+```mermaid
+erDiagram
+
+University ||--|{ Department : has
+Department ||--|{ Class : offers
+
+University ||--o{ Tutor : employs
+Tutor ||--|{ Hours : "is scheduled"
+Class ||--o{ Tutor : represents
+Student ||--|| Hours : books
+```
+
+
+
+## A Hybrid Group and One-on-One Tutoring Model
+
+```mermaid
+erDiagram
+
+University ||--|{ Department : has
+Department ||--|{ Class : offers
+Department ||--o{ Tutor : coordinates
+
+University ||--o{ Tutor : employs
+Tutor ||--|{ Hours : "is scheduled"
+Class }|--o{ Tutor : represents
+
+Tutor }|--|{ GroupHours : "is scheduled"
+GroupHours }o--o{ Student : "comes to"
+Hours ||--|| Student : books
+```
 
 
 
@@ -30,3 +98,4 @@
 
 1. Maxwell, M. (1990). Does Tutoring Help? A Look at the Literature. *Review of Research in Developmental Education*, *7*(4).
 2. Erik Cooper (2010) Tutoring Center Effectiveness: The Effect of Drop-In Tutoring, Journal of College Reading and Learning, 40:2, 21-34, DOI: 10.1080/10790195.2010.10850328
+
