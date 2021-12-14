@@ -157,7 +157,7 @@ Student ||--|| Hours : books
 ​	A cost function would only need to consider the amount a tutor is paid per hour (\$10) and how many total tutoring hours the university would want to be available. Coincidentally, because this is a one-on-one model, this also represents how many students could be served by the tutors. $t$ is the number of tutors and $h$ is the total number of hours offered by all tutors combined with $h_t$ the number of hours offered by a particular tutor.
 $$
 C=\sum_0^t10h_t\\
-TH=\frac{10h}{B}=\frac{10h}{88640}\rightarrow h=8864\\
+SH=TH=\frac{10h}{B}=\frac{10h}{88640}\rightarrow h=8864\\
 $$
 ​	This is, of course, the same number of total tutoring hours as the current model. Nevertheless, this does have one main advantage over the current model; So long as students are booking tutoring hours, the number of student hours will be relatively constant and the same as the number of tutor hours available. That is not to say that it could not also be boosted by friends booking time together if they are also struggling together.
 
@@ -181,7 +181,15 @@ GroupHours }o--o{ Student : "comes to"
 Hours ||--|| Student : books
 ```
 
+​	Thankfully, for this one either the math is relatively simple or I'm relatively simple and don't understand how much harder the math should be.
+$$
+SH=\frac{10h_t+\sum_1^c\sum_0^t10h_t}{B}
+$$
+​	The student hours available are the group hours per class plus the individual student hours, then just checking to make sure everything is within budget. To maximize the amount of student hours, maximize group hours for popular classes such as Calculus, Physics, and Intro to Programming, and maximize the number of classes that individual tutors can tutor for.
 
+# Conclusion
+
+​	This is a difficult problem to tackle. Without sufficient proof that working together will save money and help students, no departments will want to pool resources and I don't know how to do enough of the theoretical math to convince anyone. However, from the theory behind maximizing the amount of student hours available, we can draw a few conclusions. The first is that a hybrid model of group tutoring and one-on-one tutoring would most likely give the highest amount of student hours possible and that a hybrid model has potential to be at least as efficient as group tutoring but is likely to be even moreso. Without actual data from the departments and tutoring center, it is nearly impossible to make a recommendation. Nevertheless, based on my rather limited experience, I believe that even if a hybrid model is cause for a hit to student hours which I don't believe it would, that a hybrid model is the best choice moving forward.
 
 ## References
 
