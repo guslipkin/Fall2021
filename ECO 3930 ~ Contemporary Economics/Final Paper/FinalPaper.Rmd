@@ -12,13 +12,25 @@ for(i in 1:length(c)) {
   t <- rlist::list.append(t, sample.int(n = 5, size = c[i], replace = TRUE) - 1)
 }
 t
-totalHours <- 0
+totalHours <- list()
 for(i in 1:length(t)) {
+  temp <- c()
   for(j in 1:length(t[[i]])) {
-    totalHours <- totalHours + 
-      sum(sample.int(n = 20, size = t[[i]][j], replace = TRUE) * 16)
+    temp <- append(temp,
+      sum(sample.int(n = 20, size = t[[i]][j], replace = TRUE) * 16))
   }
+  totalHours <- rlist::list.append(totalHours, temp)
 }
-totalHours * 10
+totalHours
+sum(sapply(totalHours, sum)) * 10
+```
+
+```{r}
+# student hours
+num <- c()
+for(i in 1:length(t)) {
+  num <- append(num, sum(t[[i]])*10*16)
+}
+num
 ```
 

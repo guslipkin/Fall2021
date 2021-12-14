@@ -1,18 +1,18 @@
-# TITLE
+# Tutoring is Bad
 
 > Gus Lipkin
 >
 > December 15, 2021
 
-## Introduction
+# Introduction
 
 ​	The current tutoring system at Florida Polytechnic University is broken. Each department pays their own tutors for specific classes, and those tutors are only registered to tutor for those specific classes. Each tutor could tutor for many classes, including ones outside their department, but are not able to due to departmental restrictions. If each department pooled their resources together, they could hire tutors to cover a wider breadth of classes while paying the same number or even fewer tutors. This is almost an inverse case of the tragedy of the commons where if the departments pooled resources, the students would be better off for it. Each department is acting in their own best interest so the students have less supports available to them. However, if they chose to work together, then they would want to explore their options and maximize tutor availability while minimizing costs.
 
-## A Personal Anecdote on Why this is Important
+# A Personal Anecdote on Why this is Important
 
 ​	To be honest, there’s no reason for you to care. This won’t affect the vast majority of faculty and staff or students. However, it will have a significant impact on the students that do Florida Poly’s tutoring services. For students who are struggling, tutoring is a last line of defense before they drop out. When I was taking Statistics, my professor, Xuebo Liu, was very kind, but not a very good professor. When the midterm rolled around, I knew I was in trouble, and a week before, the exam, I began to go to tutoring every day that I could. The tutor never showed. With two days before the exam, I went to the department chair and told him that his tutor wasn’t coming even though he was logging hours as though he was. Of all the tutors employed at the time, I’m sure that there was more than just the one who would have been able to help me, but he was the only one that was listed as a stats tutor, and I didn’t know who else to go to. Had every tutor listed every class they were comfortable tutoring in, I would have had a much less stressful time by going to someone who could help. This goes for students today as it did for me. Tutors are only listed for a specific class at a specific time, and if a student is not available at that time, then they’re out of luck. If tutors listed every class they could tutor for, then help would be much more accessible to those in need.
 
-## Literature Review
+# Literature Review
 
 ​	In 1990, Martha Maxwell of Appalachian State University conducted a literature of studies on tutoring to determine if tutoring really does help. *Does Tutoring Help? A Look at the Literature* found that “the small number of studies on college tutoring provide no consistent evidence that underpiepared students who are tutored improve either their grades or their grade-point averages.” While grades did not necessarily improve, the author found that students who attended tutoring stayed in school longer than those who did not. Finally, they concluded that new studies would need to be done as tutoring methods evolve.
 
@@ -66,19 +66,19 @@ C=\sum_1^d\sum_1^c\sum_0^t10h_t\\
 $$
 ​	To ensure that everything is under budget $B$ for each department, divide the budget by the cost and so long as it is greater than or equal to the number of departments, you’re good.
 $$
-d\ge\frac{\sum_1^dB}{\sum_1^d\sum_1^c\sum_0^t10h_t}
+d\le\frac{\sum_1^d\sum_1^c\sum_0^t10h_t}{\sum_1^dB}
 $$
 ​	It’s easier to understand on a departmental level when you have the budget for that department.
 $$
-1\ge\frac{B_d}{\sum_1^d\sum_1^c\sum_0^t10h_t}
+1\le\frac{\sum_1^d\sum_1^c\sum_0^t10h_t}{B_d}
 $$
 ​	Unfortunately, that’s not necessarily the most efficient as the total number of tutoring hours ($TH$) is just the departmental budget divided by the total number of hours they are willing to pay for a tutor.
 $$
-TH=\frac{B_d}{10h_t}
+TH=\frac{10h_t}{B_d}
 $$
-​	And the total hours available to students $SH$:
+​	And the total hours available to students $SH$. This is, in essence, a measure of how many students are able to visit tutoring.
 $$
-SH=\frac{\sum_1^dB_d}{\sum_1^c\sum_0^t10h_t}
+SH=\frac{\sum_1^c\sum_0^t10h_t}{\sum_1^dB_d}
 $$
 ​	Let’s say we have five departments that have some number of classes each, $c_{d_i}$. . Each class then has some number of tutors $t_{c_i}$. And each tutor offers $h_{t_i}$ hours. Let’s make up some numbers that we’ll use for the rest of the paper. We will calculate this out and use the resulting required budget as our baseline budget. Rather than do this out by hand, we can use R, because R is my friend.
 
@@ -110,18 +110,29 @@ t
 # Create the number of hours that each tutor works
 # Each tutor has to work at least one hour and up to twenty hours
 # We'll also assume that every tutor works every week for the whole semester
-totalHours <- 0
+totalHours <- list()
 for(i in 1:length(t)) {
+  temp <- c()
   for(j in 1:length(t[[i]])) {
-    totalHours <- totalHours + 
-      sum(sample.int(n = 20, size = t[[i]][j], replace = TRUE) * 16)
+    temp <- append(temp,
+      sum(sample.int(n = 20, size = t[[i]][j], replace = TRUE) * 16))
   }
+  totalHours <- rlist::list.append(totalHours, temp)
 }
-totalHours * 10
+totalHours
+# [[1]]
+# [1] 320 752 192 816   0 784 176
+#
+# [[2]]
+# [1] 512 304  80 544 864 160
+#
+# [[3]]
+# [1] 224 672 784  80 352 496 752
+sum(sapply(totalHours, sum)) * 10
 # [1] 88640
 ```
 
-​	In the end, we have a budget of \$88,640 for a semester of tutoring.
+​	In the end, we have a budget of \$88,640 for a semester of tutoring. The university would divy that up between departments and departments would then further divy it up to classes and then the professors would decide about their tutors. In the end, at the class level, there is functionally no difference between one tutor for twenty hours or four tutors for five hours each, so long as none of the hours overlap. If they do, it starts to get more complicated than I can handle. I do know, however, that if two tutors are scheduled concurrently that the total number of student hours decreases at a rate relative to the number of students present for tutoring at that time. If there are no students and multiple tutors, the student hours will take a much greater hit than many students and several tutors. It could also be the case that there are so many students that are able to visit tutoring at the same time with the same problems that student hours is boosted above the baseline.
 
 # Analysis
 
@@ -141,19 +152,18 @@ Class ||--o{ Tutor : represents
 Student ||--|| Hours : books
 ```
 
-​	A cost function would only need to consider the amount a tutor is paid per hour (\$10) and how many total tutoring hours the university would want to be available. Coincidentally, because this is a one-on-one model, this also represents how many students could be served by the tutors. $n$ is the number of tutors and $h$ is the average number of hours offered by each tutor.
-$$
-\textrm{Cost: }C=10nh\\
-\textrm{Total Hours: }H=nh\\
-$$
-​	The best way to maximize this would be for the university to hire as few tutors that are capable of tutoring as many classes as possible rather than many tutors who can only tutor a few classes. In the former, while general availability may be reduced, course availability would be maximized. In the latter, while general tutoring availability may be maximized, there is no guarantee that course availability would also be maixmized. In fact, it could even be lower than in the first option.
-$$
-C=10nh\\
-H=nh\\
-$$
+​	The best way to maximize this would be for the university to hire as few tutors that are capable of tutoring as many classes as possible rather than many tutors who can only tutor a few classes. In the former, while general availability may be reduced, course availability would be maximized. In the latter, while general tutoring availability may be maximized, there is no guarantee that course availability would also be maixmized. In fact, it could even be lower than in the first option.	
 
+​	A cost function would only need to consider the amount a tutor is paid per hour (\$10) and how many total tutoring hours the university would want to be available. Coincidentally, because this is a one-on-one model, this also represents how many students could be served by the tutors. $t$ is the number of tutors and $h$ is the total number of hours offered by all tutors combined with $h_t$ the number of hours offered by a particular tutor.
+$$
+C=\sum_0^t10h_t\\
+TH=\frac{10h}{B}=\frac{10h}{88640}\rightarrow h=8864\\
+$$
+​	This is, of course, the same number of total tutoring hours as the current model. Nevertheless, this does have one main advantage over the current model; So long as students are booking tutoring hours, the number of student hours will be relatively constant and the same as the number of tutor hours available. That is not to say that it could not also be boosted by friends booking time together if they are also struggling together.
 
 ## A Hybrid Group and One-on-One Tutoring Model
+
+​	A hybrid model is exactly what it sounds like. It aims to combine the best aspects of both a group tutoring and one-on-one tutoring model in an effort to maximize student hours and minimize costs. Like the one-on-one model, tutors are available for private bookings for a variety of classes. Like the group model, some tutors may also or only be available for predetermined group hours for specific high-volume classes.
 
 ```mermaid
 erDiagram
