@@ -1,0 +1,24 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+set.seed(2021)
+c <- sample.int(n = 9, size = 3, replace = TRUE)
+c
+t <- list()
+for(i in 1:length(c)) {
+  t <- rlist::list.append(t, sample.int(n = 5, size = c[i], replace = TRUE) - 1)
+}
+t
+totalHours <- 0
+for(i in 1:length(t)) {
+  for(j in 1:length(t[[i]])) {
+    totalHours <- totalHours + 
+      sum(sample.int(n = 20, size = t[[i]][j], replace = TRUE) * 16)
+  }
+}
+totalHours * 10
+```
+

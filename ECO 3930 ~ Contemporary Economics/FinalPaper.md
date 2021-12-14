@@ -30,8 +30,6 @@
 
 ​	How can we improve the tutoring model at Florida Polytechnic University so that students are better served, tutors are being put to proper use, and the departments are not wasting what little money they have?
 
-# Analysis
-
 ## The Current Group Tutoring Model
 
 ​	The current group tutoring model is quite simple and is outlined below.
@@ -56,9 +54,80 @@ Class ||--o{ Hours : schedules
 Hours }o--o{ Student : "comes to"
 ```
 
+​	Before we dive into the math, we need to define a few variables. A university has a number of departments $d$, each department has a number of classes $c$, and each class has a number of tutors, $t$. Each tutor is then scheduled a number of hours $h$ and paid \$10 per hour. If you assume that everything is the same across departments, classes, tutors, and the number of hours they work, the cost function is quite simple.
 
+$$
+C=10dc_dt_ch_t
+$$
+
+​	If everyone schedules according to their specific needs, it’s a bit more complicated.
+$$
+C=\sum_1^d\sum_1^c\sum_0^t10h_t\\
+$$
+​	To ensure that everything is under budget $B$ for each department, divide the budget by the cost and so long as it is greater than or equal to the number of departments, you’re good.
+$$
+d\ge\frac{\sum_1^dB}{\sum_1^d\sum_1^c\sum_0^t10h_t}
+$$
+​	It’s easier to understand on a departmental level when you have the budget for that department.
+$$
+1\ge\frac{B_d}{\sum_1^d\sum_1^c\sum_0^t10h_t}
+$$
+​	Unfortunately, that’s not necessarily the most efficient as the total number of tutoring hours ($TH$) is just the departmental budget divided by the total number of hours they are willing to pay for a tutor.
+$$
+TH=\frac{B_d}{10h_t}
+$$
+​	And the total hours available to students $SH$:
+$$
+SH=\frac{\sum_1^dB_d}{\sum_1^c\sum_0^t10h_t}
+$$
+​	Let’s say we have five departments that have some number of classes each, $c_{d_i}$. . Each class then has some number of tutors $t_{c_i}$. And each tutor offers $h_{t_i}$ hours. Let’s make up some numbers that we’ll use for the rest of the paper. We will calculate this out and use the resulting required budget as our baseline budget. Rather than do this out by hand, we can use R, because R is my friend.
+
+```R
+# Set the seed
+set.seed(2021)
+# Create the number of classes across three departments
+# Each department can have up to nine classes
+c <- sample.int(n = 9, size = 3, replace = TRUE)
+c
+# [1] 7 6 7
+
+# Create the number of tutors for each class
+# Each class can have up to four tutors
+t <- list()
+for(i in 1:length(c)) {
+  t <- rlist::list.append(t, sample.int(n = 5, size = c[i], replace = TRUE) - 1)
+}
+t
+# [[1]]
+# [1] 3 3 2 4 0 3 2
+#
+# [[2]]
+# [1] 3 1 2 3 4 2
+#
+# [[3]]
+# [1] 1 3 4 1 2 3 4
+
+# Create the number of hours that each tutor works
+# Each tutor has to work at least one hour and up to twenty hours
+# We'll also assume that every tutor works every week for the whole semester
+totalHours <- 0
+for(i in 1:length(t)) {
+  for(j in 1:length(t[[i]])) {
+    totalHours <- totalHours + 
+      sum(sample.int(n = 20, size = t[[i]][j], replace = TRUE) * 16)
+  }
+}
+totalHours * 10
+# [1] 88640
+```
+
+​	In the end, we have a budget of \$88,640 for a semester of tutoring.
+
+# Analysis
 
 ## A One-on-One Tutoring Model
+
+​	A one-on-one tutoring model is much simpler to both describe and model. Here, a university employs a tutor rather than the department. One tutor can be schedule for one or more hours and one student comes to one hour of tutoring. The university would publish a list of tutors, their availability, and what courses they are qualified to tutor for. The university would also provide a way for students to schedule time with a tutor in certain blocks of time, probably either thirty or sixty minutes.
 
 ```mermaid
 erDiagram
@@ -72,6 +141,16 @@ Class ||--o{ Tutor : represents
 Student ||--|| Hours : books
 ```
 
+​	A cost function would only need to consider the amount a tutor is paid per hour (\$10) and how many total tutoring hours the university would want to be available. Coincidentally, because this is a one-on-one model, this also represents how many students could be served by the tutors. $n$ is the number of tutors and $h$ is the average number of hours offered by each tutor.
+$$
+\textrm{Cost: }C=10nh\\
+\textrm{Total Hours: }H=nh\\
+$$
+​	The best way to maximize this would be for the university to hire as few tutors that are capable of tutoring as many classes as possible rather than many tutors who can only tutor a few classes. In the former, while general availability may be reduced, course availability would be maximized. In the latter, while general tutoring availability may be maximized, there is no guarantee that course availability would also be maixmized. In fact, it could even be lower than in the first option.
+$$
+C=10nh\\
+H=nh\\
+$$
 
 
 ## A Hybrid Group and One-on-One Tutoring Model
